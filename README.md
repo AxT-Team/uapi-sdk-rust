@@ -41,6 +41,16 @@ async fn main() -> Result<(), _::Error> {
 
 如果你需要查看字段细节或内部逻辑，仓库中的 `./internal` 目录同步保留了由 `openapi-generator` 生成的完整结构体，随时可供参考。
 
+## 模型
+
+`uapi_sdk_rust::models` 直接 re-export 了 `internal/src/models` 下的所有结构体，因此你可以在 IDE 中获取与 OpenAPI 保持一致的强类型定义。例如：
+
+```rust
+use uapi_sdk_rust::{Client, models::GetNetworkIpinfo200Response};
+```
+
+这些模型全部派生了 `Serialize` / `Deserialize`，便于在应用中进行序列化或持久化。
+
 ## 错误模型概览
 
 | HTTP 状态码 | SDK 错误类型             | 附加信息                                          |

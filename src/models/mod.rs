@@ -1,2 +1,10 @@
-pub mod game;
-pub mod social;
+#![allow(clippy::all)]
+#![allow(dead_code)]
+#![allow(non_camel_case_types)]
+#![allow(non_snake_case)]
+#![allow(non_upper_case_globals)]
+
+#[path = "../../internal/src/models/mod.rs"]
+mod generated;
+
+pub use generated::*;

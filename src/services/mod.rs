@@ -12,7 +12,7 @@ pub struct ClipzyZaiXianJianTieBanService<'a> {
 }
 
 impl<'a> ClipzyZaiXianJianTieBanService<'a> {
-    /// 步骤2 (方法一): 获取加密数据
+/// 步骤2 (方法一): 获取加密数据
     #[instrument(skip(self, params))]
     pub async fn get_clipzy_get(&self, params: GetClipzyGetParams) -> Result<Value> {
         let mut path = "/api/get".to_string();
@@ -22,18 +22,20 @@ impl<'a> ClipzyZaiXianJianTieBanService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
 
         self.client
-            .request_json(Method::GET, &path, headers, query, body)
+            .request_json(
+                Method::GET,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
-    /// 步骤2 (方法二): 获取原始文本
+/// 步骤2 (方法二): 获取原始文本
     #[instrument(skip(self, params))]
     pub async fn get_clipzy_raw(&self, params: GetClipzyRawParams) -> Result<Value> {
         let mut path = "/api/raw/{id}".to_string();
@@ -47,18 +49,20 @@ impl<'a> ClipzyZaiXianJianTieBanService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
 
         self.client
-            .request_json(Method::GET, &path, headers, query, body)
+            .request_json(
+                Method::GET,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
-    /// 步骤1：上传加密数据
+/// 步骤1：上传加密数据
     #[instrument(skip(self, params))]
     pub async fn post_clipzy_store(&self, params: PostClipzyStoreParams) -> Result<Value> {
         let mut path = "/api/store".to_string();
@@ -67,15 +71,17 @@ impl<'a> ClipzyZaiXianJianTieBanService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = params.body.clone();
 
         self.client
-            .request_json(Method::POST, &path, headers, query, body)
+            .request_json(
+                Method::POST,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
 }
@@ -115,7 +121,9 @@ pub struct PostClipzyStoreParams {
 
 impl PostClipzyStoreParams {
     pub fn new() -> Self {
-        Self { body: None }
+        Self {
+            body: None,
+        }
     }
     pub fn body(mut self, value: Value) -> Self {
         self.body = Some(value);
@@ -128,7 +136,7 @@ pub struct ConvertService<'a> {
 }
 
 impl<'a> ConvertService<'a> {
-    /// Unix时间戳与日期字符串双向转换
+/// Unix时间戳与日期字符串双向转换
     #[instrument(skip(self, params))]
     pub async fn get_convert_unixtime(&self, params: GetConvertUnixtimeParams) -> Result<Value> {
         let mut path = "/convert/unixtime".to_string();
@@ -138,18 +146,20 @@ impl<'a> ConvertService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
 
         self.client
-            .request_json(Method::GET, &path, headers, query, body)
+            .request_json(
+                Method::GET,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
-    /// 美化并格式化JSON字符串
+/// 美化并格式化JSON字符串
     #[instrument(skip(self, params))]
     pub async fn post_convert_json(&self, params: PostConvertJsonParams) -> Result<Value> {
         let mut path = "/convert/json".to_string();
@@ -158,15 +168,17 @@ impl<'a> ConvertService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = params.body.clone();
 
         self.client
-            .request_json(Method::POST, &path, headers, query, body)
+            .request_json(
+                Method::POST,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
 }
@@ -191,7 +203,9 @@ pub struct PostConvertJsonParams {
 
 impl PostConvertJsonParams {
     pub fn new() -> Self {
-        Self { body: None }
+        Self {
+            body: None,
+        }
     }
     pub fn body(mut self, value: Value) -> Self {
         self.body = Some(value);
@@ -204,7 +218,7 @@ pub struct DailyService<'a> {
 }
 
 impl<'a> DailyService<'a> {
-    /// 生成每日新闻摘要图片
+/// 生成每日新闻摘要图片
     #[instrument(skip(self))]
     pub async fn get_daily_news_image(&self) -> Result<Value> {
         let mut path = "/daily/news-image".to_string();
@@ -213,15 +227,17 @@ impl<'a> DailyService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
 
         self.client
-            .request_json(Method::GET, &path, headers, query, body)
+            .request_json(
+                Method::GET,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
 }
@@ -232,7 +248,7 @@ pub struct GameService<'a> {
 }
 
 impl<'a> GameService<'a> {
-    /// 获取Epic Games免费游戏
+/// 获取Epic Games免费游戏
     #[instrument(skip(self))]
     pub async fn get_game_epic_free(&self) -> Result<Value> {
         let mut path = "/game/epic-free".to_string();
@@ -241,23 +257,22 @@ impl<'a> GameService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
 
         self.client
-            .request_json(Method::GET, &path, headers, query, body)
+            .request_json(
+                Method::GET,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
-    /// 查询Minecraft玩家历史用户名
+/// 查询Minecraft玩家历史用户名
     #[instrument(skip(self, params))]
-    pub async fn get_game_minecraft_historyid(
-        &self,
-        params: GetGameMinecraftHistoryidParams,
-    ) -> Result<Value> {
+    pub async fn get_game_minecraft_historyid(&self, params: GetGameMinecraftHistoryidParams) -> Result<Value> {
         let mut path = "/game/minecraft/historyid".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -265,23 +280,22 @@ impl<'a> GameService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
 
         self.client
-            .request_json(Method::GET, &path, headers, query, body)
+            .request_json(
+                Method::GET,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
-    /// 查询Minecraft服务器状态
+/// 查询Minecraft服务器状态
     #[instrument(skip(self, params))]
-    pub async fn get_game_minecraft_serverstatus(
-        &self,
-        params: GetGameMinecraftServerstatusParams,
-    ) -> Result<Value> {
+    pub async fn get_game_minecraft_serverstatus(&self, params: GetGameMinecraftServerstatusParams) -> Result<Value> {
         let mut path = "/game/minecraft/serverstatus".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -289,23 +303,22 @@ impl<'a> GameService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
 
         self.client
-            .request_json(Method::GET, &path, headers, query, body)
+            .request_json(
+                Method::GET,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
-    /// 查询Minecraft玩家信息
+/// 查询Minecraft玩家信息
     #[instrument(skip(self, params))]
-    pub async fn get_game_minecraft_userinfo(
-        &self,
-        params: GetGameMinecraftUserinfoParams,
-    ) -> Result<Value> {
+    pub async fn get_game_minecraft_userinfo(&self, params: GetGameMinecraftUserinfoParams) -> Result<Value> {
         let mut path = "/game/minecraft/userinfo".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -313,18 +326,20 @@ impl<'a> GameService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
 
         self.client
-            .request_json(Method::GET, &path, headers, query, body)
+            .request_json(
+                Method::GET,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
-    /// 获取Steam用户公开摘要
+/// 获取Steam用户公开摘要
     #[instrument(skip(self, params))]
     pub async fn get_game_steam_summary(&self, params: GetGameSteamSummaryParams) -> Result<Value> {
         let mut path = "/game/steam/summary".to_string();
@@ -345,18 +360,21 @@ impl<'a> GameService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
 
         self.client
-            .request_json(Method::GET, &path, headers, query, body)
+            .request_json(
+                Method::GET,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
 }
+
 
 #[derive(Debug, Clone)]
 pub struct GetGameMinecraftHistoryidParams {
@@ -437,7 +455,7 @@ pub struct ImageService<'a> {
 }
 
 impl<'a> ImageService<'a> {
-    /// 获取Gravatar头像
+/// 获取Gravatar头像
     #[instrument(skip(self, params))]
     pub async fn get_avatar_gravatar(&self, params: GetAvatarGravatarParams) -> Result<Value> {
         let mut path = "/avatar/gravatar".to_string();
@@ -461,18 +479,20 @@ impl<'a> ImageService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
 
         self.client
-            .request_json(Method::GET, &path, headers, query, body)
+            .request_json(
+                Method::GET,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
-    /// 获取必应每日壁纸
+/// 获取必应每日壁纸
     #[instrument(skip(self))]
     pub async fn get_image_bing_daily(&self) -> Result<Value> {
         let mut path = "/image/bing-daily".to_string();
@@ -481,18 +501,20 @@ impl<'a> ImageService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
 
         self.client
-            .request_json(Method::GET, &path, headers, query, body)
+            .request_json(
+                Method::GET,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
-    /// 生成摸摸头GIF (QQ号方式)
+/// 生成摸摸头GIF (QQ号方式)
     #[instrument(skip(self, params))]
     pub async fn get_image_motou(&self, params: GetImageMotouParams) -> Result<Value> {
         let mut path = "/image/motou".to_string();
@@ -505,18 +527,20 @@ impl<'a> ImageService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
 
         self.client
-            .request_json(Method::GET, &path, headers, query, body)
+            .request_json(
+                Method::GET,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
-    /// 动态生成二维码
+/// 动态生成二维码
     #[instrument(skip(self, params))]
     pub async fn get_image_qrcode(&self, params: GetImageQrcodeParams) -> Result<Value> {
         let mut path = "/image/qrcode".to_string();
@@ -532,18 +556,20 @@ impl<'a> ImageService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
 
         self.client
-            .request_json(Method::GET, &path, headers, query, body)
+            .request_json(
+                Method::GET,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
-    /// 将在线图片转换为Base64
+/// 将在线图片转换为Base64
     #[instrument(skip(self, params))]
     pub async fn get_image_tobase_64(&self, params: GetImageTobase64Params) -> Result<Value> {
         let mut path = "/image/tobase64".to_string();
@@ -553,18 +579,20 @@ impl<'a> ImageService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
 
         self.client
-            .request_json(Method::GET, &path, headers, query, body)
+            .request_json(
+                Method::GET,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
-    /// 无损压缩图片
+/// 无损压缩图片
     #[instrument(skip(self, params))]
     pub async fn post_image_compress(&self, params: PostImageCompressParams) -> Result<Value> {
         let mut path = "/image/compress".to_string();
@@ -579,18 +607,20 @@ impl<'a> ImageService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = params.body.clone();
 
         self.client
-            .request_json(Method::POST, &path, headers, query, body)
+            .request_json(
+                Method::POST,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
-    /// 通过Base64编码上传图片
+/// 通过Base64编码上传图片
     #[instrument(skip(self, params))]
     pub async fn post_image_frombase_64(&self, params: PostImageFrombase64Params) -> Result<Value> {
         let mut path = "/image/frombase64".to_string();
@@ -599,18 +629,20 @@ impl<'a> ImageService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = params.body.clone();
 
         self.client
-            .request_json(Method::POST, &path, headers, query, body)
+            .request_json(
+                Method::POST,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
-    /// 生成摸摸头GIF (图片上传或URL方式)
+/// 生成摸摸头GIF (图片上传或URL方式)
     #[instrument(skip(self, params))]
     pub async fn post_image_motou(&self, params: PostImageMotouParams) -> Result<Value> {
         let mut path = "/image/motou".to_string();
@@ -619,18 +651,20 @@ impl<'a> ImageService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = params.body.clone();
 
         self.client
-            .request_json(Method::POST, &path, headers, query, body)
+            .request_json(
+                Method::POST,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
-    /// 生成你们怎么不说话了表情包
+/// 生成你们怎么不说话了表情包
     #[instrument(skip(self, params))]
     pub async fn post_image_speechless(&self, params: PostImageSpeechlessParams) -> Result<Value> {
         let mut path = "/image/speechless".to_string();
@@ -639,18 +673,20 @@ impl<'a> ImageService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = params.body.clone();
 
         self.client
-            .request_json(Method::POST, &path, headers, query, body)
+            .request_json(
+                Method::POST,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
-    /// SVG转图片
+/// SVG转图片
     #[instrument(skip(self, params))]
     pub async fn post_image_svg(&self, params: PostImageSvgParams) -> Result<Value> {
         let mut path = "/image/svg".to_string();
@@ -671,15 +707,17 @@ impl<'a> ImageService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = params.body.clone();
 
         self.client
-            .request_json(Method::POST, &path, headers, query, body)
+            .request_json(
+                Method::POST,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
 }
@@ -724,6 +762,7 @@ impl GetAvatarGravatarParams {
         self
     }
 }
+
 
 #[derive(Debug, Clone)]
 pub struct GetImageMotouParams {
@@ -818,7 +857,9 @@ pub struct PostImageFrombase64Params {
 
 impl PostImageFrombase64Params {
     pub fn new() -> Self {
-        Self { body: None }
+        Self {
+            body: None,
+        }
     }
     pub fn body(mut self, value: Value) -> Self {
         self.body = Some(value);
@@ -833,7 +874,9 @@ pub struct PostImageMotouParams {
 
 impl PostImageMotouParams {
     pub fn new() -> Self {
-        Self { body: None }
+        Self {
+            body: None,
+        }
     }
     pub fn body(mut self, value: Value) -> Self {
         self.body = Some(value);
@@ -848,7 +891,9 @@ pub struct PostImageSpeechlessParams {
 
 impl PostImageSpeechlessParams {
     pub fn new() -> Self {
-        Self { body: None }
+        Self {
+            body: None,
+        }
     }
     pub fn body(mut self, value: Value) -> Self {
         self.body = Some(value);
@@ -902,12 +947,9 @@ pub struct MiscService<'a> {
 }
 
 impl<'a> MiscService<'a> {
-    /// 获取指定日期的程序员历史事件
+/// 获取指定日期的程序员历史事件
     #[instrument(skip(self, params))]
-    pub async fn get_history_programmer(
-        &self,
-        params: GetHistoryProgrammerParams,
-    ) -> Result<Value> {
+    pub async fn get_history_programmer(&self, params: GetHistoryProgrammerParams) -> Result<Value> {
         let mut path = "/history/programmer".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -916,18 +958,20 @@ impl<'a> MiscService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
 
         self.client
-            .request_json(Method::GET, &path, headers, query, body)
+            .request_json(
+                Method::GET,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
-    /// 获取今天的程序员历史事件
+/// 获取今天的程序员历史事件
     #[instrument(skip(self))]
     pub async fn get_history_programmer_today(&self) -> Result<Value> {
         let mut path = "/history/programmer/today".to_string();
@@ -936,18 +980,20 @@ impl<'a> MiscService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
 
         self.client
-            .request_json(Method::GET, &path, headers, query, body)
+            .request_json(
+                Method::GET,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
-    /// 获取多平台实时热榜
+/// 获取多平台实时热榜
     #[instrument(skip(self, params))]
     pub async fn get_misc_hotboard(&self, params: GetMiscHotboardParams) -> Result<Value> {
         let mut path = "/misc/hotboard".to_string();
@@ -957,18 +1003,20 @@ impl<'a> MiscService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
 
         self.client
-            .request_json(Method::GET, &path, headers, query, body)
+            .request_json(
+                Method::GET,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
-    /// 查询手机号码归属地信息
+/// 查询手机号码归属地信息
     #[instrument(skip(self, params))]
     pub async fn get_misc_phoneinfo(&self, params: GetMiscPhoneinfoParams) -> Result<Value> {
         let mut path = "/misc/phoneinfo".to_string();
@@ -978,18 +1026,20 @@ impl<'a> MiscService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
 
         self.client
-            .request_json(Method::GET, &path, headers, query, body)
+            .request_json(
+                Method::GET,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
-    /// 生成高度可定制的随机数
+/// 生成高度可定制的随机数
     #[instrument(skip(self, params))]
     pub async fn get_misc_randomnumber(&self, params: GetMiscRandomnumberParams) -> Result<Value> {
         let mut path = "/misc/randomnumber".to_string();
@@ -1016,18 +1066,20 @@ impl<'a> MiscService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
 
         self.client
-            .request_json(Method::GET, &path, headers, query, body)
+            .request_json(
+                Method::GET,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
-    /// 转换时间戳 (旧版，推荐使用/convert/unixtime)
+/// 转换时间戳 (旧版，推荐使用/convert/unixtime)
     #[instrument(skip(self, params))]
     pub async fn get_misc_timestamp(&self, params: GetMiscTimestampParams) -> Result<Value> {
         let mut path = "/misc/timestamp".to_string();
@@ -1037,18 +1089,20 @@ impl<'a> MiscService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
 
         self.client
-            .request_json(Method::GET, &path, headers, query, body)
+            .request_json(
+                Method::GET,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
-    /// 获取支持的快递公司列表
+/// 获取支持的快递公司列表
     #[instrument(skip(self))]
     pub async fn get_misc_tracking_carriers(&self) -> Result<Value> {
         let mut path = "/misc/tracking/carriers".to_string();
@@ -1057,75 +1111,69 @@ impl<'a> MiscService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
 
         self.client
-            .request_json(Method::GET, &path, headers, query, body)
+            .request_json(
+                Method::GET,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
-    /// 识别快递公司
+/// 识别快递公司
     #[instrument(skip(self, params))]
-    pub async fn get_misc_tracking_detect(
-        &self,
-        params: GetMiscTrackingDetectParams,
-    ) -> Result<Value> {
+    pub async fn get_misc_tracking_detect(&self, params: GetMiscTrackingDetectParams) -> Result<Value> {
         let mut path = "/misc/tracking/detect".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
-        query.push((
-            "tracking_number".to_string(),
-            params.tracking_number_query.clone(),
-        ));
+        query.push(("tracking_number".to_string(), params.tracking_number_query.clone()));
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
 
         self.client
-            .request_json(Method::GET, &path, headers, query, body)
+            .request_json(
+                Method::GET,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
-    /// 查询快递物流信息
+/// 查询快递物流信息
     #[instrument(skip(self, params))]
-    pub async fn get_misc_tracking_query(
-        &self,
-        params: GetMiscTrackingQueryParams,
-    ) -> Result<Value> {
+    pub async fn get_misc_tracking_query(&self, params: GetMiscTrackingQueryParams) -> Result<Value> {
         let mut path = "/misc/tracking/query".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
-        query.push((
-            "tracking_number".to_string(),
-            params.tracking_number_query.clone(),
-        ));
+        query.push(("tracking_number".to_string(), params.tracking_number_query.clone()));
         if let Some(value) = &params.carrier_code_query {
             query.push(("carrier_code".to_string(), value.clone()));
         }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
 
         self.client
-            .request_json(Method::GET, &path, headers, query, body)
+            .request_json(
+                Method::GET,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
-    /// 查询实时天气信息
+/// 查询实时天气信息
     #[instrument(skip(self, params))]
     pub async fn get_misc_weather(&self, params: GetMiscWeatherParams) -> Result<Value> {
         let mut path = "/misc/weather".to_string();
@@ -1140,18 +1188,20 @@ impl<'a> MiscService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
 
         self.client
-            .request_json(Method::GET, &path, headers, query, body)
+            .request_json(
+                Method::GET,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
-    /// 查询全球任意时区的时间
+/// 查询全球任意时区的时间
     #[instrument(skip(self, params))]
     pub async fn get_misc_worldtime(&self, params: GetMiscWorldtimeParams) -> Result<Value> {
         let mut path = "/misc/worldtime".to_string();
@@ -1161,15 +1211,17 @@ impl<'a> MiscService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
 
         self.client
-            .request_json(Method::GET, &path, headers, query, body)
+            .request_json(
+                Method::GET,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
 }
@@ -1188,6 +1240,7 @@ impl GetHistoryProgrammerParams {
         }
     }
 }
+
 
 #[derive(Debug, Clone)]
 pub struct GetMiscHotboardParams {
@@ -1275,6 +1328,7 @@ impl GetMiscTimestampParams {
     }
 }
 
+
 #[derive(Debug, Clone)]
 pub struct GetMiscTrackingDetectParams {
     pub tracking_number_query: String,
@@ -1348,7 +1402,7 @@ pub struct NetworkService<'a> {
 }
 
 impl<'a> NetworkService<'a> {
-    /// 执行DNS解析查询
+/// 执行DNS解析查询
     #[instrument(skip(self, params))]
     pub async fn get_network_dns(&self, params: GetNetworkDnsParams) -> Result<Value> {
         let mut path = "/network/dns".to_string();
@@ -1361,18 +1415,20 @@ impl<'a> NetworkService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
 
         self.client
-            .request_json(Method::GET, &path, headers, query, body)
+            .request_json(
+                Method::GET,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
-    /// 查询域名ICP备案信息
+/// 查询域名ICP备案信息
     #[instrument(skip(self, params))]
     pub async fn get_network_icp(&self, params: GetNetworkIcpParams) -> Result<Value> {
         let mut path = "/network/icp".to_string();
@@ -1382,18 +1438,20 @@ impl<'a> NetworkService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
 
         self.client
-            .request_json(Method::GET, &path, headers, query, body)
+            .request_json(
+                Method::GET,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
-    /// 查询指定IP或域名的归属信息
+/// 查询指定IP或域名的归属信息
     #[instrument(skip(self, params))]
     pub async fn get_network_ipinfo(&self, params: GetNetworkIpinfoParams) -> Result<Value> {
         let mut path = "/network/ipinfo".to_string();
@@ -1406,18 +1464,20 @@ impl<'a> NetworkService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
 
         self.client
-            .request_json(Method::GET, &path, headers, query, body)
+            .request_json(
+                Method::GET,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
-    /// 获取你的公网IP及归属信息
+/// 获取你的公网IP及归属信息
     #[instrument(skip(self, params))]
     pub async fn get_network_myip(&self, params: GetNetworkMyipParams) -> Result<Value> {
         let mut path = "/network/myip".to_string();
@@ -1429,18 +1489,20 @@ impl<'a> NetworkService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
 
         self.client
-            .request_json(Method::GET, &path, headers, query, body)
+            .request_json(
+                Method::GET,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
-    /// 从服务器Ping指定主机
+/// 从服务器Ping指定主机
     #[instrument(skip(self, params))]
     pub async fn get_network_ping(&self, params: GetNetworkPingParams) -> Result<Value> {
         let mut path = "/network/ping".to_string();
@@ -1450,18 +1512,20 @@ impl<'a> NetworkService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
 
         self.client
-            .request_json(Method::GET, &path, headers, query, body)
+            .request_json(
+                Method::GET,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
-    /// 从服务器Ping你的客户端IP
+/// 从服务器Ping你的客户端IP
     #[instrument(skip(self))]
     pub async fn get_network_pingmyip(&self) -> Result<Value> {
         let mut path = "/network/pingmyip".to_string();
@@ -1470,18 +1534,20 @@ impl<'a> NetworkService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
 
         self.client
-            .request_json(Method::GET, &path, headers, query, body)
+            .request_json(
+                Method::GET,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
-    /// 扫描远程主机的指定端口
+/// 扫描远程主机的指定端口
     #[instrument(skip(self, params))]
     pub async fn get_network_portscan(&self, params: GetNetworkPortscanParams) -> Result<Value> {
         let mut path = "/network/portscan".to_string();
@@ -1495,18 +1561,20 @@ impl<'a> NetworkService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
 
         self.client
-            .request_json(Method::GET, &path, headers, query, body)
+            .request_json(
+                Method::GET,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
-    /// 检查URL的可访问性状态
+/// 检查URL的可访问性状态
     #[instrument(skip(self, params))]
     pub async fn get_network_urlstatus(&self, params: GetNetworkUrlstatusParams) -> Result<Value> {
         let mut path = "/network/urlstatus".to_string();
@@ -1516,18 +1584,20 @@ impl<'a> NetworkService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
 
         self.client
-            .request_json(Method::GET, &path, headers, query, body)
+            .request_json(
+                Method::GET,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
-    /// 查询域名的WHOIS注册信息
+/// 查询域名的WHOIS注册信息
     #[instrument(skip(self, params))]
     pub async fn get_network_whois(&self, params: GetNetworkWhoisParams) -> Result<Value> {
         let mut path = "/network/whois".to_string();
@@ -1540,18 +1610,20 @@ impl<'a> NetworkService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
 
         self.client
-            .request_json(Method::GET, &path, headers, query, body)
+            .request_json(
+                Method::GET,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
-    /// 检查域名在微信中的访问状态
+/// 检查域名在微信中的访问状态
     #[instrument(skip(self, params))]
     pub async fn get_network_wxdomain(&self, params: GetNetworkWxdomainParams) -> Result<Value> {
         let mut path = "/network/wxdomain".to_string();
@@ -1561,15 +1633,17 @@ impl<'a> NetworkService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
 
         self.client
-            .request_json(Method::GET, &path, headers, query, body)
+            .request_json(
+                Method::GET,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
 }
@@ -1632,7 +1706,9 @@ pub struct GetNetworkMyipParams {
 
 impl GetNetworkMyipParams {
     pub fn new() -> Self {
-        Self { source_query: None }
+        Self {
+            source_query: None,
+        }
     }
     pub fn source_query(mut self, value: impl Into<String>) -> Self {
         self.source_query = Some(value.into());
@@ -1652,6 +1728,7 @@ impl GetNetworkPingParams {
         }
     }
 }
+
 
 #[derive(Debug, Clone)]
 pub struct GetNetworkPortscanParams {
@@ -1724,7 +1801,7 @@ pub struct PoemService<'a> {
 }
 
 impl<'a> PoemService<'a> {
-    /// 随机获取一句诗词或名言
+/// 随机获取一句诗词或名言
     #[instrument(skip(self))]
     pub async fn get_saying(&self) -> Result<Value> {
         let mut path = "/saying".to_string();
@@ -1733,15 +1810,17 @@ impl<'a> PoemService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
 
         self.client
-            .request_json(Method::GET, &path, headers, query, body)
+            .request_json(
+                Method::GET,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
 }
@@ -1752,7 +1831,7 @@ pub struct RandomService<'a> {
 }
 
 impl<'a> RandomService<'a> {
-    /// 获取答案之书的神秘答案 (GET)
+/// 获取答案之书的神秘答案 (GET)
     #[instrument(skip(self, params))]
     pub async fn get_answerbook_ask(&self, params: GetAnswerbookAskParams) -> Result<Value> {
         let mut path = "/answerbook/ask".to_string();
@@ -1762,18 +1841,20 @@ impl<'a> RandomService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
 
         self.client
-            .request_json(Method::GET, &path, headers, query, body)
+            .request_json(
+                Method::GET,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
-    /// 随机二次元、风景、动漫图片壁纸
+/// 随机二次元、风景、动漫图片壁纸
     #[instrument(skip(self, params))]
     pub async fn get_random_image(&self, params: GetRandomImageParams) -> Result<Value> {
         let mut path = "/random/image".to_string();
@@ -1788,18 +1869,20 @@ impl<'a> RandomService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
 
         self.client
-            .request_json(Method::GET, &path, headers, query, body)
+            .request_json(
+                Method::GET,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
-    /// 生成高度可定制的随机字符串
+/// 生成高度可定制的随机字符串
     #[instrument(skip(self, params))]
     pub async fn get_random_string(&self, params: GetRandomStringParams) -> Result<Value> {
         let mut path = "/random/string".to_string();
@@ -1814,18 +1897,20 @@ impl<'a> RandomService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
 
         self.client
-            .request_json(Method::GET, &path, headers, query, body)
+            .request_json(
+                Method::GET,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
-    /// 获取答案之书的神秘答案 (POST)
+/// 获取答案之书的神秘答案 (POST)
     #[instrument(skip(self, params))]
     pub async fn post_answerbook_ask(&self, params: PostAnswerbookAskParams) -> Result<Value> {
         let mut path = "/answerbook/ask".to_string();
@@ -1834,15 +1919,17 @@ impl<'a> RandomService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = params.body.clone();
 
         self.client
-            .request_json(Method::POST, &path, headers, query, body)
+            .request_json(
+                Method::POST,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
 }
@@ -1913,7 +2000,9 @@ pub struct PostAnswerbookAskParams {
 
 impl PostAnswerbookAskParams {
     pub fn new() -> Self {
-        Self { body: None }
+        Self {
+            body: None,
+        }
     }
     pub fn body(mut self, value: Value) -> Self {
         self.body = Some(value);
@@ -1926,7 +2015,7 @@ pub struct SocialService<'a> {
 }
 
 impl<'a> SocialService<'a> {
-    /// 获取GitHub仓库信息
+/// 获取GitHub仓库信息
     #[instrument(skip(self, params))]
     pub async fn get_github_repo(&self, params: GetGithubRepoParams) -> Result<Value> {
         let mut path = "/github/repo".to_string();
@@ -1936,23 +2025,22 @@ impl<'a> SocialService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
 
         self.client
-            .request_json(Method::GET, &path, headers, query, body)
+            .request_json(
+                Method::GET,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
-    /// 获取Bilibili用户投稿列表
+/// 获取Bilibili用户投稿列表
     #[instrument(skip(self, params))]
-    pub async fn get_social_bilibili_archives(
-        &self,
-        params: GetSocialBilibiliArchivesParams,
-    ) -> Result<Value> {
+    pub async fn get_social_bilibili_archives(&self, params: GetSocialBilibiliArchivesParams) -> Result<Value> {
         let mut path = "/social/bilibili/archives".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -1972,23 +2060,22 @@ impl<'a> SocialService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
 
         self.client
-            .request_json(Method::GET, &path, headers, query, body)
+            .request_json(
+                Method::GET,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
-    /// 获取Bilibili直播间信息
+/// 获取Bilibili直播间信息
     #[instrument(skip(self, params))]
-    pub async fn get_social_bilibili_liveroom(
-        &self,
-        params: GetSocialBilibiliLiveroomParams,
-    ) -> Result<Value> {
+    pub async fn get_social_bilibili_liveroom(&self, params: GetSocialBilibiliLiveroomParams) -> Result<Value> {
         let mut path = "/social/bilibili/liveroom".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -2001,23 +2088,22 @@ impl<'a> SocialService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
 
         self.client
-            .request_json(Method::GET, &path, headers, query, body)
+            .request_json(
+                Method::GET,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
-    /// 获取Bilibili视频评论
+/// 获取Bilibili视频评论
     #[instrument(skip(self, params))]
-    pub async fn get_social_bilibili_replies(
-        &self,
-        params: GetSocialBilibiliRepliesParams,
-    ) -> Result<Value> {
+    pub async fn get_social_bilibili_replies(&self, params: GetSocialBilibiliRepliesParams) -> Result<Value> {
         let mut path = "/social/bilibili/replies".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -2034,23 +2120,22 @@ impl<'a> SocialService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
 
         self.client
-            .request_json(Method::GET, &path, headers, query, body)
+            .request_json(
+                Method::GET,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
-    /// 查询Bilibili用户信息
+/// 查询Bilibili用户信息
     #[instrument(skip(self, params))]
-    pub async fn get_social_bilibili_userinfo(
-        &self,
-        params: GetSocialBilibiliUserinfoParams,
-    ) -> Result<Value> {
+    pub async fn get_social_bilibili_userinfo(&self, params: GetSocialBilibiliUserinfoParams) -> Result<Value> {
         let mut path = "/social/bilibili/userinfo".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -2058,23 +2143,22 @@ impl<'a> SocialService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
 
         self.client
-            .request_json(Method::GET, &path, headers, query, body)
+            .request_json(
+                Method::GET,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
-    /// 获取Bilibili视频详细信息
+/// 获取Bilibili视频详细信息
     #[instrument(skip(self, params))]
-    pub async fn get_social_bilibili_videoinfo(
-        &self,
-        params: GetSocialBilibiliVideoinfoParams,
-    ) -> Result<Value> {
+    pub async fn get_social_bilibili_videoinfo(&self, params: GetSocialBilibiliVideoinfoParams) -> Result<Value> {
         let mut path = "/social/bilibili/videoinfo".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -2087,23 +2171,22 @@ impl<'a> SocialService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
 
         self.client
-            .request_json(Method::GET, &path, headers, query, body)
+            .request_json(
+                Method::GET,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
-    /// 获取QQ群名称、头像、简介
+/// 获取QQ群名称、头像、简介
     #[instrument(skip(self, params))]
-    pub async fn get_social_qq_groupinfo(
-        &self,
-        params: GetSocialQqGroupinfoParams,
-    ) -> Result<Value> {
+    pub async fn get_social_qq_groupinfo(&self, params: GetSocialQqGroupinfoParams) -> Result<Value> {
         let mut path = "/social/qq/groupinfo".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -2111,18 +2194,20 @@ impl<'a> SocialService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
 
         self.client
-            .request_json(Method::GET, &path, headers, query, body)
+            .request_json(
+                Method::GET,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
-    /// 独家获取QQ号头像、昵称
+/// 独家获取QQ号头像、昵称
     #[instrument(skip(self, params))]
     pub async fn get_social_qq_userinfo(&self, params: GetSocialQqUserinfoParams) -> Result<Value> {
         let mut path = "/social/qq/userinfo".to_string();
@@ -2132,15 +2217,17 @@ impl<'a> SocialService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
 
         self.client
-            .request_json(Method::GET, &path, headers, query, body)
+            .request_json(
+                Method::GET,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
 }
@@ -2316,7 +2403,7 @@ pub struct StatusService<'a> {
 }
 
 impl<'a> StatusService<'a> {
-    /// 获取API限流器实时状态
+/// 获取API限流器实时状态
     #[instrument(skip(self, params))]
     pub async fn get_status_ratelimit(&self, params: GetStatusRatelimitParams) -> Result<Value> {
         let mut path = "/status/ratelimit".to_string();
@@ -2327,24 +2414,22 @@ impl<'a> StatusService<'a> {
         let mut extra_headers = HeaderMap::new();
         extra_headers.insert(
             "Authorization",
-            HeaderValue::from_str(&params.authorization_header).map_err(|_| {
-                Error::InvalidHeader {
-                    name: "Authorization".into(),
-                }
-            })?,
+            HeaderValue::from_str(&params.authorization_header).map_err(|_| Error::InvalidHeader { name: "Authorization".into() })?,
         );
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
 
         self.client
-            .request_json(Method::GET, &path, headers, query, body)
+            .request_json(
+                Method::GET,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
-    /// 获取API端点使用统计
+/// 获取API端点使用统计
     #[instrument(skip(self, params))]
     pub async fn get_status_usage(&self, params: GetStatusUsageParams) -> Result<Value> {
         let mut path = "/status/usage".to_string();
@@ -2356,15 +2441,17 @@ impl<'a> StatusService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
 
         self.client
-            .request_json(Method::GET, &path, headers, query, body)
+            .request_json(
+                Method::GET,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
 }
@@ -2389,7 +2476,9 @@ pub struct GetStatusUsageParams {
 
 impl GetStatusUsageParams {
     pub fn new() -> Self {
-        Self { path_query: None }
+        Self {
+            path_query: None,
+        }
     }
     pub fn path_query(mut self, value: impl Into<String>) -> Self {
         self.path_query = Some(value.into());
@@ -2402,7 +2491,7 @@ pub struct TextService<'a> {
 }
 
 impl<'a> TextService<'a> {
-    /// 计算文本的MD5哈希值(GET)
+/// 计算文本的MD5哈希值(GET)
     #[instrument(skip(self, params))]
     pub async fn get_text_md_5(&self, params: GetTextMd5Params) -> Result<Value> {
         let mut path = "/text/md5".to_string();
@@ -2412,18 +2501,20 @@ impl<'a> TextService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
 
         self.client
-            .request_json(Method::GET, &path, headers, query, body)
+            .request_json(
+                Method::GET,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
-    /// 使用AES算法解密文本
+/// 使用AES算法解密文本
     #[instrument(skip(self, params))]
     pub async fn post_text_aes_decrypt(&self, params: PostTextAesDecryptParams) -> Result<Value> {
         let mut path = "/text/aes/decrypt".to_string();
@@ -2432,18 +2523,20 @@ impl<'a> TextService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = params.body.clone();
 
         self.client
-            .request_json(Method::POST, &path, headers, query, body)
+            .request_json(
+                Method::POST,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
-    /// 使用AES算法加密文本
+/// 使用AES算法加密文本
     #[instrument(skip(self, params))]
     pub async fn post_text_aes_encrypt(&self, params: PostTextAesEncryptParams) -> Result<Value> {
         let mut path = "/text/aes/encrypt".to_string();
@@ -2452,18 +2545,20 @@ impl<'a> TextService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = params.body.clone();
 
         self.client
-            .request_json(Method::POST, &path, headers, query, body)
+            .request_json(
+                Method::POST,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
-    /// 多维度分析文本内容
+/// 多维度分析文本内容
     #[instrument(skip(self, params))]
     pub async fn post_text_analyze(&self, params: PostTextAnalyzeParams) -> Result<Value> {
         let mut path = "/text/analyze".to_string();
@@ -2472,64 +2567,64 @@ impl<'a> TextService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = params.body.clone();
 
         self.client
-            .request_json(Method::POST, &path, headers, query, body)
+            .request_json(
+                Method::POST,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
-    /// 解码Base64编码的文本
+/// 解码Base64编码的文本
     #[instrument(skip(self, params))]
-    pub async fn post_text_base_64_decode(
-        &self,
-        params: PostTextBase64DecodeParams,
-    ) -> Result<Value> {
+    pub async fn post_text_base_64_decode(&self, params: PostTextBase64DecodeParams) -> Result<Value> {
         let mut path = "/text/base64/decode".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = params.body.clone();
 
         self.client
-            .request_json(Method::POST, &path, headers, query, body)
+            .request_json(
+                Method::POST,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
-    /// 将文本进行Base64编码
+/// 将文本进行Base64编码
     #[instrument(skip(self, params))]
-    pub async fn post_text_base_64_encode(
-        &self,
-        params: PostTextBase64EncodeParams,
-    ) -> Result<Value> {
+    pub async fn post_text_base_64_encode(&self, params: PostTextBase64EncodeParams) -> Result<Value> {
         let mut path = "/text/base64/encode".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = params.body.clone();
 
         self.client
-            .request_json(Method::POST, &path, headers, query, body)
+            .request_json(
+                Method::POST,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
-    /// 计算文本的MD5哈希值 (POST)
+/// 计算文本的MD5哈希值 (POST)
     #[instrument(skip(self, params))]
     pub async fn post_text_md_5(&self, params: PostTextMd5Params) -> Result<Value> {
         let mut path = "/text/md5".to_string();
@@ -2538,18 +2633,20 @@ impl<'a> TextService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = params.body.clone();
 
         self.client
-            .request_json(Method::POST, &path, headers, query, body)
+            .request_json(
+                Method::POST,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
-    /// 校验MD5哈希值
+/// 校验MD5哈希值
     #[instrument(skip(self, params))]
     pub async fn post_text_md_5_verify(&self, params: PostTextMd5VerifyParams) -> Result<Value> {
         let mut path = "/text/md5/verify".to_string();
@@ -2558,15 +2655,17 @@ impl<'a> TextService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = params.body.clone();
 
         self.client
-            .request_json(Method::POST, &path, headers, query, body)
+            .request_json(
+                Method::POST,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
 }
@@ -2591,7 +2690,9 @@ pub struct PostTextAesDecryptParams {
 
 impl PostTextAesDecryptParams {
     pub fn new() -> Self {
-        Self { body: None }
+        Self {
+            body: None,
+        }
     }
     pub fn body(mut self, value: Value) -> Self {
         self.body = Some(value);
@@ -2606,7 +2707,9 @@ pub struct PostTextAesEncryptParams {
 
 impl PostTextAesEncryptParams {
     pub fn new() -> Self {
-        Self { body: None }
+        Self {
+            body: None,
+        }
     }
     pub fn body(mut self, value: Value) -> Self {
         self.body = Some(value);
@@ -2621,7 +2724,9 @@ pub struct PostTextAnalyzeParams {
 
 impl PostTextAnalyzeParams {
     pub fn new() -> Self {
-        Self { body: None }
+        Self {
+            body: None,
+        }
     }
     pub fn body(mut self, value: Value) -> Self {
         self.body = Some(value);
@@ -2636,7 +2741,9 @@ pub struct PostTextBase64DecodeParams {
 
 impl PostTextBase64DecodeParams {
     pub fn new() -> Self {
-        Self { body: None }
+        Self {
+            body: None,
+        }
     }
     pub fn body(mut self, value: Value) -> Self {
         self.body = Some(value);
@@ -2651,7 +2758,9 @@ pub struct PostTextBase64EncodeParams {
 
 impl PostTextBase64EncodeParams {
     pub fn new() -> Self {
-        Self { body: None }
+        Self {
+            body: None,
+        }
     }
     pub fn body(mut self, value: Value) -> Self {
         self.body = Some(value);
@@ -2666,7 +2775,9 @@ pub struct PostTextMd5Params {
 
 impl PostTextMd5Params {
     pub fn new() -> Self {
-        Self { body: None }
+        Self {
+            body: None,
+        }
     }
     pub fn body(mut self, value: Value) -> Self {
         self.body = Some(value);
@@ -2681,7 +2792,9 @@ pub struct PostTextMd5VerifyParams {
 
 impl PostTextMd5VerifyParams {
     pub fn new() -> Self {
-        Self { body: None }
+        Self {
+            body: None,
+        }
     }
     pub fn body(mut self, value: Value) -> Self {
         self.body = Some(value);
@@ -2694,7 +2807,7 @@ pub struct TranslateService<'a> {
 }
 
 impl<'a> TranslateService<'a> {
-    /// 获取AI翻译支持的语言和配置
+/// 获取AI翻译支持的语言和配置
     #[instrument(skip(self))]
     pub async fn get_ai_translate_languages(&self) -> Result<Value> {
         let mut path = "/ai/translate/languages".to_string();
@@ -2703,18 +2816,20 @@ impl<'a> TranslateService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
 
         self.client
-            .request_json(Method::GET, &path, headers, query, body)
+            .request_json(
+                Method::GET,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
-    /// AI智能翻译
+/// AI智能翻译
     #[instrument(skip(self, params))]
     pub async fn post_ai_translate(&self, params: PostAiTranslateParams) -> Result<Value> {
         let mut path = "/ai/translate".to_string();
@@ -2724,18 +2839,20 @@ impl<'a> TranslateService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = params.body.clone();
 
         self.client
-            .request_json(Method::POST, &path, headers, query, body)
+            .request_json(
+                Method::POST,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
-    /// 多语言文本翻译
+/// 多语言文本翻译
     #[instrument(skip(self, params))]
     pub async fn post_translate_text(&self, params: PostTranslateTextParams) -> Result<Value> {
         let mut path = "/translate/text".to_string();
@@ -2745,18 +2862,21 @@ impl<'a> TranslateService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = params.body.clone();
 
         self.client
-            .request_json(Method::POST, &path, headers, query, body)
+            .request_json(
+                Method::POST,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
 }
+
 
 #[derive(Debug, Clone)]
 pub struct PostAiTranslateParams {
@@ -2801,12 +2921,9 @@ pub struct WebparseService<'a> {
 }
 
 impl<'a> WebparseService<'a> {
-    /// 查询网页转换任务状态和结果
+/// 查询网页转换任务状态和结果
     #[instrument(skip(self, params))]
-    pub async fn get_web_tomarkdown_async_status(
-        &self,
-        params: GetWebTomarkdownAsyncStatusParams,
-    ) -> Result<Value> {
+    pub async fn get_web_tomarkdown_async_status(&self, params: GetWebTomarkdownAsyncStatusParams) -> Result<Value> {
         let mut path = "/web/tomarkdown/async/{task_id}".to_string();
         {
             let encoded = encode(&params.task_id_path).into_owned();
@@ -2817,23 +2934,22 @@ impl<'a> WebparseService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
 
         self.client
-            .request_json(Method::GET, &path, headers, query, body)
+            .request_json(
+                Method::GET,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
-    /// 提取网页中的所有图片
+/// 提取网页中的所有图片
     #[instrument(skip(self, params))]
-    pub async fn get_webparse_extractimages(
-        &self,
-        params: GetWebparseExtractimagesParams,
-    ) -> Result<Value> {
+    pub async fn get_webparse_extractimages(&self, params: GetWebparseExtractimagesParams) -> Result<Value> {
         let mut path = "/webparse/extractimages".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -2841,18 +2957,20 @@ impl<'a> WebparseService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
 
         self.client
-            .request_json(Method::GET, &path, headers, query, body)
+            .request_json(
+                Method::GET,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
-    /// 抓取并解析网页的元数据
+/// 抓取并解析网页的元数据
     #[instrument(skip(self, params))]
     pub async fn get_webparse_metadata(&self, params: GetWebparseMetadataParams) -> Result<Value> {
         let mut path = "/webparse/metadata".to_string();
@@ -2862,23 +2980,22 @@ impl<'a> WebparseService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
 
         self.client
-            .request_json(Method::GET, &path, headers, query, body)
+            .request_json(
+                Method::GET,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
-    /// 深度抓取网页转Markdown
+/// 深度抓取网页转Markdown
     #[instrument(skip(self, params))]
-    pub async fn post_web_tomarkdown_async(
-        &self,
-        params: PostWebTomarkdownAsyncParams,
-    ) -> Result<Value> {
+    pub async fn post_web_tomarkdown_async(&self, params: PostWebTomarkdownAsyncParams) -> Result<Value> {
         let mut path = "/web/tomarkdown/async".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -2886,15 +3003,17 @@ impl<'a> WebparseService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
 
         self.client
-            .request_json(Method::POST, &path, headers, query, body)
+            .request_json(
+                Method::POST,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
 }
@@ -2956,12 +3075,9 @@ pub struct MinGanCiShiBieService<'a> {
 }
 
 impl<'a> MinGanCiShiBieService<'a> {
-    /// 查询参数分析
+/// 查询参数分析
     #[instrument(skip(self, params))]
-    pub async fn get_sensitive_word_analyze_query(
-        &self,
-        params: GetSensitiveWordAnalyzeQueryParams,
-    ) -> Result<Value> {
+    pub async fn get_sensitive_word_analyze_query(&self, params: GetSensitiveWordAnalyzeQueryParams) -> Result<Value> {
         let mut path = "/sensitive-word/analyze-query".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -2969,61 +3085,61 @@ impl<'a> MinGanCiShiBieService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
 
         self.client
-            .request_json(Method::GET, &path, headers, query, body)
+            .request_json(
+                Method::GET,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
-    /// 分析敏感词
+/// 分析敏感词
     #[instrument(skip(self, params))]
-    pub async fn post_sensitive_word_analyze(
-        &self,
-        params: PostSensitiveWordAnalyzeParams,
-    ) -> Result<Value> {
+    pub async fn post_sensitive_word_analyze(&self, params: PostSensitiveWordAnalyzeParams) -> Result<Value> {
         let mut path = "/sensitive-word/analyze".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = params.body.clone();
 
         self.client
-            .request_json(Method::POST, &path, headers, query, body)
+            .request_json(
+                Method::POST,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
-    /// 敏感词检测（快速）
+/// 敏感词检测（快速）
     #[instrument(skip(self, params))]
-    pub async fn post_sensitive_word_quick_check(
-        &self,
-        params: PostSensitiveWordQuickCheckParams,
-    ) -> Result<Value> {
+    pub async fn post_sensitive_word_quick_check(&self, params: PostSensitiveWordQuickCheckParams) -> Result<Value> {
         let mut path = "/text/profanitycheck".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = params.body.clone();
 
         self.client
-            .request_json(Method::POST, &path, headers, query, body)
+            .request_json(
+                Method::POST,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
 }
@@ -3048,7 +3164,9 @@ pub struct PostSensitiveWordAnalyzeParams {
 
 impl PostSensitiveWordAnalyzeParams {
     pub fn new() -> Self {
-        Self { body: None }
+        Self {
+            body: None,
+        }
     }
     pub fn body(mut self, value: Value) -> Self {
         self.body = Some(value);
@@ -3063,7 +3181,9 @@ pub struct PostSensitiveWordQuickCheckParams {
 
 impl PostSensitiveWordQuickCheckParams {
     pub fn new() -> Self {
-        Self { body: None }
+        Self {
+            body: None,
+        }
     }
     pub fn body(mut self, value: Value) -> Self {
         self.body = Some(value);
@@ -3076,7 +3196,7 @@ pub struct ZhiNengSouSuoService<'a> {
 }
 
 impl<'a> ZhiNengSouSuoService<'a> {
-    /// 获取搜索引擎信息
+/// 获取搜索引擎信息
     #[instrument(skip(self))]
     pub async fn get_search_engines(&self) -> Result<Value> {
         let mut path = "/search/engines".to_string();
@@ -3085,18 +3205,20 @@ impl<'a> ZhiNengSouSuoService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
 
         self.client
-            .request_json(Method::GET, &path, headers, query, body)
+            .request_json(
+                Method::GET,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
-    /// 智能搜索
+/// 智能搜索
     #[instrument(skip(self, params))]
     pub async fn post_search_aggregate(&self, params: PostSearchAggregateParams) -> Result<Value> {
         let mut path = "/search/aggregate".to_string();
@@ -3105,18 +3227,21 @@ impl<'a> ZhiNengSouSuoService<'a> {
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() {
-            None
-        } else {
-            Some(extra_headers)
-        };
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = params.body.clone();
 
         self.client
-            .request_json(Method::POST, &path, headers, query, body)
+            .request_json(
+                Method::POST,
+                &path,
+                headers,
+                query,
+                body,
+            )
             .await
     }
 }
+
 
 #[derive(Debug, Clone)]
 pub struct PostSearchAggregateParams {
@@ -3125,7 +3250,9 @@ pub struct PostSearchAggregateParams {
 
 impl PostSearchAggregateParams {
     pub fn new() -> Self {
-        Self { body: None }
+        Self {
+            body: None,
+        }
     }
     pub fn body(mut self, value: Value) -> Self {
         self.body = Some(value);
