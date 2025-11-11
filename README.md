@@ -26,8 +26,6 @@ async fn main() -> Result<(), uapi_sdk_rust::Error> {
 }
 ```
 
-> 未发布到 crates.io 时，可用 `uapi-sdk-rust = { path = "sdks/rust/uapi-sdk-rust" }` 拉取本地版本。
-
 ## 特性
 
 现在你不再需要反反复复的查阅文档了。
