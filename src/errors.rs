@@ -3,7 +3,11 @@ use thiserror::Error;
 #[derive(Debug, Error)]
 pub enum Error {
     #[error("authentication failed (status {status})")]
-    AuthenticationError { status: u16, message: Option<String>, request_id: Option<String> },
+    AuthenticationError {
+        status: u16,
+        message: Option<String>,
+        request_id: Option<String>,
+    },
 
     #[error("rate limited (status {status})")]
     RateLimitError {
@@ -14,13 +18,26 @@ pub enum Error {
     },
 
     #[error("validation failed (status {status})")]
-    ValidationError { status: u16, message: Option<String>, details: Option<serde_json::Value>, request_id: Option<String> },
+    ValidationError {
+        status: u16,
+        message: Option<String>,
+        details: Option<serde_json::Value>,
+        request_id: Option<String>,
+    },
 
     #[error("resource not found (status {status})")]
-    NotFound { status: u16, message: Option<String>, request_id: Option<String> },
+    NotFound {
+        status: u16,
+        message: Option<String>,
+        request_id: Option<String>,
+    },
 
     #[error("server error (status {status})")]
-    ServerError { status: u16, message: Option<String>, request_id: Option<String> },
+    ServerError {
+        status: u16,
+        message: Option<String>,
+        request_id: Option<String>,
+    },
 
     #[error("api error (status {status})")]
     ApiError {
@@ -30,6 +47,9 @@ pub enum Error {
         details: Option<serde_json::Value>,
         request_id: Option<String>,
     },
+
+    #[error("invalid header `{name}`")]
+    InvalidHeader { name: String },
 
     #[error(transparent)]
     Transport(#[from] reqwest::Error),

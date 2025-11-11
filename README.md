@@ -15,10 +15,10 @@ cargo add uapi-sdk-rust
 ```
 
 ```rust
-use uapi_sdk_rust::Client;
+use _::Client;
 
 #[tokio::main]
-async fn main() -> Result<(), uapi_sdk_rust::Error> {
+async fn main() -> Result<(), _::Error> {
     let client = Client::new("");
     let result = client.social().get_social_qq_userinfo("10001").await?;
     println!("{result:?}");
@@ -68,5 +68,6 @@ async fn main() -> Result<(), uapi_sdk_rust::Error> {
 ## 文档
 
 访问 [UApi文档首页](https://uapis.cn/docs/introduction) 并选择任意接口，向下滚动到 **快速启动** 区块即可看到最新的 Rust 示例代码。
+
 
 

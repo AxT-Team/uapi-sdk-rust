@@ -1,6 +1,6 @@
 [package]
 name = "uapi-sdk-rust"
-version = "0.1.1"
+version = "0.1.0"
 edition = "2021"
 license = "MIT OR Apache-2.0"
 description = "UAPI Rust SDK - idiomatic, typed, domain-driven API client."
@@ -23,6 +23,7 @@ thiserror = "1.0"
 tracing = "0.1"
 url = "2.5"
 time = { version = "0.3", features = ["parsing", "formatting"] }
+urlencoding = "2.1"
 
 [dev-dependencies]
 tokio = { version = "1.39", features = ["macros", "rt-multi-thread"] }

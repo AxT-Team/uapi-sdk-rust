@@ -3,8 +3,8 @@
 
 mod client;
 pub mod errors;
-pub mod services;
 pub mod models;
+pub mod services;
 
 pub use client::{Client, ClientBuilder};
 pub type Result<T> = std::result::Result<T, errors::Error>;
