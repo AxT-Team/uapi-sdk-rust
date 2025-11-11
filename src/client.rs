@@ -176,13 +176,12 @@ fn map_status_to_error(
     request_id: Option<String>,
     retry_after: Option<u64>,
 ) -> Error {
-    use StatusCode::*;
     let s = status.as_u16();
     match status {
-        UNAUTHORIZED | FORBIDDEN => Error::AuthenticationError { status: s, message, request_id },
-        TOO_MANY_REQUESTS => Error::RateLimitError { status: s, message, retry_after_seconds: retry_after, request_id },
-        NOT_FOUND => Error::NotFound { status: s, message, request_id },
-        BAD_REQUEST => Error::ValidationError { status: s, message, details, request_id },
+        StatusCode::UNAUTHORIZED | StatusCode::FORBIDDEN => Error::AuthenticationError { status: s, message, request_id },
+        StatusCode::TOO_MANY_REQUESTS => Error::RateLimitError { status: s, message, retry_after_seconds: retry_after, request_id },
+        StatusCode::NOT_FOUND => Error::NotFound { status: s, message, request_id },
+        StatusCode::BAD_REQUEST => Error::ValidationError { status: s, message, details, request_id },
         _ if status.is_server_error() => Error::ServerError { status: s, message, request_id },
         _ if status.is_client_error() => Error::ApiError { status: s, code, message, details, request_id },
         _ => Error::ApiError { status: s, code, message, details, request_id },
