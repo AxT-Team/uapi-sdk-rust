@@ -1,6 +1,6 @@
 # uapi-sdk-rust
 
-![Banner](./banner.png)
+![Banner](https://raw.githubusercontent.com/AxT-Team/uapi-sdk-rust/main/banner.png)
 
 [![Rust](https://img.shields.io/badge/Rust-1.75+-DEA584?style=flat-square&logo=rust&logoColor=white)](https://www.rust-lang.org/)
 [![Docs](https://img.shields.io/badge/Docs-uapis.cn-2EAE5D?style=flat-square)](https://uapis.cn/)
@@ -70,3 +70,4 @@ async fn main() -> Result<(), uapi::Error> {
 ## 文档
 
 访问 [UApi文档首页](https://uapis.cn/docs/introduction) 并选择任意接口，向下滚动到 **快速启动** 区块即可看到最新的 Rust 示例代码。
+

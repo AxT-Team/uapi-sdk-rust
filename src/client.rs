@@ -10,7 +10,7 @@ use tracing::{debug, instrument};
 use url::Url;
 
 static DEFAULT_BASE: &str = "https://uapis.cn/api/v1";
-static DEFAULT_UA: &str = "uapi-sdk-rust/0.1.0";
+static DEFAULT_UA: &str = "uapi-sdk-rust/0.1.1";
 static DEFAULT_BASE_URL: Lazy<Url> = Lazy::new(|| Url::parse(DEFAULT_BASE).expect("valid default base"));
 
 #[derive(Clone)]
