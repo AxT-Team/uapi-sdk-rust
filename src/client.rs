@@ -12,8 +12,8 @@ use std::time::Duration;
 use tracing::{debug, instrument};
 use url::Url;
 
-static DEFAULT_BASE: &str = "https://uapis.cn/api/v1";
-static DEFAULT_UA: &str = "uapi-sdk-rust/0.1.2";
+static DEFAULT_BASE: &str = "https://uapis.cn/api/v1/";
+static DEFAULT_UA: &str = "uapi-sdk-rust/0.1.3";
 static DEFAULT_BASE_URL: Lazy<Url> =
     Lazy::new(|| Url::parse(DEFAULT_BASE).expect("valid default base"));
 
@@ -111,7 +111,8 @@ impl Client {
         query: Option<Vec<(String, String)>>,
         json_body: Option<serde_json::Value>,
     ) -> Result<T> {
-        let url = self.base_url.join(path)?;
+        let clean_path = path.trim_start_matches('/');
+        let url = self.base_url.join(clean_path)?;
         let mut req = self.http.request(method.clone(), url.clone());
 
         let mut merged = HeaderMap::new();

@@ -4,6 +4,7 @@
 
 [![Rust](https://img.shields.io/badge/Rust-1.75+-DEA584?style=flat-square&logo=rust&logoColor=white)](https://www.rust-lang.org/)
 [![Docs](https://img.shields.io/badge/Docs-uapis.cn-2EAE5D?style=flat-square)](https://uapis.cn/)
+[![docs.rs](https://img.shields.io/docsrs/uapi-sdk-rust?label=docs.rs&style=flat-square)](https://docs.rs/uapi-sdk-rust)
 
 > [!NOTE]
 > 所有接口的 Rust 示例都可以在 [UApi](https://uapis.cn/docs/introduction) 的接口文档页面，向下滚动至 **快速启动** 区块后直接复制。
