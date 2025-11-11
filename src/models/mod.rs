@@ -4,7 +4,6 @@
 #![allow(non_snake_case)]
 #![allow(non_upper_case_globals)]
 
-#[path = "../../internal/src/models/mod.rs"]
-mod generated;
+pub mod generated;
 
 pub use generated::*;

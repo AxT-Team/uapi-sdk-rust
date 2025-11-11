@@ -4,6 +4,7 @@
 
 [![Rust](https://img.shields.io/badge/Rust-1.75+-DEA584?style=flat-square&logo=rust&logoColor=white)](https://www.rust-lang.org/)
 [![Docs](https://img.shields.io/badge/Docs-uapis.cn-2EAE5D?style=flat-square)](https://uapis.cn/)
+[![crates.io](https://img.shields.io/crates/v/uapi-sdk-rust?style=flat-square&logo=rust)](https://crates.io/crates/uapi-sdk-rust)
 [![docs.rs](https://img.shields.io/docsrs/uapi-sdk-rust?label=docs.rs&style=flat-square)](https://docs.rs/uapi-sdk-rust)
 
 > [!NOTE]
@@ -16,11 +17,11 @@ cargo add uapi-sdk-rust
 ```
 
 ```rust
-use _::Client;
+use uapi_sdk_rust::{Client, Result};
 
 #[tokio::main]
-async fn main() -> Result<(), _::Error> {
-    let client = Client::new("");
+async fn main() -> Result<()> {
+    let client = Client::new("<TOKEN>");
     let result = client.social().get_social_qq_userinfo("10001").await?;
     println!("{result:?}");
     Ok(())
@@ -47,9 +48,15 @@ async fn main() -> Result<(), _::Error> {
 
 ```rust
 use uapi_sdk_rust::{Client, models::GetNetworkIpinfo200Response};
+
+async fn example(client: &Client) -> uapi_sdk_rust::Result<()> {
+    let info: GetNetworkIpinfo200Response = client.network().get_network_ipinfo(...).await?;
+    println!("{:?}", info.region);
+    Ok(())
+}
 ```
 
-这些模型全部派生了 `Serialize` / `Deserialize`，便于在应用中进行序列化或持久化。
+这些模型全部派生了 `Serialize`/`Deserialize`，可以直接在应用中持久化或与数据库交互。
 
 ## 错误模型概览
 
