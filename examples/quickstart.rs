@@ -1,4 +1,4 @@
-use uapi::{Client, Result};
+use uapi_sdk_rust::{Client, Result};
 
 #[tokio::main]
 async fn main() -> Result<()> {

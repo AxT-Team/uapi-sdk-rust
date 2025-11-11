@@ -15,10 +15,10 @@ cargo add uapi-sdk-rust
 ```
 
 ```rust
-use uapi::Client;
+use uapi_sdk_rust::Client;
 
 #[tokio::main]
-async fn main() -> Result<(), uapi::Error> {
+async fn main() -> Result<(), uapi_sdk_rust::Error> {
     let client = Client::new("");
     let result = client.social().get_social_qq_userinfo("10001").await?;
     println!("{result:?}");
