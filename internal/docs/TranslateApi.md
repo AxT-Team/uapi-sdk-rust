@@ -6,6 +6,7 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**get_ai_translate_languages**](TranslateApi.md#get_ai_translate_languages) | **GET** /ai/translate/languages | 获取AI翻译支持的语言和配置
 [**post_ai_translate**](TranslateApi.md#post_ai_translate) | **POST** /ai/translate | AI智能翻译
+[**post_translate_stream**](TranslateApi.md#post_translate_stream) | **POST** /translate/stream | 流式翻译（中英互译）
 [**post_translate_text**](TranslateApi.md#post_translate_text) | **POST** /translate/text | 多语言文本翻译
 
 
@@ -64,6 +65,36 @@ No authorization required
 
 - **Content-Type**: application/json
 - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
+## post_translate_stream
+
+> String post_translate_stream(post_translate_stream_request)
+流式翻译（中英互译）
+
+想让翻译结果像打字机一样逐字显示出来？这个流式翻译接口能实现这种效果。  ## 功能概述 不同于传统翻译API一次性返回完整结果，这个接口会实时地、一个字一个字地把翻译内容推给你（就像ChatGPT回复消息那样），非常适合用在聊天应用、直播字幕等需要即时反馈的场景。  ## 它能做什么 - **中英互译**：支持中文和英文之间的双向翻译 - **自动识别**：不确定源语言？设置为 `auto` 让我们自动检测 - **逐字返回**：翻译结果会像打字机一样逐字流式返回，用户体验更流畅 - **音频朗读**：部分翻译结果会附带音频链接，方便朗读  ## 支持的语言 目前专注于中英互译，支持以下选项： - `中文`（简体/繁体） - `英文` - `auto`（自动检测）
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**post_translate_stream_request** | [**PostTranslateStreamRequest**](PostTranslateStreamRequest.md) | 包含翻译参数的JSON对象 | [required] |
+
+### Return type
+
+**String**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: text/event-stream, application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

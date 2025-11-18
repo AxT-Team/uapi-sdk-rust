@@ -1,8 +1,5 @@
 use crate::errors::{ApiErrorBody, Error};
-use crate::services::{
-    ClipzyZaiXianJianTieBanService, ConvertService, DailyService, GameService, ImageService,
-    MinGanCiShiBieService, MiscService, NetworkService, PoemService, RandomService, SocialService,
-    StatusService, TextService, TranslateService, WebparseService, ZhiNengSouSuoService,
+use crate::services::{ClipzyZaiXianJianTieBanService,ConvertService,DailyService,GameService,ImageService,MiscService,NetworkService,PoemService,RandomService,SocialService,StatusService,TextService,TranslateService,WebparseService,MinGanCiShiBieService,ZhiNengSouSuoService
 };
 use crate::Result;
 use once_cell::sync::Lazy;
@@ -13,9 +10,8 @@ use tracing::{debug, instrument};
 use url::Url;
 
 static DEFAULT_BASE: &str = "https://uapis.cn/api/v1/";
-static DEFAULT_UA: &str = "uapi-sdk-rust/0.1.4";
-static DEFAULT_BASE_URL: Lazy<Url> =
-    Lazy::new(|| Url::parse(DEFAULT_BASE).expect("valid default base"));
+static DEFAULT_UA: &str = "uapi-sdk-rust/0.1.0";
+static DEFAULT_BASE_URL: Lazy<Url> = Lazy::new(|| Url::parse(DEFAULT_BASE).expect("valid default base"));
 
 #[derive(Clone, Debug)]
 pub struct Client {
@@ -140,10 +136,7 @@ impl Client {
         self.handle_json_response(resp).await
     }
 
-    async fn handle_json_response<T: serde::de::DeserializeOwned>(
-        &self,
-        resp: reqwest::Response,
-    ) -> Result<T> {
+    async fn handle_json_response<T: serde::de::DeserializeOwned>(&self, resp: reqwest::Response) -> Result<T> {
         let status = resp.status();
         let req_id = find_request_id(resp.headers());
         let retry_after = parse_retry_after(resp.headers());
@@ -152,20 +145,10 @@ impl Client {
         }
         let text = resp.text().await.unwrap_or_default();
         let parsed = serde_json::from_str::<ApiErrorBody>(&text).ok();
-        let msg = parsed
-            .as_ref()
-            .and_then(|b| b.message.clone())
-            .or_else(|| non_empty(text.clone()));
+        let msg = parsed.as_ref().and_then(|b| b.message.clone()).or_else(|| non_empty(text.clone()));
         let code = parsed.as_ref().and_then(|b| b.code.clone());
         let details = parsed.as_ref().and_then(|b| b.details.clone());
-        Err(map_status_to_error(
-            status,
-            code,
-            msg,
-            details,
-            req_id,
-            retry_after,
-        ))
+        Err(map_status_to_error(status, code, msg, details, req_id, retry_after))
     }
 }
 
@@ -179,26 +162,11 @@ pub struct ClientBuilder {
 }
 
 impl ClientBuilder {
-    pub fn api_key<T: Into<String>>(mut self, api_key: T) -> Self {
-        self.api_key = Some(api_key.into());
-        self
-    }
-    pub fn base_url(mut self, base: Url) -> Self {
-        self.base_url = Some(base);
-        self
-    }
-    pub fn timeout(mut self, secs: u64) -> Self {
-        self.timeout = Some(Duration::from_secs(secs));
-        self
-    }
-    pub fn user_agent<T: Into<String>>(mut self, ua: T) -> Self {
-        self.user_agent = Some(ua.into());
-        self
-    }
-    pub fn http_client(mut self, cli: reqwest::Client) -> Self {
-        self.client = Some(cli);
-        self
-    }
+    pub fn api_key<T: Into<String>>(mut self, api_key: T) -> Self { self.api_key = Some(api_key.into()); self }
+    pub fn base_url(mut self, base: Url) -> Self { self.base_url = Some(base); self }
+    pub fn timeout(mut self, secs: u64) -> Self { self.timeout = Some(Duration::from_secs(secs)); self }
+    pub fn user_agent<T: Into<String>>(mut self, ua: T) -> Self { self.user_agent = Some(ua.into()); self }
+    pub fn http_client(mut self, cli: reqwest::Client) -> Self { self.client = Some(cli); self }
 
     pub fn build(self) -> Result<Client> {
         let http = if let Some(cli) = self.client {
@@ -238,11 +206,7 @@ fn parse_retry_after(headers: &HeaderMap) -> Option<u64> {
 
 fn non_empty(s: String) -> Option<String> {
     let trimmed = s.trim();
-    if trimmed.is_empty() {
-        None
-    } else {
-        Some(trimmed.to_owned())
-    }
+    if trimmed.is_empty() { None } else { Some(trimmed.to_owned()) }
 }
 
 fn map_status_to_error(
@@ -255,46 +219,12 @@ fn map_status_to_error(
 ) -> Error {
     let s = status.as_u16();
     match status {
-        StatusCode::UNAUTHORIZED | StatusCode::FORBIDDEN => Error::AuthenticationError {
-            status: s,
-            message,
-            request_id,
-        },
-        StatusCode::TOO_MANY_REQUESTS => Error::RateLimitError {
-            status: s,
-            message,
-            retry_after_seconds: retry_after,
-            request_id,
-        },
-        StatusCode::NOT_FOUND => Error::NotFound {
-            status: s,
-            message,
-            request_id,
-        },
-        StatusCode::BAD_REQUEST => Error::ValidationError {
-            status: s,
-            message,
-            details,
-            request_id,
-        },
-        _ if status.is_server_error() => Error::ServerError {
-            status: s,
-            message,
-            request_id,
-        },
-        _ if status.is_client_error() => Error::ApiError {
-            status: s,
-            code,
-            message,
-            details,
-            request_id,
-        },
-        _ => Error::ApiError {
-            status: s,
-            code,
-            message,
-            details,
-            request_id,
-        },
+        StatusCode::UNAUTHORIZED | StatusCode::FORBIDDEN => Error::AuthenticationError { status: s, message, request_id },
+        StatusCode::TOO_MANY_REQUESTS => Error::RateLimitError { status: s, message, retry_after_seconds: retry_after, request_id },
+        StatusCode::NOT_FOUND => Error::NotFound { status: s, message, request_id },
+        StatusCode::BAD_REQUEST => Error::ValidationError { status: s, message, details, request_id },
+        _ if status.is_server_error() => Error::ServerError { status: s, message, request_id },
+        _ if status.is_client_error() => Error::ApiError { status: s, code, message, details, request_id },
+        _ => Error::ApiError { status: s, code, message, details, request_id },
     }
 }

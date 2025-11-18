@@ -17,7 +17,7 @@ cargo add uapi-sdk-rust
 ```
 
 ```rust
-use uapi_sdk_rust::{Client, Result};
+use _::{Client, Result};
 
 #[tokio::main]
 async fn main() -> Result<()> {
@@ -44,19 +44,13 @@ async fn main() -> Result<()> {
 
 ## 模型
 
-`uapi_sdk_rust::models` 直接 re-export 了 `internal/src/models` 下的所有结构体，因此你可以在 IDE 中获取与 OpenAPI 保持一致的强类型定义。例如：
+`uapi::models` 直接 re-export 了 `internal/src/models` 中的所有结构体，因此你可以在 IDE 中获得与 OpenAPI 保持一致的强类型定义。例如：
 
 ```rust
-use uapi_sdk_rust::{Client, models::GetNetworkIpinfo200Response};
-
-async fn example(client: &Client) -> uapi_sdk_rust::Result<()> {
-    let info: GetNetworkIpinfo200Response = client.network().get_network_ipinfo(...).await?;
-    println!("{:?}", info.region);
-    Ok(())
-}
+use uapi::{Client, models::GetNetworkIpinfo200Response};
 ```
 
-这些模型全部派生了 `Serialize`/`Deserialize`，可以直接在应用中持久化或与数据库交互。
+所有模型都派生了 `Serialize` / `Deserialize`，可以安全地持久化或在应用调用间传递。
 
 ## 错误模型概览
 

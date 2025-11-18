@@ -1,5 +1,4 @@
 .gitignore
-.openapi-generator-ignore
 .travis.yml
 Cargo.toml
 README.md
@@ -264,6 +263,9 @@ docs/PostTextMd5Request.md
 docs/PostTextMd5Verify200Response.md
 docs/PostTextMd5Verify400Response.md
 docs/PostTextMd5VerifyRequest.md
+docs/PostTranslateStream400Response.md
+docs/PostTranslateStream500Response.md
+docs/PostTranslateStreamRequest.md
 docs/PostTranslateText200Response.md
 docs/PostTranslateText400Response.md
 docs/PostTranslateText500Response.md
@@ -549,6 +551,9 @@ src/models/post_text_md5_request.rs
 src/models/post_text_md5_verify_200_response.rs
 src/models/post_text_md5_verify_400_response.rs
 src/models/post_text_md5_verify_request.rs
+src/models/post_translate_stream_400_response.rs
+src/models/post_translate_stream_500_response.rs
+src/models/post_translate_stream_request.rs
 src/models/post_translate_text_200_response.rs
 src/models/post_translate_text_400_response.rs
 src/models/post_translate_text_500_response.rs

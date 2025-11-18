@@ -2852,6 +2852,28 @@ impl<'a> TranslateService<'a> {
             )
             .await
     }
+/// 流式翻译（中英互译）
+    #[instrument(skip(self, params))]
+    pub async fn post_translate_stream(&self, params: PostTranslateStreamParams) -> Result<Value> {
+        let mut path = "/translate/stream".to_string();
+
+        let mut query: Vec<(String, String)> = Vec::new();
+        let query = if query.is_empty() { None } else { Some(query) };
+
+        let mut extra_headers = HeaderMap::new();
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
+        let body = params.body.clone();
+
+        self.client
+            .request_json(
+                Method::POST,
+                &path,
+                headers,
+                query,
+                body,
+            )
+            .await
+    }
 /// 多语言文本翻译
     #[instrument(skip(self, params))]
     pub async fn post_translate_text(&self, params: PostTranslateTextParams) -> Result<Value> {
@@ -2888,6 +2910,23 @@ impl PostAiTranslateParams {
     pub fn new(target_lang_query: impl Into<String>) -> Self {
         Self {
             target_lang_query: target_lang_query.into(),
+            body: None,
+        }
+    }
+    pub fn body(mut self, value: Value) -> Self {
+        self.body = Some(value);
+        self
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct PostTranslateStreamParams {
+    pub body: Option<Value>,
+}
+
+impl PostTranslateStreamParams {
+    pub fn new() -> Self {
+        Self {
             body: None,
         }
     }
