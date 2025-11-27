@@ -15,7 +15,7 @@ impl<'a> ClipzyZaiXianJianTieBanService<'a> {
 /// 步骤2 (方法一): 获取加密数据
     #[instrument(skip(self, params))]
     pub async fn get_clipzy_get(&self, params: GetClipzyGetParams) -> Result<Value> {
-        let mut path = "/api/get".to_string();
+        let mut path = "/api/v1/api/get".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         query.push(("id".to_string(), params.id_query.clone()));
@@ -38,7 +38,7 @@ impl<'a> ClipzyZaiXianJianTieBanService<'a> {
 /// 步骤2 (方法二): 获取原始文本
     #[instrument(skip(self, params))]
     pub async fn get_clipzy_raw(&self, params: GetClipzyRawParams) -> Result<Value> {
-        let mut path = "/api/raw/{id}".to_string();
+        let mut path = "/api/v1/api/raw/{id}".to_string();
         {
             let encoded = encode(&params.id_path).into_owned();
             path = path.replace("{id}", &encoded);
@@ -65,7 +65,7 @@ impl<'a> ClipzyZaiXianJianTieBanService<'a> {
 /// 步骤1：上传加密数据
     #[instrument(skip(self, params))]
     pub async fn post_clipzy_store(&self, params: PostClipzyStoreParams) -> Result<Value> {
-        let mut path = "/api/store".to_string();
+        let mut path = "/api/v1/api/store".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         let query = if query.is_empty() { None } else { Some(query) };
@@ -139,7 +139,7 @@ impl<'a> ConvertService<'a> {
 /// Unix时间戳与日期字符串双向转换
     #[instrument(skip(self, params))]
     pub async fn get_convert_unixtime(&self, params: GetConvertUnixtimeParams) -> Result<Value> {
-        let mut path = "/convert/unixtime".to_string();
+        let mut path = "/api/v1/convert/unixtime".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         query.push(("time".to_string(), params.time_query.clone()));
@@ -162,7 +162,7 @@ impl<'a> ConvertService<'a> {
 /// 美化并格式化JSON字符串
     #[instrument(skip(self, params))]
     pub async fn post_convert_json(&self, params: PostConvertJsonParams) -> Result<Value> {
-        let mut path = "/convert/json".to_string();
+        let mut path = "/api/v1/convert/json".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         let query = if query.is_empty() { None } else { Some(query) };
@@ -221,7 +221,7 @@ impl<'a> DailyService<'a> {
 /// 生成每日新闻摘要图片
     #[instrument(skip(self))]
     pub async fn get_daily_news_image(&self) -> Result<Value> {
-        let mut path = "/daily/news-image".to_string();
+        let mut path = "/api/v1/daily/news-image".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         let query = if query.is_empty() { None } else { Some(query) };
@@ -251,7 +251,7 @@ impl<'a> GameService<'a> {
 /// 获取Epic Games免费游戏
     #[instrument(skip(self))]
     pub async fn get_game_epic_free(&self) -> Result<Value> {
-        let mut path = "/game/epic-free".to_string();
+        let mut path = "/api/v1/game/epic-free".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         let query = if query.is_empty() { None } else { Some(query) };
@@ -273,7 +273,7 @@ impl<'a> GameService<'a> {
 /// 查询Minecraft玩家历史用户名
     #[instrument(skip(self, params))]
     pub async fn get_game_minecraft_historyid(&self, params: GetGameMinecraftHistoryidParams) -> Result<Value> {
-        let mut path = "/game/minecraft/historyid".to_string();
+        let mut path = "/api/v1/game/minecraft/historyid".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         query.push(("uuid".to_string(), params.uuid_query.clone()));
@@ -296,7 +296,7 @@ impl<'a> GameService<'a> {
 /// 查询Minecraft服务器状态
     #[instrument(skip(self, params))]
     pub async fn get_game_minecraft_serverstatus(&self, params: GetGameMinecraftServerstatusParams) -> Result<Value> {
-        let mut path = "/game/minecraft/serverstatus".to_string();
+        let mut path = "/api/v1/game/minecraft/serverstatus".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         query.push(("server".to_string(), params.server_query.clone()));
@@ -319,7 +319,7 @@ impl<'a> GameService<'a> {
 /// 查询Minecraft玩家信息
     #[instrument(skip(self, params))]
     pub async fn get_game_minecraft_userinfo(&self, params: GetGameMinecraftUserinfoParams) -> Result<Value> {
-        let mut path = "/game/minecraft/userinfo".to_string();
+        let mut path = "/api/v1/game/minecraft/userinfo".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         query.push(("username".to_string(), params.username_query.clone()));
@@ -342,7 +342,7 @@ impl<'a> GameService<'a> {
 /// 获取Steam用户公开摘要
     #[instrument(skip(self, params))]
     pub async fn get_game_steam_summary(&self, params: GetGameSteamSummaryParams) -> Result<Value> {
-        let mut path = "/game/steam/summary".to_string();
+        let mut path = "/api/v1/game/steam/summary".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         if let Some(value) = &params.steamid_query {
@@ -458,7 +458,7 @@ impl<'a> ImageService<'a> {
 /// 获取Gravatar头像
     #[instrument(skip(self, params))]
     pub async fn get_avatar_gravatar(&self, params: GetAvatarGravatarParams) -> Result<Value> {
-        let mut path = "/avatar/gravatar".to_string();
+        let mut path = "/api/v1/avatar/gravatar".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         if let Some(value) = &params.email_query {
@@ -495,7 +495,7 @@ impl<'a> ImageService<'a> {
 /// 获取必应每日壁纸
     #[instrument(skip(self))]
     pub async fn get_image_bing_daily(&self) -> Result<Value> {
-        let mut path = "/image/bing-daily".to_string();
+        let mut path = "/api/v1/image/bing-daily".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         let query = if query.is_empty() { None } else { Some(query) };
@@ -517,7 +517,7 @@ impl<'a> ImageService<'a> {
 /// 生成摸摸头GIF (QQ号方式)
     #[instrument(skip(self, params))]
     pub async fn get_image_motou(&self, params: GetImageMotouParams) -> Result<Value> {
-        let mut path = "/image/motou".to_string();
+        let mut path = "/api/v1/image/motou".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         query.push(("qq".to_string(), params.qq_query.clone()));
@@ -543,7 +543,7 @@ impl<'a> ImageService<'a> {
 /// 动态生成二维码
     #[instrument(skip(self, params))]
     pub async fn get_image_qrcode(&self, params: GetImageQrcodeParams) -> Result<Value> {
-        let mut path = "/image/qrcode".to_string();
+        let mut path = "/api/v1/image/qrcode".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         query.push(("text".to_string(), params.text_query.clone()));
@@ -572,7 +572,7 @@ impl<'a> ImageService<'a> {
 /// 将在线图片转换为Base64
     #[instrument(skip(self, params))]
     pub async fn get_image_tobase_64(&self, params: GetImageTobase64Params) -> Result<Value> {
-        let mut path = "/image/tobase64".to_string();
+        let mut path = "/api/v1/image/tobase64".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         query.push(("url".to_string(), params.url_query.clone()));
@@ -595,7 +595,7 @@ impl<'a> ImageService<'a> {
 /// 无损压缩图片
     #[instrument(skip(self, params))]
     pub async fn post_image_compress(&self, params: PostImageCompressParams) -> Result<Value> {
-        let mut path = "/image/compress".to_string();
+        let mut path = "/api/v1/image/compress".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         if let Some(value) = &params.level_query {
@@ -623,7 +623,7 @@ impl<'a> ImageService<'a> {
 /// 通过Base64编码上传图片
     #[instrument(skip(self, params))]
     pub async fn post_image_frombase_64(&self, params: PostImageFrombase64Params) -> Result<Value> {
-        let mut path = "/image/frombase64".to_string();
+        let mut path = "/api/v1/image/frombase64".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         let query = if query.is_empty() { None } else { Some(query) };
@@ -645,7 +645,7 @@ impl<'a> ImageService<'a> {
 /// 生成摸摸头GIF (图片上传或URL方式)
     #[instrument(skip(self, params))]
     pub async fn post_image_motou(&self, params: PostImageMotouParams) -> Result<Value> {
-        let mut path = "/image/motou".to_string();
+        let mut path = "/api/v1/image/motou".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         let query = if query.is_empty() { None } else { Some(query) };
@@ -667,7 +667,7 @@ impl<'a> ImageService<'a> {
 /// 生成你们怎么不说话了表情包
     #[instrument(skip(self, params))]
     pub async fn post_image_speechless(&self, params: PostImageSpeechlessParams) -> Result<Value> {
-        let mut path = "/image/speechless".to_string();
+        let mut path = "/api/v1/image/speechless".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         let query = if query.is_empty() { None } else { Some(query) };
@@ -689,7 +689,7 @@ impl<'a> ImageService<'a> {
 /// SVG转图片
     #[instrument(skip(self, params))]
     pub async fn post_image_svg(&self, params: PostImageSvgParams) -> Result<Value> {
-        let mut path = "/image/svg".to_string();
+        let mut path = "/api/v1/image/svg".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         if let Some(value) = &params.format_query {
@@ -950,7 +950,7 @@ impl<'a> MiscService<'a> {
 /// 获取指定日期的程序员历史事件
     #[instrument(skip(self, params))]
     pub async fn get_history_programmer(&self, params: GetHistoryProgrammerParams) -> Result<Value> {
-        let mut path = "/history/programmer".to_string();
+        let mut path = "/api/v1/history/programmer".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         query.push(("month".to_string(), params.month_query.clone()));
@@ -974,7 +974,7 @@ impl<'a> MiscService<'a> {
 /// 获取今天的程序员历史事件
     #[instrument(skip(self))]
     pub async fn get_history_programmer_today(&self) -> Result<Value> {
-        let mut path = "/history/programmer/today".to_string();
+        let mut path = "/api/v1/history/programmer/today".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         let query = if query.is_empty() { None } else { Some(query) };
@@ -996,7 +996,7 @@ impl<'a> MiscService<'a> {
 /// 获取多平台实时热榜
     #[instrument(skip(self, params))]
     pub async fn get_misc_hotboard(&self, params: GetMiscHotboardParams) -> Result<Value> {
-        let mut path = "/misc/hotboard".to_string();
+        let mut path = "/api/v1/misc/hotboard".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         query.push(("type".to_string(), params.type_query.clone()));
@@ -1019,7 +1019,7 @@ impl<'a> MiscService<'a> {
 /// 查询手机号码归属地信息
     #[instrument(skip(self, params))]
     pub async fn get_misc_phoneinfo(&self, params: GetMiscPhoneinfoParams) -> Result<Value> {
-        let mut path = "/misc/phoneinfo".to_string();
+        let mut path = "/api/v1/misc/phoneinfo".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         query.push(("phone".to_string(), params.phone_query.clone()));
@@ -1042,7 +1042,7 @@ impl<'a> MiscService<'a> {
 /// 生成高度可定制的随机数
     #[instrument(skip(self, params))]
     pub async fn get_misc_randomnumber(&self, params: GetMiscRandomnumberParams) -> Result<Value> {
-        let mut path = "/misc/randomnumber".to_string();
+        let mut path = "/api/v1/misc/randomnumber".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         if let Some(value) = &params.min_query {
@@ -1082,7 +1082,7 @@ impl<'a> MiscService<'a> {
 /// 转换时间戳 (旧版，推荐使用/convert/unixtime)
     #[instrument(skip(self, params))]
     pub async fn get_misc_timestamp(&self, params: GetMiscTimestampParams) -> Result<Value> {
-        let mut path = "/misc/timestamp".to_string();
+        let mut path = "/api/v1/misc/timestamp".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         query.push(("ts".to_string(), params.ts_query.clone()));
@@ -1105,7 +1105,7 @@ impl<'a> MiscService<'a> {
 /// 获取支持的快递公司列表
     #[instrument(skip(self))]
     pub async fn get_misc_tracking_carriers(&self) -> Result<Value> {
-        let mut path = "/misc/tracking/carriers".to_string();
+        let mut path = "/api/v1/misc/tracking/carriers".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         let query = if query.is_empty() { None } else { Some(query) };
@@ -1127,7 +1127,7 @@ impl<'a> MiscService<'a> {
 /// 识别快递公司
     #[instrument(skip(self, params))]
     pub async fn get_misc_tracking_detect(&self, params: GetMiscTrackingDetectParams) -> Result<Value> {
-        let mut path = "/misc/tracking/detect".to_string();
+        let mut path = "/api/v1/misc/tracking/detect".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         query.push(("tracking_number".to_string(), params.tracking_number_query.clone()));
@@ -1150,7 +1150,7 @@ impl<'a> MiscService<'a> {
 /// 查询快递物流信息
     #[instrument(skip(self, params))]
     pub async fn get_misc_tracking_query(&self, params: GetMiscTrackingQueryParams) -> Result<Value> {
-        let mut path = "/misc/tracking/query".to_string();
+        let mut path = "/api/v1/misc/tracking/query".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         query.push(("tracking_number".to_string(), params.tracking_number_query.clone()));
@@ -1176,7 +1176,7 @@ impl<'a> MiscService<'a> {
 /// 查询实时天气信息
     #[instrument(skip(self, params))]
     pub async fn get_misc_weather(&self, params: GetMiscWeatherParams) -> Result<Value> {
-        let mut path = "/misc/weather".to_string();
+        let mut path = "/api/v1/misc/weather".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         if let Some(value) = &params.city_query {
@@ -1204,7 +1204,7 @@ impl<'a> MiscService<'a> {
 /// 查询全球任意时区的时间
     #[instrument(skip(self, params))]
     pub async fn get_misc_worldtime(&self, params: GetMiscWorldtimeParams) -> Result<Value> {
-        let mut path = "/misc/worldtime".to_string();
+        let mut path = "/api/v1/misc/worldtime".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         query.push(("city".to_string(), params.city_query.clone()));
@@ -1405,7 +1405,7 @@ impl<'a> NetworkService<'a> {
 /// 执行DNS解析查询
     #[instrument(skip(self, params))]
     pub async fn get_network_dns(&self, params: GetNetworkDnsParams) -> Result<Value> {
-        let mut path = "/network/dns".to_string();
+        let mut path = "/api/v1/network/dns".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         query.push(("domain".to_string(), params.domain_query.clone()));
@@ -1431,7 +1431,7 @@ impl<'a> NetworkService<'a> {
 /// 查询域名ICP备案信息
     #[instrument(skip(self, params))]
     pub async fn get_network_icp(&self, params: GetNetworkIcpParams) -> Result<Value> {
-        let mut path = "/network/icp".to_string();
+        let mut path = "/api/v1/network/icp".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         query.push(("domain".to_string(), params.domain_query.clone()));
@@ -1454,7 +1454,7 @@ impl<'a> NetworkService<'a> {
 /// 查询指定IP或域名的归属信息
     #[instrument(skip(self, params))]
     pub async fn get_network_ipinfo(&self, params: GetNetworkIpinfoParams) -> Result<Value> {
-        let mut path = "/network/ipinfo".to_string();
+        let mut path = "/api/v1/network/ipinfo".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         query.push(("ip".to_string(), params.ip_query.clone()));
@@ -1480,7 +1480,7 @@ impl<'a> NetworkService<'a> {
 /// 获取你的公网IP及归属信息
     #[instrument(skip(self, params))]
     pub async fn get_network_myip(&self, params: GetNetworkMyipParams) -> Result<Value> {
-        let mut path = "/network/myip".to_string();
+        let mut path = "/api/v1/network/myip".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         if let Some(value) = &params.source_query {
@@ -1505,7 +1505,7 @@ impl<'a> NetworkService<'a> {
 /// 从服务器Ping指定主机
     #[instrument(skip(self, params))]
     pub async fn get_network_ping(&self, params: GetNetworkPingParams) -> Result<Value> {
-        let mut path = "/network/ping".to_string();
+        let mut path = "/api/v1/network/ping".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         query.push(("host".to_string(), params.host_query.clone()));
@@ -1528,7 +1528,7 @@ impl<'a> NetworkService<'a> {
 /// 从服务器Ping你的客户端IP
     #[instrument(skip(self))]
     pub async fn get_network_pingmyip(&self) -> Result<Value> {
-        let mut path = "/network/pingmyip".to_string();
+        let mut path = "/api/v1/network/pingmyip".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         let query = if query.is_empty() { None } else { Some(query) };
@@ -1550,7 +1550,7 @@ impl<'a> NetworkService<'a> {
 /// 扫描远程主机的指定端口
     #[instrument(skip(self, params))]
     pub async fn get_network_portscan(&self, params: GetNetworkPortscanParams) -> Result<Value> {
-        let mut path = "/network/portscan".to_string();
+        let mut path = "/api/v1/network/portscan".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         query.push(("host".to_string(), params.host_query.clone()));
@@ -1577,7 +1577,7 @@ impl<'a> NetworkService<'a> {
 /// 检查URL的可访问性状态
     #[instrument(skip(self, params))]
     pub async fn get_network_urlstatus(&self, params: GetNetworkUrlstatusParams) -> Result<Value> {
-        let mut path = "/network/urlstatus".to_string();
+        let mut path = "/api/v1/network/urlstatus".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         query.push(("url".to_string(), params.url_query.clone()));
@@ -1600,7 +1600,7 @@ impl<'a> NetworkService<'a> {
 /// 查询域名的WHOIS注册信息
     #[instrument(skip(self, params))]
     pub async fn get_network_whois(&self, params: GetNetworkWhoisParams) -> Result<Value> {
-        let mut path = "/network/whois".to_string();
+        let mut path = "/api/v1/network/whois".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         query.push(("domain".to_string(), params.domain_query.clone()));
@@ -1626,7 +1626,7 @@ impl<'a> NetworkService<'a> {
 /// 检查域名在微信中的访问状态
     #[instrument(skip(self, params))]
     pub async fn get_network_wxdomain(&self, params: GetNetworkWxdomainParams) -> Result<Value> {
-        let mut path = "/network/wxdomain".to_string();
+        let mut path = "/api/v1/network/wxdomain".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         query.push(("domain".to_string(), params.domain_query.clone()));
@@ -1804,7 +1804,7 @@ impl<'a> PoemService<'a> {
 /// 随机获取一句诗词或名言
     #[instrument(skip(self))]
     pub async fn get_saying(&self) -> Result<Value> {
-        let mut path = "/saying".to_string();
+        let mut path = "/api/v1/saying".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         let query = if query.is_empty() { None } else { Some(query) };
@@ -1834,7 +1834,7 @@ impl<'a> RandomService<'a> {
 /// 获取答案之书的神秘答案 (GET)
     #[instrument(skip(self, params))]
     pub async fn get_answerbook_ask(&self, params: GetAnswerbookAskParams) -> Result<Value> {
-        let mut path = "/answerbook/ask".to_string();
+        let mut path = "/api/v1/answerbook/ask".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         query.push(("question".to_string(), params.question_query.clone()));
@@ -1857,7 +1857,7 @@ impl<'a> RandomService<'a> {
 /// 随机二次元、风景、动漫图片壁纸
     #[instrument(skip(self, params))]
     pub async fn get_random_image(&self, params: GetRandomImageParams) -> Result<Value> {
-        let mut path = "/random/image".to_string();
+        let mut path = "/api/v1/random/image".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         if let Some(value) = &params.category_query {
@@ -1885,7 +1885,7 @@ impl<'a> RandomService<'a> {
 /// 生成高度可定制的随机字符串
     #[instrument(skip(self, params))]
     pub async fn get_random_string(&self, params: GetRandomStringParams) -> Result<Value> {
-        let mut path = "/random/string".to_string();
+        let mut path = "/api/v1/random/string".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         if let Some(value) = &params.length_query {
@@ -1913,7 +1913,7 @@ impl<'a> RandomService<'a> {
 /// 获取答案之书的神秘答案 (POST)
     #[instrument(skip(self, params))]
     pub async fn post_answerbook_ask(&self, params: PostAnswerbookAskParams) -> Result<Value> {
-        let mut path = "/answerbook/ask".to_string();
+        let mut path = "/api/v1/answerbook/ask".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         let query = if query.is_empty() { None } else { Some(query) };
@@ -2018,7 +2018,7 @@ impl<'a> SocialService<'a> {
 /// 获取GitHub仓库信息
     #[instrument(skip(self, params))]
     pub async fn get_github_repo(&self, params: GetGithubRepoParams) -> Result<Value> {
-        let mut path = "/github/repo".to_string();
+        let mut path = "/api/v1/github/repo".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         query.push(("repo".to_string(), params.repo_query.clone()));
@@ -2041,7 +2041,7 @@ impl<'a> SocialService<'a> {
 /// 获取Bilibili用户投稿列表
     #[instrument(skip(self, params))]
     pub async fn get_social_bilibili_archives(&self, params: GetSocialBilibiliArchivesParams) -> Result<Value> {
-        let mut path = "/social/bilibili/archives".to_string();
+        let mut path = "/api/v1/social/bilibili/archives".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         query.push(("mid".to_string(), params.mid_query.clone()));
@@ -2076,7 +2076,7 @@ impl<'a> SocialService<'a> {
 /// 获取Bilibili直播间信息
     #[instrument(skip(self, params))]
     pub async fn get_social_bilibili_liveroom(&self, params: GetSocialBilibiliLiveroomParams) -> Result<Value> {
-        let mut path = "/social/bilibili/liveroom".to_string();
+        let mut path = "/api/v1/social/bilibili/liveroom".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         if let Some(value) = &params.mid_query {
@@ -2104,7 +2104,7 @@ impl<'a> SocialService<'a> {
 /// 获取Bilibili视频评论
     #[instrument(skip(self, params))]
     pub async fn get_social_bilibili_replies(&self, params: GetSocialBilibiliRepliesParams) -> Result<Value> {
-        let mut path = "/social/bilibili/replies".to_string();
+        let mut path = "/api/v1/social/bilibili/replies".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         query.push(("oid".to_string(), params.oid_query.clone()));
@@ -2136,7 +2136,7 @@ impl<'a> SocialService<'a> {
 /// 查询Bilibili用户信息
     #[instrument(skip(self, params))]
     pub async fn get_social_bilibili_userinfo(&self, params: GetSocialBilibiliUserinfoParams) -> Result<Value> {
-        let mut path = "/social/bilibili/userinfo".to_string();
+        let mut path = "/api/v1/social/bilibili/userinfo".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         query.push(("uid".to_string(), params.uid_query.clone()));
@@ -2159,7 +2159,7 @@ impl<'a> SocialService<'a> {
 /// 获取Bilibili视频详细信息
     #[instrument(skip(self, params))]
     pub async fn get_social_bilibili_videoinfo(&self, params: GetSocialBilibiliVideoinfoParams) -> Result<Value> {
-        let mut path = "/social/bilibili/videoinfo".to_string();
+        let mut path = "/api/v1/social/bilibili/videoinfo".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         if let Some(value) = &params.aid_query {
@@ -2187,7 +2187,7 @@ impl<'a> SocialService<'a> {
 /// 获取QQ群名称、头像、简介
     #[instrument(skip(self, params))]
     pub async fn get_social_qq_groupinfo(&self, params: GetSocialQqGroupinfoParams) -> Result<Value> {
-        let mut path = "/social/qq/groupinfo".to_string();
+        let mut path = "/api/v1/social/qq/groupinfo".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         query.push(("group_id".to_string(), params.group_id_query.clone()));
@@ -2210,7 +2210,7 @@ impl<'a> SocialService<'a> {
 /// 独家获取QQ号头像、昵称
     #[instrument(skip(self, params))]
     pub async fn get_social_qq_userinfo(&self, params: GetSocialQqUserinfoParams) -> Result<Value> {
-        let mut path = "/social/qq/userinfo".to_string();
+        let mut path = "/api/v1/social/qq/userinfo".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         query.push(("qq".to_string(), params.qq_query.clone()));
@@ -2406,7 +2406,7 @@ impl<'a> StatusService<'a> {
 /// 获取API限流器实时状态
     #[instrument(skip(self, params))]
     pub async fn get_status_ratelimit(&self, params: GetStatusRatelimitParams) -> Result<Value> {
-        let mut path = "/status/ratelimit".to_string();
+        let mut path = "/api/v1/status/ratelimit".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         let query = if query.is_empty() { None } else { Some(query) };
@@ -2432,7 +2432,7 @@ impl<'a> StatusService<'a> {
 /// 获取API端点使用统计
     #[instrument(skip(self, params))]
     pub async fn get_status_usage(&self, params: GetStatusUsageParams) -> Result<Value> {
-        let mut path = "/status/usage".to_string();
+        let mut path = "/api/v1/status/usage".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         if let Some(value) = &params.path_query {
@@ -2494,7 +2494,7 @@ impl<'a> TextService<'a> {
 /// 计算文本的MD5哈希值(GET)
     #[instrument(skip(self, params))]
     pub async fn get_text_md_5(&self, params: GetTextMd5Params) -> Result<Value> {
-        let mut path = "/text/md5".to_string();
+        let mut path = "/api/v1/text/md5".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         query.push(("text".to_string(), params.text_query.clone()));
@@ -2517,7 +2517,7 @@ impl<'a> TextService<'a> {
 /// 使用AES算法解密文本
     #[instrument(skip(self, params))]
     pub async fn post_text_aes_decrypt(&self, params: PostTextAesDecryptParams) -> Result<Value> {
-        let mut path = "/text/aes/decrypt".to_string();
+        let mut path = "/api/v1/text/aes/decrypt".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         let query = if query.is_empty() { None } else { Some(query) };
@@ -2539,7 +2539,7 @@ impl<'a> TextService<'a> {
 /// 使用AES算法加密文本
     #[instrument(skip(self, params))]
     pub async fn post_text_aes_encrypt(&self, params: PostTextAesEncryptParams) -> Result<Value> {
-        let mut path = "/text/aes/encrypt".to_string();
+        let mut path = "/api/v1/text/aes/encrypt".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         let query = if query.is_empty() { None } else { Some(query) };
@@ -2561,7 +2561,7 @@ impl<'a> TextService<'a> {
 /// 多维度分析文本内容
     #[instrument(skip(self, params))]
     pub async fn post_text_analyze(&self, params: PostTextAnalyzeParams) -> Result<Value> {
-        let mut path = "/text/analyze".to_string();
+        let mut path = "/api/v1/text/analyze".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         let query = if query.is_empty() { None } else { Some(query) };
@@ -2583,7 +2583,7 @@ impl<'a> TextService<'a> {
 /// 解码Base64编码的文本
     #[instrument(skip(self, params))]
     pub async fn post_text_base_64_decode(&self, params: PostTextBase64DecodeParams) -> Result<Value> {
-        let mut path = "/text/base64/decode".to_string();
+        let mut path = "/api/v1/text/base64/decode".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         let query = if query.is_empty() { None } else { Some(query) };
@@ -2605,7 +2605,7 @@ impl<'a> TextService<'a> {
 /// 将文本进行Base64编码
     #[instrument(skip(self, params))]
     pub async fn post_text_base_64_encode(&self, params: PostTextBase64EncodeParams) -> Result<Value> {
-        let mut path = "/text/base64/encode".to_string();
+        let mut path = "/api/v1/text/base64/encode".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         let query = if query.is_empty() { None } else { Some(query) };
@@ -2627,7 +2627,7 @@ impl<'a> TextService<'a> {
 /// 计算文本的MD5哈希值 (POST)
     #[instrument(skip(self, params))]
     pub async fn post_text_md_5(&self, params: PostTextMd5Params) -> Result<Value> {
-        let mut path = "/text/md5".to_string();
+        let mut path = "/api/v1/text/md5".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         let query = if query.is_empty() { None } else { Some(query) };
@@ -2649,7 +2649,7 @@ impl<'a> TextService<'a> {
 /// 校验MD5哈希值
     #[instrument(skip(self, params))]
     pub async fn post_text_md_5_verify(&self, params: PostTextMd5VerifyParams) -> Result<Value> {
-        let mut path = "/text/md5/verify".to_string();
+        let mut path = "/api/v1/text/md5/verify".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         let query = if query.is_empty() { None } else { Some(query) };
@@ -2810,7 +2810,7 @@ impl<'a> TranslateService<'a> {
 /// 获取AI翻译支持的语言和配置
     #[instrument(skip(self))]
     pub async fn get_ai_translate_languages(&self) -> Result<Value> {
-        let mut path = "/ai/translate/languages".to_string();
+        let mut path = "/api/v1/ai/translate/languages".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         let query = if query.is_empty() { None } else { Some(query) };
@@ -2832,7 +2832,7 @@ impl<'a> TranslateService<'a> {
 /// AI智能翻译
     #[instrument(skip(self, params))]
     pub async fn post_ai_translate(&self, params: PostAiTranslateParams) -> Result<Value> {
-        let mut path = "/ai/translate".to_string();
+        let mut path = "/api/v1/ai/translate".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         query.push(("target_lang".to_string(), params.target_lang_query.clone()));
@@ -2855,7 +2855,7 @@ impl<'a> TranslateService<'a> {
 /// 流式翻译（中英互译）
     #[instrument(skip(self, params))]
     pub async fn post_translate_stream(&self, params: PostTranslateStreamParams) -> Result<Value> {
-        let mut path = "/translate/stream".to_string();
+        let mut path = "/api/v1/translate/stream".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         let query = if query.is_empty() { None } else { Some(query) };
@@ -2877,7 +2877,7 @@ impl<'a> TranslateService<'a> {
 /// 多语言文本翻译
     #[instrument(skip(self, params))]
     pub async fn post_translate_text(&self, params: PostTranslateTextParams) -> Result<Value> {
-        let mut path = "/translate/text".to_string();
+        let mut path = "/api/v1/translate/text".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         query.push(("to_lang".to_string(), params.to_lang_query.clone()));
@@ -2963,7 +2963,7 @@ impl<'a> WebparseService<'a> {
 /// 查询网页转换任务状态和结果
     #[instrument(skip(self, params))]
     pub async fn get_web_tomarkdown_async_status(&self, params: GetWebTomarkdownAsyncStatusParams) -> Result<Value> {
-        let mut path = "/web/tomarkdown/async/{task_id}".to_string();
+        let mut path = "/api/v1/web/tomarkdown/async/{task_id}".to_string();
         {
             let encoded = encode(&params.task_id_path).into_owned();
             path = path.replace("{task_id}", &encoded);
@@ -2989,7 +2989,7 @@ impl<'a> WebparseService<'a> {
 /// 提取网页中的所有图片
     #[instrument(skip(self, params))]
     pub async fn get_webparse_extractimages(&self, params: GetWebparseExtractimagesParams) -> Result<Value> {
-        let mut path = "/webparse/extractimages".to_string();
+        let mut path = "/api/v1/webparse/extractimages".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         query.push(("url".to_string(), params.url_query.clone()));
@@ -3012,7 +3012,7 @@ impl<'a> WebparseService<'a> {
 /// 抓取并解析网页的元数据
     #[instrument(skip(self, params))]
     pub async fn get_webparse_metadata(&self, params: GetWebparseMetadataParams) -> Result<Value> {
-        let mut path = "/webparse/metadata".to_string();
+        let mut path = "/api/v1/webparse/metadata".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         query.push(("url".to_string(), params.url_query.clone()));
@@ -3035,7 +3035,7 @@ impl<'a> WebparseService<'a> {
 /// 深度抓取网页转Markdown
     #[instrument(skip(self, params))]
     pub async fn post_web_tomarkdown_async(&self, params: PostWebTomarkdownAsyncParams) -> Result<Value> {
-        let mut path = "/web/tomarkdown/async".to_string();
+        let mut path = "/api/v1/web/tomarkdown/async".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         query.push(("url".to_string(), params.url_query.clone()));
@@ -3117,7 +3117,7 @@ impl<'a> MinGanCiShiBieService<'a> {
 /// 查询参数分析
     #[instrument(skip(self, params))]
     pub async fn get_sensitive_word_analyze_query(&self, params: GetSensitiveWordAnalyzeQueryParams) -> Result<Value> {
-        let mut path = "/sensitive-word/analyze-query".to_string();
+        let mut path = "/api/v1/sensitive-word/analyze-query".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         query.push(("keyword".to_string(), params.keyword_query.clone()));
@@ -3140,7 +3140,7 @@ impl<'a> MinGanCiShiBieService<'a> {
 /// 分析敏感词
     #[instrument(skip(self, params))]
     pub async fn post_sensitive_word_analyze(&self, params: PostSensitiveWordAnalyzeParams) -> Result<Value> {
-        let mut path = "/sensitive-word/analyze".to_string();
+        let mut path = "/api/v1/sensitive-word/analyze".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         let query = if query.is_empty() { None } else { Some(query) };
@@ -3162,7 +3162,7 @@ impl<'a> MinGanCiShiBieService<'a> {
 /// 敏感词检测（快速）
     #[instrument(skip(self, params))]
     pub async fn post_sensitive_word_quick_check(&self, params: PostSensitiveWordQuickCheckParams) -> Result<Value> {
-        let mut path = "/text/profanitycheck".to_string();
+        let mut path = "/api/v1/text/profanitycheck".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         let query = if query.is_empty() { None } else { Some(query) };
@@ -3238,7 +3238,7 @@ impl<'a> ZhiNengSouSuoService<'a> {
 /// 获取搜索引擎信息
     #[instrument(skip(self))]
     pub async fn get_search_engines(&self) -> Result<Value> {
-        let mut path = "/search/engines".to_string();
+        let mut path = "/api/v1/search/engines".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         let query = if query.is_empty() { None } else { Some(query) };
@@ -3260,7 +3260,7 @@ impl<'a> ZhiNengSouSuoService<'a> {
 /// 智能搜索
     #[instrument(skip(self, params))]
     pub async fn post_search_aggregate(&self, params: PostSearchAggregateParams) -> Result<Value> {
-        let mut path = "/search/aggregate".to_string();
+        let mut path = "/api/v1/search/aggregate".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         let query = if query.is_empty() { None } else { Some(query) };
