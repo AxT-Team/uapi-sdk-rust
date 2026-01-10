@@ -136,7 +136,7 @@ pub struct ConvertService<'a> {
 }
 
 impl<'a> ConvertService<'a> {
-/// Unix时间戳与日期字符串双向转换
+/// 时间戳转换
     #[instrument(skip(self, params))]
     pub async fn get_convert_unixtime(&self, params: GetConvertUnixtimeParams) -> Result<Value> {
         let mut path = "/api/v1/convert/unixtime".to_string();
@@ -159,7 +159,7 @@ impl<'a> ConvertService<'a> {
             )
             .await
     }
-/// 美化并格式化JSON字符串
+/// JSON 格式化
     #[instrument(skip(self, params))]
     pub async fn post_convert_json(&self, params: PostConvertJsonParams) -> Result<Value> {
         let mut path = "/api/v1/convert/json".to_string();
@@ -218,7 +218,7 @@ pub struct DailyService<'a> {
 }
 
 impl<'a> DailyService<'a> {
-/// 生成每日新闻摘要图片
+/// 每日新闻图
     #[instrument(skip(self))]
     pub async fn get_daily_news_image(&self) -> Result<Value> {
         let mut path = "/api/v1/daily/news-image".to_string();
@@ -248,7 +248,7 @@ pub struct GameService<'a> {
 }
 
 impl<'a> GameService<'a> {
-/// 获取Epic Games免费游戏
+/// Epic 免费游戏
     #[instrument(skip(self))]
     pub async fn get_game_epic_free(&self) -> Result<Value> {
         let mut path = "/api/v1/game/epic-free".to_string();
@@ -270,13 +270,18 @@ impl<'a> GameService<'a> {
             )
             .await
     }
-/// 查询Minecraft玩家历史用户名
+/// 查询 MC 曾用名
     #[instrument(skip(self, params))]
     pub async fn get_game_minecraft_historyid(&self, params: GetGameMinecraftHistoryidParams) -> Result<Value> {
         let mut path = "/api/v1/game/minecraft/historyid".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
-        query.push(("uuid".to_string(), params.uuid_query.clone()));
+        if let Some(value) = &params.name_query {
+            query.push(("name".to_string(), value.clone()));
+        }
+        if let Some(value) = &params.uuid_query {
+            query.push(("uuid".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -293,7 +298,7 @@ impl<'a> GameService<'a> {
             )
             .await
     }
-/// 查询Minecraft服务器状态
+/// 查询 MC 服务器
     #[instrument(skip(self, params))]
     pub async fn get_game_minecraft_serverstatus(&self, params: GetGameMinecraftServerstatusParams) -> Result<Value> {
         let mut path = "/api/v1/game/minecraft/serverstatus".to_string();
@@ -316,7 +321,7 @@ impl<'a> GameService<'a> {
             )
             .await
     }
-/// 查询Minecraft玩家信息
+/// 查询 MC 玩家
     #[instrument(skip(self, params))]
     pub async fn get_game_minecraft_userinfo(&self, params: GetGameMinecraftUserinfoParams) -> Result<Value> {
         let mut path = "/api/v1/game/minecraft/userinfo".to_string();
@@ -339,7 +344,7 @@ impl<'a> GameService<'a> {
             )
             .await
     }
-/// 获取Steam用户公开摘要
+/// 查询 Steam 用户
     #[instrument(skip(self, params))]
     pub async fn get_game_steam_summary(&self, params: GetGameSteamSummaryParams) -> Result<Value> {
         let mut path = "/api/v1/game/steam/summary".to_string();
@@ -378,14 +383,24 @@ impl<'a> GameService<'a> {
 
 #[derive(Debug, Clone)]
 pub struct GetGameMinecraftHistoryidParams {
-    pub uuid_query: String,
+    pub name_query: Option<String>,
+    pub uuid_query: Option<String>,
 }
 
 impl GetGameMinecraftHistoryidParams {
-    pub fn new(uuid_query: impl Into<String>) -> Self {
+    pub fn new() -> Self {
         Self {
-            uuid_query: uuid_query.into(),
+            name_query: None,
+            uuid_query: None,
         }
+    }
+    pub fn name_query(mut self, value: impl Into<String>) -> Self {
+        self.name_query = Some(value.into());
+        self
+    }
+    pub fn uuid_query(mut self, value: impl Into<String>) -> Self {
+        self.uuid_query = Some(value.into());
+        self
     }
 }
 
@@ -492,7 +507,7 @@ impl<'a> ImageService<'a> {
             )
             .await
     }
-/// 获取必应每日壁纸
+/// 必应壁纸
     #[instrument(skip(self))]
     pub async fn get_image_bing_daily(&self) -> Result<Value> {
         let mut path = "/api/v1/image/bing-daily".to_string();
@@ -514,7 +529,7 @@ impl<'a> ImageService<'a> {
             )
             .await
     }
-/// 生成摸摸头GIF (QQ号方式)
+/// 摸头 GIF
     #[instrument(skip(self, params))]
     pub async fn get_image_motou(&self, params: GetImageMotouParams) -> Result<Value> {
         let mut path = "/api/v1/image/motou".to_string();
@@ -540,7 +555,7 @@ impl<'a> ImageService<'a> {
             )
             .await
     }
-/// 动态生成二维码
+/// 生成二维码
     #[instrument(skip(self, params))]
     pub async fn get_image_qrcode(&self, params: GetImageQrcodeParams) -> Result<Value> {
         let mut path = "/api/v1/image/qrcode".to_string();
@@ -569,7 +584,7 @@ impl<'a> ImageService<'a> {
             )
             .await
     }
-/// 将在线图片转换为Base64
+/// 图片转 Base64
     #[instrument(skip(self, params))]
     pub async fn get_image_tobase_64(&self, params: GetImageTobase64Params) -> Result<Value> {
         let mut path = "/api/v1/image/tobase64".to_string();
@@ -642,7 +657,7 @@ impl<'a> ImageService<'a> {
             )
             .await
     }
-/// 生成摸摸头GIF (图片上传或URL方式)
+/// 摸头 GIF (上传)
     #[instrument(skip(self, params))]
     pub async fn post_image_motou(&self, params: PostImageMotouParams) -> Result<Value> {
         let mut path = "/api/v1/image/motou".to_string();
@@ -947,7 +962,7 @@ pub struct MiscService<'a> {
 }
 
 impl<'a> MiscService<'a> {
-/// 获取指定日期的程序员历史事件
+/// 程序员历史事件
     #[instrument(skip(self, params))]
     pub async fn get_history_programmer(&self, params: GetHistoryProgrammerParams) -> Result<Value> {
         let mut path = "/api/v1/history/programmer".to_string();
@@ -971,7 +986,7 @@ impl<'a> MiscService<'a> {
             )
             .await
     }
-/// 获取今天的程序员历史事件
+/// 程序员历史上的今天
     #[instrument(skip(self))]
     pub async fn get_history_programmer_today(&self) -> Result<Value> {
         let mut path = "/api/v1/history/programmer/today".to_string();
@@ -993,7 +1008,7 @@ impl<'a> MiscService<'a> {
             )
             .await
     }
-/// 获取多平台实时热榜
+/// 查询热榜
     #[instrument(skip(self, params))]
     pub async fn get_misc_hotboard(&self, params: GetMiscHotboardParams) -> Result<Value> {
         let mut path = "/api/v1/misc/hotboard".to_string();
@@ -1016,7 +1031,7 @@ impl<'a> MiscService<'a> {
             )
             .await
     }
-/// 查询手机号码归属地信息
+/// 查询手机归属地
     #[instrument(skip(self, params))]
     pub async fn get_misc_phoneinfo(&self, params: GetMiscPhoneinfoParams) -> Result<Value> {
         let mut path = "/api/v1/misc/phoneinfo".to_string();
@@ -1039,7 +1054,7 @@ impl<'a> MiscService<'a> {
             )
             .await
     }
-/// 生成高度可定制的随机数
+/// 随机数生成
     #[instrument(skip(self, params))]
     pub async fn get_misc_randomnumber(&self, params: GetMiscRandomnumberParams) -> Result<Value> {
         let mut path = "/api/v1/misc/randomnumber".to_string();
@@ -1173,7 +1188,7 @@ impl<'a> MiscService<'a> {
             )
             .await
     }
-/// 查询实时天气信息
+/// 查询天气
     #[instrument(skip(self, params))]
     pub async fn get_misc_weather(&self, params: GetMiscWeatherParams) -> Result<Value> {
         let mut path = "/api/v1/misc/weather".to_string();
@@ -1184,6 +1199,15 @@ impl<'a> MiscService<'a> {
         }
         if let Some(value) = &params.adcode_query {
             query.push(("adcode".to_string(), value.clone()));
+        }
+        if let Some(value) = &params.extended_query {
+            query.push(("extended".to_string(), value.clone()));
+        }
+        if let Some(value) = &params.indices_query {
+            query.push(("indices".to_string(), value.clone()));
+        }
+        if let Some(value) = &params.forecast_query {
+            query.push(("forecast".to_string(), value.clone()));
         }
         let query = if query.is_empty() { None } else { Some(query) };
 
@@ -1201,7 +1225,7 @@ impl<'a> MiscService<'a> {
             )
             .await
     }
-/// 查询全球任意时区的时间
+/// 查询世界时间
     #[instrument(skip(self, params))]
     pub async fn get_misc_worldtime(&self, params: GetMiscWorldtimeParams) -> Result<Value> {
         let mut path = "/api/v1/misc/worldtime".to_string();
@@ -1217,6 +1241,28 @@ impl<'a> MiscService<'a> {
         self.client
             .request_json(
                 Method::GET,
+                &path,
+                headers,
+                query,
+                body,
+            )
+            .await
+    }
+/// 计算两个日期之间的时间差值
+    #[instrument(skip(self, params))]
+    pub async fn post_misc_date_diff(&self, params: PostMiscDateDiffParams) -> Result<Value> {
+        let mut path = "/api/v1/misc/date-diff".to_string();
+
+        let mut query: Vec<(String, String)> = Vec::new();
+        let query = if query.is_empty() { None } else { Some(query) };
+
+        let mut extra_headers = HeaderMap::new();
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
+        let body = params.body.clone();
+
+        self.client
+            .request_json(
+                Method::POST,
                 &path,
                 headers,
                 query,
@@ -1365,6 +1411,9 @@ impl GetMiscTrackingQueryParams {
 pub struct GetMiscWeatherParams {
     pub city_query: Option<String>,
     pub adcode_query: Option<String>,
+    pub extended_query: Option<String>,
+    pub indices_query: Option<String>,
+    pub forecast_query: Option<String>,
 }
 
 impl GetMiscWeatherParams {
@@ -1372,6 +1421,9 @@ impl GetMiscWeatherParams {
         Self {
             city_query: None,
             adcode_query: None,
+            extended_query: None,
+            indices_query: None,
+            forecast_query: None,
         }
     }
     pub fn city_query(mut self, value: impl Into<String>) -> Self {
@@ -1380,6 +1432,18 @@ impl GetMiscWeatherParams {
     }
     pub fn adcode_query(mut self, value: impl Into<String>) -> Self {
         self.adcode_query = Some(value.into());
+        self
+    }
+    pub fn extended_query(mut self, value: impl Into<String>) -> Self {
+        self.extended_query = Some(value.into());
+        self
+    }
+    pub fn indices_query(mut self, value: impl Into<String>) -> Self {
+        self.indices_query = Some(value.into());
+        self
+    }
+    pub fn forecast_query(mut self, value: impl Into<String>) -> Self {
+        self.forecast_query = Some(value.into());
         self
     }
 }
@@ -1394,6 +1458,23 @@ impl GetMiscWorldtimeParams {
         Self {
             city_query: city_query.into(),
         }
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct PostMiscDateDiffParams {
+    pub body: Option<Value>,
+}
+
+impl PostMiscDateDiffParams {
+    pub fn new() -> Self {
+        Self {
+            body: None,
+        }
+    }
+    pub fn body(mut self, value: Value) -> Self {
+        self.body = Some(value);
+        self
     }
 }
 #[derive(Debug, Clone)]
@@ -1451,7 +1532,7 @@ impl<'a> NetworkService<'a> {
             )
             .await
     }
-/// 查询指定IP或域名的归属信息
+/// 查询 IP
     #[instrument(skip(self, params))]
     pub async fn get_network_ipinfo(&self, params: GetNetworkIpinfoParams) -> Result<Value> {
         let mut path = "/api/v1/network/ipinfo".to_string();
@@ -1477,7 +1558,7 @@ impl<'a> NetworkService<'a> {
             )
             .await
     }
-/// 获取你的公网IP及归属信息
+/// 查询我的 IP
     #[instrument(skip(self, params))]
     pub async fn get_network_myip(&self, params: GetNetworkMyipParams) -> Result<Value> {
         let mut path = "/api/v1/network/myip".to_string();
@@ -1502,7 +1583,7 @@ impl<'a> NetworkService<'a> {
             )
             .await
     }
-/// 从服务器Ping指定主机
+/// Ping 主机
     #[instrument(skip(self, params))]
     pub async fn get_network_ping(&self, params: GetNetworkPingParams) -> Result<Value> {
         let mut path = "/api/v1/network/ping".to_string();
@@ -1525,7 +1606,7 @@ impl<'a> NetworkService<'a> {
             )
             .await
     }
-/// 从服务器Ping你的客户端IP
+/// Ping 我的 IP
     #[instrument(skip(self))]
     pub async fn get_network_pingmyip(&self) -> Result<Value> {
         let mut path = "/api/v1/network/pingmyip".to_string();
@@ -1547,7 +1628,7 @@ impl<'a> NetworkService<'a> {
             )
             .await
     }
-/// 扫描远程主机的指定端口
+/// 端口扫描
     #[instrument(skip(self, params))]
     pub async fn get_network_portscan(&self, params: GetNetworkPortscanParams) -> Result<Value> {
         let mut path = "/api/v1/network/portscan".to_string();
@@ -1801,7 +1882,7 @@ pub struct PoemService<'a> {
 }
 
 impl<'a> PoemService<'a> {
-/// 随机获取一句诗词或名言
+/// 一言
     #[instrument(skip(self))]
     pub async fn get_saying(&self) -> Result<Value> {
         let mut path = "/api/v1/saying".to_string();
@@ -1831,7 +1912,7 @@ pub struct RandomService<'a> {
 }
 
 impl<'a> RandomService<'a> {
-/// 获取答案之书的神秘答案 (GET)
+/// 答案之书
     #[instrument(skip(self, params))]
     pub async fn get_answerbook_ask(&self, params: GetAnswerbookAskParams) -> Result<Value> {
         let mut path = "/api/v1/answerbook/ask".to_string();
@@ -1854,7 +1935,7 @@ impl<'a> RandomService<'a> {
             )
             .await
     }
-/// 随机二次元、风景、动漫图片壁纸
+/// 随机图片
     #[instrument(skip(self, params))]
     pub async fn get_random_image(&self, params: GetRandomImageParams) -> Result<Value> {
         let mut path = "/api/v1/random/image".to_string();
@@ -1882,7 +1963,7 @@ impl<'a> RandomService<'a> {
             )
             .await
     }
-/// 生成高度可定制的随机字符串
+/// 随机字符串
     #[instrument(skip(self, params))]
     pub async fn get_random_string(&self, params: GetRandomStringParams) -> Result<Value> {
         let mut path = "/api/v1/random/string".to_string();
@@ -1910,7 +1991,7 @@ impl<'a> RandomService<'a> {
             )
             .await
     }
-/// 获取答案之书的神秘答案 (POST)
+/// 答案之书 (POST)
     #[instrument(skip(self, params))]
     pub async fn post_answerbook_ask(&self, params: PostAnswerbookAskParams) -> Result<Value> {
         let mut path = "/api/v1/answerbook/ask".to_string();
@@ -2015,7 +2096,7 @@ pub struct SocialService<'a> {
 }
 
 impl<'a> SocialService<'a> {
-/// 获取GitHub仓库信息
+/// 查询 GitHub 仓库
     #[instrument(skip(self, params))]
     pub async fn get_github_repo(&self, params: GetGithubRepoParams) -> Result<Value> {
         let mut path = "/api/v1/github/repo".to_string();
@@ -2038,7 +2119,7 @@ impl<'a> SocialService<'a> {
             )
             .await
     }
-/// 获取Bilibili用户投稿列表
+/// 查询 B站投稿
     #[instrument(skip(self, params))]
     pub async fn get_social_bilibili_archives(&self, params: GetSocialBilibiliArchivesParams) -> Result<Value> {
         let mut path = "/api/v1/social/bilibili/archives".to_string();
@@ -2073,7 +2154,7 @@ impl<'a> SocialService<'a> {
             )
             .await
     }
-/// 获取Bilibili直播间信息
+/// 查询 B站直播间
     #[instrument(skip(self, params))]
     pub async fn get_social_bilibili_liveroom(&self, params: GetSocialBilibiliLiveroomParams) -> Result<Value> {
         let mut path = "/api/v1/social/bilibili/liveroom".to_string();
@@ -2101,7 +2182,7 @@ impl<'a> SocialService<'a> {
             )
             .await
     }
-/// 获取Bilibili视频评论
+/// 查询 B站评论
     #[instrument(skip(self, params))]
     pub async fn get_social_bilibili_replies(&self, params: GetSocialBilibiliRepliesParams) -> Result<Value> {
         let mut path = "/api/v1/social/bilibili/replies".to_string();
@@ -2133,7 +2214,7 @@ impl<'a> SocialService<'a> {
             )
             .await
     }
-/// 查询Bilibili用户信息
+/// 查询 B站用户
     #[instrument(skip(self, params))]
     pub async fn get_social_bilibili_userinfo(&self, params: GetSocialBilibiliUserinfoParams) -> Result<Value> {
         let mut path = "/api/v1/social/bilibili/userinfo".to_string();
@@ -2156,7 +2237,7 @@ impl<'a> SocialService<'a> {
             )
             .await
     }
-/// 获取Bilibili视频详细信息
+/// 查询 B站视频
     #[instrument(skip(self, params))]
     pub async fn get_social_bilibili_videoinfo(&self, params: GetSocialBilibiliVideoinfoParams) -> Result<Value> {
         let mut path = "/api/v1/social/bilibili/videoinfo".to_string();
@@ -2184,7 +2265,7 @@ impl<'a> SocialService<'a> {
             )
             .await
     }
-/// 获取QQ群名称、头像、简介
+/// 查询 QQ 群信息
     #[instrument(skip(self, params))]
     pub async fn get_social_qq_groupinfo(&self, params: GetSocialQqGroupinfoParams) -> Result<Value> {
         let mut path = "/api/v1/social/qq/groupinfo".to_string();
@@ -2207,7 +2288,7 @@ impl<'a> SocialService<'a> {
             )
             .await
     }
-/// 独家获取QQ号头像、昵称
+/// 查询 QQ 信息
     #[instrument(skip(self, params))]
     pub async fn get_social_qq_userinfo(&self, params: GetSocialQqUserinfoParams) -> Result<Value> {
         let mut path = "/api/v1/social/qq/userinfo".to_string();
@@ -2403,7 +2484,7 @@ pub struct StatusService<'a> {
 }
 
 impl<'a> StatusService<'a> {
-/// 获取API限流器实时状态
+/// 限流状态
     #[instrument(skip(self, params))]
     pub async fn get_status_ratelimit(&self, params: GetStatusRatelimitParams) -> Result<Value> {
         let mut path = "/api/v1/status/ratelimit".to_string();
@@ -2491,7 +2572,7 @@ pub struct TextService<'a> {
 }
 
 impl<'a> TextService<'a> {
-/// 计算文本的MD5哈希值(GET)
+/// MD5 哈希
     #[instrument(skip(self, params))]
     pub async fn get_text_md_5(&self, params: GetTextMd5Params) -> Result<Value> {
         let mut path = "/api/v1/text/md5".to_string();
@@ -2514,7 +2595,7 @@ impl<'a> TextService<'a> {
             )
             .await
     }
-/// 使用AES算法解密文本
+/// AES 解密
     #[instrument(skip(self, params))]
     pub async fn post_text_aes_decrypt(&self, params: PostTextAesDecryptParams) -> Result<Value> {
         let mut path = "/api/v1/text/aes/decrypt".to_string();
@@ -2536,7 +2617,29 @@ impl<'a> TextService<'a> {
             )
             .await
     }
-/// 使用AES算法加密文本
+/// AES高级解密
+    #[instrument(skip(self, params))]
+    pub async fn post_text_aes_decrypt_advanced(&self, params: PostTextAesDecryptAdvancedParams) -> Result<Value> {
+        let mut path = "/api/v1/text/aes/decrypt-advanced".to_string();
+
+        let mut query: Vec<(String, String)> = Vec::new();
+        let query = if query.is_empty() { None } else { Some(query) };
+
+        let mut extra_headers = HeaderMap::new();
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
+        let body = params.body.clone();
+
+        self.client
+            .request_json(
+                Method::POST,
+                &path,
+                headers,
+                query,
+                body,
+            )
+            .await
+    }
+/// AES 加密
     #[instrument(skip(self, params))]
     pub async fn post_text_aes_encrypt(&self, params: PostTextAesEncryptParams) -> Result<Value> {
         let mut path = "/api/v1/text/aes/encrypt".to_string();
@@ -2558,7 +2661,29 @@ impl<'a> TextService<'a> {
             )
             .await
     }
-/// 多维度分析文本内容
+/// AES高级加密
+    #[instrument(skip(self, params))]
+    pub async fn post_text_aes_encrypt_advanced(&self, params: PostTextAesEncryptAdvancedParams) -> Result<Value> {
+        let mut path = "/api/v1/text/aes/encrypt-advanced".to_string();
+
+        let mut query: Vec<(String, String)> = Vec::new();
+        let query = if query.is_empty() { None } else { Some(query) };
+
+        let mut extra_headers = HeaderMap::new();
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
+        let body = params.body.clone();
+
+        self.client
+            .request_json(
+                Method::POST,
+                &path,
+                headers,
+                query,
+                body,
+            )
+            .await
+    }
+/// 文本分析
     #[instrument(skip(self, params))]
     pub async fn post_text_analyze(&self, params: PostTextAnalyzeParams) -> Result<Value> {
         let mut path = "/api/v1/text/analyze".to_string();
@@ -2580,7 +2705,7 @@ impl<'a> TextService<'a> {
             )
             .await
     }
-/// 解码Base64编码的文本
+/// Base64 解码
     #[instrument(skip(self, params))]
     pub async fn post_text_base_64_decode(&self, params: PostTextBase64DecodeParams) -> Result<Value> {
         let mut path = "/api/v1/text/base64/decode".to_string();
@@ -2602,7 +2727,7 @@ impl<'a> TextService<'a> {
             )
             .await
     }
-/// 将文本进行Base64编码
+/// Base64 编码
     #[instrument(skip(self, params))]
     pub async fn post_text_base_64_encode(&self, params: PostTextBase64EncodeParams) -> Result<Value> {
         let mut path = "/api/v1/text/base64/encode".to_string();
@@ -2624,7 +2749,29 @@ impl<'a> TextService<'a> {
             )
             .await
     }
-/// 计算文本的MD5哈希值 (POST)
+/// 格式转换
+    #[instrument(skip(self, params))]
+    pub async fn post_text_convert(&self, params: PostTextConvertParams) -> Result<Value> {
+        let mut path = "/api/v1/text/convert".to_string();
+
+        let mut query: Vec<(String, String)> = Vec::new();
+        let query = if query.is_empty() { None } else { Some(query) };
+
+        let mut extra_headers = HeaderMap::new();
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
+        let body = params.body.clone();
+
+        self.client
+            .request_json(
+                Method::POST,
+                &path,
+                headers,
+                query,
+                body,
+            )
+            .await
+    }
+/// MD5 哈希 (POST)
     #[instrument(skip(self, params))]
     pub async fn post_text_md_5(&self, params: PostTextMd5Params) -> Result<Value> {
         let mut path = "/api/v1/text/md5".to_string();
@@ -2646,7 +2793,7 @@ impl<'a> TextService<'a> {
             )
             .await
     }
-/// 校验MD5哈希值
+/// MD5 校验
     #[instrument(skip(self, params))]
     pub async fn post_text_md_5_verify(&self, params: PostTextMd5VerifyParams) -> Result<Value> {
         let mut path = "/api/v1/text/md5/verify".to_string();
@@ -2701,11 +2848,45 @@ impl PostTextAesDecryptParams {
 }
 
 #[derive(Debug, Clone)]
+pub struct PostTextAesDecryptAdvancedParams {
+    pub body: Option<Value>,
+}
+
+impl PostTextAesDecryptAdvancedParams {
+    pub fn new() -> Self {
+        Self {
+            body: None,
+        }
+    }
+    pub fn body(mut self, value: Value) -> Self {
+        self.body = Some(value);
+        self
+    }
+}
+
+#[derive(Debug, Clone)]
 pub struct PostTextAesEncryptParams {
     pub body: Option<Value>,
 }
 
 impl PostTextAesEncryptParams {
+    pub fn new() -> Self {
+        Self {
+            body: None,
+        }
+    }
+    pub fn body(mut self, value: Value) -> Self {
+        self.body = Some(value);
+        self
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct PostTextAesEncryptAdvancedParams {
+    pub body: Option<Value>,
+}
+
+impl PostTextAesEncryptAdvancedParams {
     pub fn new() -> Self {
         Self {
             body: None,
@@ -2769,6 +2950,23 @@ impl PostTextBase64EncodeParams {
 }
 
 #[derive(Debug, Clone)]
+pub struct PostTextConvertParams {
+    pub body: Option<Value>,
+}
+
+impl PostTextConvertParams {
+    pub fn new() -> Self {
+        Self {
+            body: None,
+        }
+    }
+    pub fn body(mut self, value: Value) -> Self {
+        self.body = Some(value);
+        self
+    }
+}
+
+#[derive(Debug, Clone)]
 pub struct PostTextMd5Params {
     pub body: Option<Value>,
 }
@@ -2807,7 +3005,7 @@ pub struct TranslateService<'a> {
 }
 
 impl<'a> TranslateService<'a> {
-/// 获取AI翻译支持的语言和配置
+/// AI翻译配置
     #[instrument(skip(self))]
     pub async fn get_ai_translate_languages(&self) -> Result<Value> {
         let mut path = "/api/v1/ai/translate/languages".to_string();
@@ -2874,7 +3072,7 @@ impl<'a> TranslateService<'a> {
             )
             .await
     }
-/// 多语言文本翻译
+/// 翻译
     #[instrument(skip(self, params))]
     pub async fn post_translate_text(&self, params: PostTranslateTextParams) -> Result<Value> {
         let mut path = "/api/v1/translate/text".to_string();
@@ -2960,7 +3158,7 @@ pub struct WebparseService<'a> {
 }
 
 impl<'a> WebparseService<'a> {
-/// 查询网页转换任务状态和结果
+/// 转换任务状态
     #[instrument(skip(self, params))]
     pub async fn get_web_tomarkdown_async_status(&self, params: GetWebTomarkdownAsyncStatusParams) -> Result<Value> {
         let mut path = "/api/v1/web/tomarkdown/async/{task_id}".to_string();
@@ -2986,7 +3184,7 @@ impl<'a> WebparseService<'a> {
             )
             .await
     }
-/// 提取网页中的所有图片
+/// 提取网页图片
     #[instrument(skip(self, params))]
     pub async fn get_webparse_extractimages(&self, params: GetWebparseExtractimagesParams) -> Result<Value> {
         let mut path = "/api/v1/webparse/extractimages".to_string();
@@ -3009,7 +3207,7 @@ impl<'a> WebparseService<'a> {
             )
             .await
     }
-/// 抓取并解析网页的元数据
+/// 网页元数据
     #[instrument(skip(self, params))]
     pub async fn get_webparse_metadata(&self, params: GetWebparseMetadataParams) -> Result<Value> {
         let mut path = "/api/v1/webparse/metadata".to_string();
@@ -3032,7 +3230,7 @@ impl<'a> WebparseService<'a> {
             )
             .await
     }
-/// 深度抓取网页转Markdown
+/// 网页转 Markdown
     #[instrument(skip(self, params))]
     pub async fn post_web_tomarkdown_async(&self, params: PostWebTomarkdownAsyncParams) -> Result<Value> {
         let mut path = "/api/v1/web/tomarkdown/async".to_string();
@@ -3114,7 +3312,7 @@ pub struct MinGanCiShiBieService<'a> {
 }
 
 impl<'a> MinGanCiShiBieService<'a> {
-/// 查询参数分析
+/// 敏感词分析 (GET)
     #[instrument(skip(self, params))]
     pub async fn get_sensitive_word_analyze_query(&self, params: GetSensitiveWordAnalyzeQueryParams) -> Result<Value> {
         let mut path = "/api/v1/sensitive-word/analyze-query".to_string();
@@ -3235,7 +3433,7 @@ pub struct ZhiNengSouSuoService<'a> {
 }
 
 impl<'a> ZhiNengSouSuoService<'a> {
-/// 获取搜索引擎信息
+/// 搜索引擎配置
     #[instrument(skip(self))]
     pub async fn get_search_engines(&self) -> Result<Value> {
         let mut path = "/api/v1/search/engines".to_string();
