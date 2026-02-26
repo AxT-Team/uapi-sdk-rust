@@ -41,30 +41,29 @@ impl PostTranslateStreamRequest {
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum ToLang {
     #[serde(rename = "中文")]
-    ,
+    Zh,
     #[serde(rename = "英文")]
-    2,
+    En,
 }
 
 impl Default for ToLang {
     fn default() -> ToLang {
-        Self::
+        Self::Zh
     }
 }
 /// 源语言，支持：中文、英文、auto（自动检测）。默认为auto
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum FromLang {
     #[serde(rename = "中文")]
-    ,
+    Zh,
     #[serde(rename = "英文")]
-    2,
+    En,
     #[serde(rename = "auto")]
     Auto,
 }
 
 impl Default for FromLang {
     fn default() -> FromLang {
-        Self::
+        Self::Auto
     }
 }
-
