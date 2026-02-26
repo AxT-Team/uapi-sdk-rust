@@ -22,7 +22,7 @@ pub struct PostSearchAggregate200Response {
     /// 搜索结果列表
     #[serde(rename = "results", skip_serializing_if = "Option::is_none")]
     pub results: Option<Vec<models::PostSearchAggregate200ResponseResultsInner>>,
-    /// 各搜索引擎的结果数量统计
+    /// 各搜索源的结果统计
     #[serde(rename = "sources", skip_serializing_if = "Option::is_none")]
     pub sources: Option<Vec<models::PostSearchAggregate200ResponseSourcesInner>>,
     /// 处理耗时（毫秒）

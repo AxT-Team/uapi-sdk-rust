@@ -529,7 +529,7 @@ impl<'a> ImageService<'a> {
             )
             .await
     }
-/// 摸头 GIF
+/// 生成摸摸头GIF (QQ号)
     #[instrument(skip(self, params))]
     pub async fn get_image_motou(&self, params: GetImageMotouParams) -> Result<Value> {
         let mut path = "/api/v1/image/motou".to_string();
@@ -567,6 +567,15 @@ impl<'a> ImageService<'a> {
         }
         if let Some(value) = &params.format_query {
             query.push(("format".to_string(), value.clone()));
+        }
+        if let Some(value) = &params.transparent_query {
+            query.push(("transparent".to_string(), value.clone()));
+        }
+        if let Some(value) = &params.fgcolor_query {
+            query.push(("fgcolor".to_string(), value.clone()));
+        }
+        if let Some(value) = &params.bgcolor_query {
+            query.push(("bgcolor".to_string(), value.clone()));
         }
         let query = if query.is_empty() { None } else { Some(query) };
 
@@ -657,10 +666,32 @@ impl<'a> ImageService<'a> {
             )
             .await
     }
-/// 摸头 GIF (上传)
+/// 生成摸摸头GIF
     #[instrument(skip(self, params))]
     pub async fn post_image_motou(&self, params: PostImageMotouParams) -> Result<Value> {
         let mut path = "/api/v1/image/motou".to_string();
+
+        let mut query: Vec<(String, String)> = Vec::new();
+        let query = if query.is_empty() { None } else { Some(query) };
+
+        let mut extra_headers = HeaderMap::new();
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
+        let body = params.body.clone();
+
+        self.client
+            .request_json(
+                Method::POST,
+                &path,
+                headers,
+                query,
+                body,
+            )
+            .await
+    }
+/// 图片敏感检测
+    #[instrument(skip(self, params))]
+    pub async fn post_image_nsfw(&self, params: PostImageNsfwParams) -> Result<Value> {
+        let mut path = "/api/v1/image/nsfw".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         let query = if query.is_empty() { None } else { Some(query) };
@@ -803,6 +834,9 @@ pub struct GetImageQrcodeParams {
     pub text_query: String,
     pub size_query: Option<String>,
     pub format_query: Option<String>,
+    pub transparent_query: Option<String>,
+    pub fgcolor_query: Option<String>,
+    pub bgcolor_query: Option<String>,
 }
 
 impl GetImageQrcodeParams {
@@ -811,6 +845,9 @@ impl GetImageQrcodeParams {
             text_query: text_query.into(),
             size_query: None,
             format_query: None,
+            transparent_query: None,
+            fgcolor_query: None,
+            bgcolor_query: None,
         }
     }
     pub fn size_query(mut self, value: impl Into<String>) -> Self {
@@ -819,6 +856,18 @@ impl GetImageQrcodeParams {
     }
     pub fn format_query(mut self, value: impl Into<String>) -> Self {
         self.format_query = Some(value.into());
+        self
+    }
+    pub fn transparent_query(mut self, value: impl Into<String>) -> Self {
+        self.transparent_query = Some(value.into());
+        self
+    }
+    pub fn fgcolor_query(mut self, value: impl Into<String>) -> Self {
+        self.fgcolor_query = Some(value.into());
+        self
+    }
+    pub fn bgcolor_query(mut self, value: impl Into<String>) -> Self {
+        self.bgcolor_query = Some(value.into());
         self
     }
 }
@@ -888,6 +937,23 @@ pub struct PostImageMotouParams {
 }
 
 impl PostImageMotouParams {
+    pub fn new() -> Self {
+        Self {
+            body: None,
+        }
+    }
+    pub fn body(mut self, value: Value) -> Self {
+        self.body = Some(value);
+        self
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct PostImageNsfwParams {
+    pub body: Option<Value>,
+}
+
+impl PostImageNsfwParams {
     pub fn new() -> Self {
         Self {
             body: None,
@@ -1008,6 +1074,92 @@ impl<'a> MiscService<'a> {
             )
             .await
     }
+/// Adcode 国内外行政区域查询
+    #[instrument(skip(self, params))]
+    pub async fn get_misc_district(&self, params: GetMiscDistrictParams) -> Result<Value> {
+        let mut path = "/api/v1/misc/district".to_string();
+
+        let mut query: Vec<(String, String)> = Vec::new();
+        if let Some(value) = &params.keywords_query {
+            query.push(("keywords".to_string(), value.clone()));
+        }
+        if let Some(value) = &params.adcode_query {
+            query.push(("adcode".to_string(), value.clone()));
+        }
+        if let Some(value) = &params.lat_query {
+            query.push(("lat".to_string(), value.clone()));
+        }
+        if let Some(value) = &params.lng_query {
+            query.push(("lng".to_string(), value.clone()));
+        }
+        if let Some(value) = &params.level_query {
+            query.push(("level".to_string(), value.clone()));
+        }
+        if let Some(value) = &params.country_query {
+            query.push(("country".to_string(), value.clone()));
+        }
+        if let Some(value) = &params.limit_query {
+            query.push(("limit".to_string(), value.clone()));
+        }
+        let query = if query.is_empty() { None } else { Some(query) };
+
+        let mut extra_headers = HeaderMap::new();
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
+        let body = None;
+
+        self.client
+            .request_json(
+                Method::GET,
+                &path,
+                headers,
+                query,
+                body,
+            )
+            .await
+    }
+/// 查询节假日与万年历
+    #[instrument(skip(self, params))]
+    pub async fn get_misc_holiday_calendar(&self, params: GetMiscHolidayCalendarParams) -> Result<Value> {
+        let mut path = "/api/v1/misc/holiday-calendar".to_string();
+
+        let mut query: Vec<(String, String)> = Vec::new();
+        if let Some(value) = &params.date_query {
+            query.push(("date".to_string(), value.clone()));
+        }
+        if let Some(value) = &params.month_query {
+            query.push(("month".to_string(), value.clone()));
+        }
+        if let Some(value) = &params.year_query {
+            query.push(("year".to_string(), value.clone()));
+        }
+        if let Some(value) = &params.timezone_query {
+            query.push(("timezone".to_string(), value.clone()));
+        }
+        if let Some(value) = &params.holiday_type_query {
+            query.push(("holiday_type".to_string(), value.clone()));
+        }
+        if let Some(value) = &params.include_nearby_query {
+            query.push(("include_nearby".to_string(), value.clone()));
+        }
+        if let Some(value) = &params.nearby_limit_query {
+            query.push(("nearby_limit".to_string(), value.clone()));
+        }
+        let query = if query.is_empty() { None } else { Some(query) };
+
+        let mut extra_headers = HeaderMap::new();
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
+        let body = None;
+
+        self.client
+            .request_json(
+                Method::GET,
+                &path,
+                headers,
+                query,
+                body,
+            )
+            .await
+    }
 /// 查询热榜
     #[instrument(skip(self, params))]
     pub async fn get_misc_hotboard(&self, params: GetMiscHotboardParams) -> Result<Value> {
@@ -1015,6 +1167,52 @@ impl<'a> MiscService<'a> {
 
         let mut query: Vec<(String, String)> = Vec::new();
         query.push(("type".to_string(), params.type_query.clone()));
+        if let Some(value) = &params.time_query {
+            query.push(("time".to_string(), value.clone()));
+        }
+        if let Some(value) = &params.keyword_query {
+            query.push(("keyword".to_string(), value.clone()));
+        }
+        if let Some(value) = &params.time_start_query {
+            query.push(("time_start".to_string(), value.clone()));
+        }
+        if let Some(value) = &params.time_end_query {
+            query.push(("time_end".to_string(), value.clone()));
+        }
+        if let Some(value) = &params.limit_query {
+            query.push(("limit".to_string(), value.clone()));
+        }
+        if let Some(value) = &params.sources_query {
+            query.push(("sources".to_string(), value.clone()));
+        }
+        let query = if query.is_empty() { None } else { Some(query) };
+
+        let mut extra_headers = HeaderMap::new();
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
+        let body = None;
+
+        self.client
+            .request_json(
+                Method::GET,
+                &path,
+                headers,
+                query,
+                body,
+            )
+            .await
+    }
+/// 查询农历时间
+    #[instrument(skip(self, params))]
+    pub async fn get_misc_lunartime(&self, params: GetMiscLunartimeParams) -> Result<Value> {
+        let mut path = "/api/v1/misc/lunartime".to_string();
+
+        let mut query: Vec<(String, String)> = Vec::new();
+        if let Some(value) = &params.ts_query {
+            query.push(("ts".to_string(), value.clone()));
+        }
+        if let Some(value) = &params.timezone_query {
+            query.push(("timezone".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -1172,6 +1370,9 @@ impl<'a> MiscService<'a> {
         if let Some(value) = &params.carrier_code_query {
             query.push(("carrier_code".to_string(), value.clone()));
         }
+        if let Some(value) = &params.phone_query {
+            query.push(("phone".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -1203,11 +1404,20 @@ impl<'a> MiscService<'a> {
         if let Some(value) = &params.extended_query {
             query.push(("extended".to_string(), value.clone()));
         }
+        if let Some(value) = &params.forecast_query {
+            query.push(("forecast".to_string(), value.clone()));
+        }
+        if let Some(value) = &params.hourly_query {
+            query.push(("hourly".to_string(), value.clone()));
+        }
+        if let Some(value) = &params.minutely_query {
+            query.push(("minutely".to_string(), value.clone()));
+        }
         if let Some(value) = &params.indices_query {
             query.push(("indices".to_string(), value.clone()));
         }
-        if let Some(value) = &params.forecast_query {
-            query.push(("forecast".to_string(), value.clone()));
+        if let Some(value) = &params.lang_query {
+            query.push(("lang".to_string(), value.clone()));
         }
         let query = if query.is_empty() { None } else { Some(query) };
 
@@ -1289,15 +1499,180 @@ impl GetHistoryProgrammerParams {
 
 
 #[derive(Debug, Clone)]
+pub struct GetMiscDistrictParams {
+    pub keywords_query: Option<String>,
+    pub adcode_query: Option<String>,
+    pub lat_query: Option<String>,
+    pub lng_query: Option<String>,
+    pub level_query: Option<String>,
+    pub country_query: Option<String>,
+    pub limit_query: Option<String>,
+}
+
+impl GetMiscDistrictParams {
+    pub fn new() -> Self {
+        Self {
+            keywords_query: None,
+            adcode_query: None,
+            lat_query: None,
+            lng_query: None,
+            level_query: None,
+            country_query: None,
+            limit_query: None,
+        }
+    }
+    pub fn keywords_query(mut self, value: impl Into<String>) -> Self {
+        self.keywords_query = Some(value.into());
+        self
+    }
+    pub fn adcode_query(mut self, value: impl Into<String>) -> Self {
+        self.adcode_query = Some(value.into());
+        self
+    }
+    pub fn lat_query(mut self, value: impl Into<String>) -> Self {
+        self.lat_query = Some(value.into());
+        self
+    }
+    pub fn lng_query(mut self, value: impl Into<String>) -> Self {
+        self.lng_query = Some(value.into());
+        self
+    }
+    pub fn level_query(mut self, value: impl Into<String>) -> Self {
+        self.level_query = Some(value.into());
+        self
+    }
+    pub fn country_query(mut self, value: impl Into<String>) -> Self {
+        self.country_query = Some(value.into());
+        self
+    }
+    pub fn limit_query(mut self, value: impl Into<String>) -> Self {
+        self.limit_query = Some(value.into());
+        self
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct GetMiscHolidayCalendarParams {
+    pub date_query: Option<String>,
+    pub month_query: Option<String>,
+    pub year_query: Option<String>,
+    pub timezone_query: Option<String>,
+    pub holiday_type_query: Option<String>,
+    pub include_nearby_query: Option<String>,
+    pub nearby_limit_query: Option<String>,
+}
+
+impl GetMiscHolidayCalendarParams {
+    pub fn new() -> Self {
+        Self {
+            date_query: None,
+            month_query: None,
+            year_query: None,
+            timezone_query: None,
+            holiday_type_query: None,
+            include_nearby_query: None,
+            nearby_limit_query: None,
+        }
+    }
+    pub fn date_query(mut self, value: impl Into<String>) -> Self {
+        self.date_query = Some(value.into());
+        self
+    }
+    pub fn month_query(mut self, value: impl Into<String>) -> Self {
+        self.month_query = Some(value.into());
+        self
+    }
+    pub fn year_query(mut self, value: impl Into<String>) -> Self {
+        self.year_query = Some(value.into());
+        self
+    }
+    pub fn timezone_query(mut self, value: impl Into<String>) -> Self {
+        self.timezone_query = Some(value.into());
+        self
+    }
+    pub fn holiday_type_query(mut self, value: impl Into<String>) -> Self {
+        self.holiday_type_query = Some(value.into());
+        self
+    }
+    pub fn include_nearby_query(mut self, value: impl Into<String>) -> Self {
+        self.include_nearby_query = Some(value.into());
+        self
+    }
+    pub fn nearby_limit_query(mut self, value: impl Into<String>) -> Self {
+        self.nearby_limit_query = Some(value.into());
+        self
+    }
+}
+
+#[derive(Debug, Clone)]
 pub struct GetMiscHotboardParams {
     pub type_query: String,
+    pub time_query: Option<String>,
+    pub keyword_query: Option<String>,
+    pub time_start_query: Option<String>,
+    pub time_end_query: Option<String>,
+    pub limit_query: Option<String>,
+    pub sources_query: Option<String>,
 }
 
 impl GetMiscHotboardParams {
     pub fn new(type_query: impl Into<String>) -> Self {
         Self {
             type_query: type_query.into(),
+            time_query: None,
+            keyword_query: None,
+            time_start_query: None,
+            time_end_query: None,
+            limit_query: None,
+            sources_query: None,
         }
+    }
+    pub fn time_query(mut self, value: impl Into<String>) -> Self {
+        self.time_query = Some(value.into());
+        self
+    }
+    pub fn keyword_query(mut self, value: impl Into<String>) -> Self {
+        self.keyword_query = Some(value.into());
+        self
+    }
+    pub fn time_start_query(mut self, value: impl Into<String>) -> Self {
+        self.time_start_query = Some(value.into());
+        self
+    }
+    pub fn time_end_query(mut self, value: impl Into<String>) -> Self {
+        self.time_end_query = Some(value.into());
+        self
+    }
+    pub fn limit_query(mut self, value: impl Into<String>) -> Self {
+        self.limit_query = Some(value.into());
+        self
+    }
+    pub fn sources_query(mut self, value: impl Into<String>) -> Self {
+        self.sources_query = Some(value.into());
+        self
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct GetMiscLunartimeParams {
+    pub ts_query: Option<String>,
+    pub timezone_query: Option<String>,
+}
+
+impl GetMiscLunartimeParams {
+    pub fn new() -> Self {
+        Self {
+            ts_query: None,
+            timezone_query: None,
+        }
+    }
+    pub fn ts_query(mut self, value: impl Into<String>) -> Self {
+        self.ts_query = Some(value.into());
+        self
+    }
+    pub fn timezone_query(mut self, value: impl Into<String>) -> Self {
+        self.timezone_query = Some(value.into());
+        self
     }
 }
 
@@ -1392,6 +1767,7 @@ impl GetMiscTrackingDetectParams {
 pub struct GetMiscTrackingQueryParams {
     pub tracking_number_query: String,
     pub carrier_code_query: Option<String>,
+    pub phone_query: Option<String>,
 }
 
 impl GetMiscTrackingQueryParams {
@@ -1399,10 +1775,15 @@ impl GetMiscTrackingQueryParams {
         Self {
             tracking_number_query: tracking_number_query.into(),
             carrier_code_query: None,
+            phone_query: None,
         }
     }
     pub fn carrier_code_query(mut self, value: impl Into<String>) -> Self {
         self.carrier_code_query = Some(value.into());
+        self
+    }
+    pub fn phone_query(mut self, value: impl Into<String>) -> Self {
+        self.phone_query = Some(value.into());
         self
     }
 }
@@ -1412,8 +1793,11 @@ pub struct GetMiscWeatherParams {
     pub city_query: Option<String>,
     pub adcode_query: Option<String>,
     pub extended_query: Option<String>,
-    pub indices_query: Option<String>,
     pub forecast_query: Option<String>,
+    pub hourly_query: Option<String>,
+    pub minutely_query: Option<String>,
+    pub indices_query: Option<String>,
+    pub lang_query: Option<String>,
 }
 
 impl GetMiscWeatherParams {
@@ -1422,8 +1806,11 @@ impl GetMiscWeatherParams {
             city_query: None,
             adcode_query: None,
             extended_query: None,
-            indices_query: None,
             forecast_query: None,
+            hourly_query: None,
+            minutely_query: None,
+            indices_query: None,
+            lang_query: None,
         }
     }
     pub fn city_query(mut self, value: impl Into<String>) -> Self {
@@ -1438,12 +1825,24 @@ impl GetMiscWeatherParams {
         self.extended_query = Some(value.into());
         self
     }
+    pub fn forecast_query(mut self, value: impl Into<String>) -> Self {
+        self.forecast_query = Some(value.into());
+        self
+    }
+    pub fn hourly_query(mut self, value: impl Into<String>) -> Self {
+        self.hourly_query = Some(value.into());
+        self
+    }
+    pub fn minutely_query(mut self, value: impl Into<String>) -> Self {
+        self.minutely_query = Some(value.into());
+        self
+    }
     pub fn indices_query(mut self, value: impl Into<String>) -> Self {
         self.indices_query = Some(value.into());
         self
     }
-    pub fn forecast_query(mut self, value: impl Into<String>) -> Self {
-        self.forecast_query = Some(value.into());
+    pub fn lang_query(mut self, value: impl Into<String>) -> Self {
+        self.lang_query = Some(value.into());
         self
     }
 }
@@ -3207,7 +3606,7 @@ impl<'a> WebparseService<'a> {
             )
             .await
     }
-/// 网页元数据
+/// 提取网页元数据
     #[instrument(skip(self, params))]
     pub async fn get_webparse_metadata(&self, params: GetWebparseMetadataParams) -> Result<Value> {
         let mut path = "/api/v1/webparse/metadata".to_string();

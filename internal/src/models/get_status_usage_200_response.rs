@@ -14,9 +14,9 @@ use serde::{Deserialize, Serialize};
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct GetStatusUsage200Response {
     #[serde(rename = "endpoints", skip_serializing_if = "Option::is_none")]
-    pub endpoints: Option<Vec<models::EndpointsAggregateEndpointsInner>>,
+    pub endpoints: Option<Vec<models::GetStatusUsage200ResponseAnyOfEndpointsInner>>,
     #[serde(rename = "unaggregated", skip_serializing_if = "Option::is_none")]
-    pub unaggregated: Option<Box<models::EndpointsAggregateUnaggregated>>,
+    pub unaggregated: Option<Box<models::GetStatusUsage200ResponseAnyOfUnaggregated>>,
     #[serde(rename = "path", skip_serializing_if = "Option::is_none")]
     pub path: Option<String>,
     #[serde(rename = "count", skip_serializing_if = "Option::is_none")]

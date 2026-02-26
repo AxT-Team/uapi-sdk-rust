@@ -4,7 +4,6 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**code** | Option<**i32**> |  | [optional]
 **message** | Option<**String**> |  | [optional]
 **is_batch** | Option<**bool**> | 标识是否为批量翻译请求。 | [optional]
 **data** | Option<[**models::PostAiTranslate200ResponseData**](post_ai_translate_200_response_data.md)> |  | [optional]

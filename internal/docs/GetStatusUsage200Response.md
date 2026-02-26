@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**endpoints** | Option<[**Vec<models::EndpointsAggregateEndpointsInner>**](endpoints_aggregate_endpoints_inner.md)> |  | [optional]
-**unaggregated** | Option<[**models::EndpointsAggregateUnaggregated**](endpoints_aggregate_unaggregated.md)> |  | [optional]
+**endpoints** | Option<[**Vec<models::GetStatusUsage200ResponseAnyOfEndpointsInner>**](get_status_usage_200_response_anyOf_endpoints_inner.md)> |  | [optional]
+**unaggregated** | Option<[**models::GetStatusUsage200ResponseAnyOfUnaggregated**](get_status_usage_200_response_anyOf_unaggregated.md)> |  | [optional]
 **path** | Option<**String**> |  | [optional]
 **count** | Option<**i32**> |  | [optional]
 

@@ -13,8 +13,6 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct GetRandomString200Response {
-    #[serde(rename = "code", skip_serializing_if = "Option::is_none")]
-    pub code: Option<i32>,
     #[serde(rename = "text", skip_serializing_if = "Option::is_none")]
     pub text: Option<String>,
 }
@@ -22,7 +20,6 @@ pub struct GetRandomString200Response {
 impl GetRandomString200Response {
     pub fn new() -> GetRandomString200Response {
         GetRandomString200Response {
-            code: None,
             text: None,
         }
     }

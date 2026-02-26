@@ -1,12 +1,11 @@
 # GetNetworkUrlstatus200Response
 
-## Properties
+## Enum Variants
 
-Name | Type | Description | Notes
------------- | ------------- | ------------- | -------------
-**code** | Option<**i32**> |  | [optional]
-**status** | Option<**i32**> | HTTP响应状态码 | [optional]
-**url** | Option<**String**> |  | [optional]
+| Name | Description |
+|---- | -----|
+| GetNetworkUrlstatus200ResponseOneOf |  |
+| GetNetworkUrlstatus200ResponseOneOf1 |  |
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

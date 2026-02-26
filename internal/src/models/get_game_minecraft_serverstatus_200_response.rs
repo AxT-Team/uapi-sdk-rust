@@ -13,9 +13,6 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct GetGameMinecraftServerstatus200Response {
-    /// 状态码，200代表成功。
-    #[serde(rename = "code", skip_serializing_if = "Option::is_none")]
-    pub code: Option<i32>,
     /// 服务器图标的 Base64 Data URI。你可以直接在 `<img>` 标签的 `src` 属性中使用它。
     #[serde(rename = "favicon_url", skip_serializing_if = "Option::is_none")]
     pub favicon_url: Option<String>,
@@ -48,7 +45,6 @@ pub struct GetGameMinecraftServerstatus200Response {
 impl GetGameMinecraftServerstatus200Response {
     pub fn new() -> GetGameMinecraftServerstatus200Response {
         GetGameMinecraftServerstatus200Response {
-            code: None,
             favicon_url: None,
             ip: None,
             max_players: None,

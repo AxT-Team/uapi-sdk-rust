@@ -13,8 +13,6 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct PostAnswerbookAsk200Response {
-    #[serde(rename = "code", skip_serializing_if = "Option::is_none")]
-    pub code: Option<i32>,
     #[serde(rename = "question", skip_serializing_if = "Option::is_none")]
     pub question: Option<String>,
     #[serde(rename = "answer", skip_serializing_if = "Option::is_none")]
@@ -24,7 +22,6 @@ pub struct PostAnswerbookAsk200Response {
 impl PostAnswerbookAsk200Response {
     pub fn new() -> PostAnswerbookAsk200Response {
         PostAnswerbookAsk200Response {
-            code: None,
             question: None,
             answer: None,
         }

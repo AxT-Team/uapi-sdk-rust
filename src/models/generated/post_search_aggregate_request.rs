@@ -28,6 +28,12 @@ pub struct PostSearchAggregateRequest {
     /// 请求超时时间（毫秒），范围 1000-30000
     #[serde(rename = "timeout_ms", skip_serializing_if = "Option::is_none")]
     pub timeout_ms: Option<i32>,
+    /// 排序方式
+    #[serde(rename = "sort", skip_serializing_if = "Option::is_none")]
+    pub sort: Option<Sort>,
+    /// 时间范围过滤
+    #[serde(rename = "time_range", skip_serializing_if = "Option::is_none")]
+    pub time_range: Option<TimeRange>,
 }
 
 impl PostSearchAggregateRequest {
@@ -38,7 +44,41 @@ impl PostSearchAggregateRequest {
             filetype: None,
             fetch_full: None,
             timeout_ms: None,
+            sort: None,
+            time_range: None,
         }
+    }
+}
+/// 排序方式
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+pub enum Sort {
+    #[serde(rename = "relevance")]
+    Relevance,
+    #[serde(rename = "date")]
+    Date,
+}
+
+impl Default for Sort {
+    fn default() -> Sort {
+        Self::Relevance
+    }
+}
+/// 时间范围过滤
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+pub enum TimeRange {
+    #[serde(rename = "day")]
+    Day,
+    #[serde(rename = "week")]
+    Week,
+    #[serde(rename = "month")]
+    Month,
+    #[serde(rename = "year")]
+    Year,
+}
+
+impl Default for TimeRange {
+    fn default() -> TimeRange {
+        Self::Day
     }
 }
 

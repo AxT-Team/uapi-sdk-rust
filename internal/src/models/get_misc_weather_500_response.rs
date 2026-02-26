@@ -15,8 +15,6 @@ use serde::{Deserialize, Serialize};
 pub struct GetMiscWeather500Response {
     #[serde(rename = "code", skip_serializing_if = "Option::is_none")]
     pub code: Option<String>,
-    #[serde(rename = "details", skip_serializing_if = "Option::is_none")]
-    pub details: Option<serde_json::Value>,
     #[serde(rename = "message", skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
 }
@@ -25,7 +23,6 @@ impl GetMiscWeather500Response {
     pub fn new() -> GetMiscWeather500Response {
         GetMiscWeather500Response {
             code: None,
-            details: None,
             message: None,
         }
     }

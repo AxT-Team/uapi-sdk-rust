@@ -22,9 +22,6 @@ pub struct GetGameSteamSummary200Response {
     /// 64x64 像素的中等尺寸头像URL。
     #[serde(rename = "avatarmedium", skip_serializing_if = "Option::is_none")]
     pub avatarmedium: Option<String>,
-    /// 状态码，200代表成功。
-    #[serde(rename = "code", skip_serializing_if = "Option::is_none")]
-    pub code: Option<i32>,
     /// 社区资料的可见性状态: 1=私密, 3=公开。
     #[serde(rename = "communityvisibilitystate", skip_serializing_if = "Option::is_none")]
     pub communityvisibilitystate: Option<i32>,
@@ -66,7 +63,6 @@ impl GetGameSteamSummary200Response {
             avatar: None,
             avatarfull: None,
             avatarmedium: None,
-            code: None,
             communityvisibilitystate: None,
             loccountrycode: None,
             personaname: None,

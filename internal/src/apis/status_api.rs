@@ -27,9 +27,7 @@ pub enum GetStatusRatelimitError {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum GetStatusUsageError {
-    Status401(models::GetStatusRatelimit401Response),
     Status404(models::GetStatusUsage404Response),
-    Status500(models::GetStatusUsage500Response),
     UnknownValue(serde_json::Value),
 }
 

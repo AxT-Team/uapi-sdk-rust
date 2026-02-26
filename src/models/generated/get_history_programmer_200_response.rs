@@ -13,8 +13,6 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct GetHistoryProgrammer200Response {
-    #[serde(rename = "code", skip_serializing_if = "Option::is_none")]
-    pub code: Option<i32>,
     #[serde(rename = "message", skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
     #[serde(rename = "date", skip_serializing_if = "Option::is_none")]
@@ -26,7 +24,6 @@ pub struct GetHistoryProgrammer200Response {
 impl GetHistoryProgrammer200Response {
     pub fn new() -> GetHistoryProgrammer200Response {
         GetHistoryProgrammer200Response {
-            code: None,
             message: None,
             date: None,
             events: None,

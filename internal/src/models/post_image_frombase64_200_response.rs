@@ -13,9 +13,6 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct PostImageFrombase64200Response {
-    /// 状态码，200代表成功。
-    #[serde(rename = "code", skip_serializing_if = "Option::is_none")]
-    pub code: Option<i32>,
     /// 图片保存后在服务器上的绝对访问URL。
     #[serde(rename = "image_url", skip_serializing_if = "Option::is_none")]
     pub image_url: Option<String>,
@@ -27,7 +24,6 @@ pub struct PostImageFrombase64200Response {
 impl PostImageFrombase64200Response {
     pub fn new() -> PostImageFrombase64200Response {
         PostImageFrombase64200Response {
-            code: None,
             image_url: None,
             msg: None,
         }

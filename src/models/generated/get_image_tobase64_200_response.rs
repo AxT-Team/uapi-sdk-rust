@@ -16,9 +16,6 @@ pub struct GetImageTobase64200Response {
     /// 转换后的完整Base64 Data URI，可以直接在CSS或HTML中使用。
     #[serde(rename = "base64", skip_serializing_if = "Option::is_none")]
     pub base64: Option<String>,
-    /// 状态码，200代表成功。
-    #[serde(rename = "code", skip_serializing_if = "Option::is_none")]
-    pub code: Option<i32>,
     /// 操作结果描述。
     #[serde(rename = "msg", skip_serializing_if = "Option::is_none")]
     pub msg: Option<String>,
@@ -28,7 +25,6 @@ impl GetImageTobase64200Response {
     pub fn new() -> GetImageTobase64200Response {
         GetImageTobase64200Response {
             base64: None,
-            code: None,
             msg: None,
         }
     }

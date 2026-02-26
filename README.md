@@ -1,6 +1,6 @@
 # uapi-sdk-rust
 
-![Banner](https://raw.githubusercontent.com/uapis/uapi-sdk-rust/main/banner.png)
+![Banner](https://raw.githubusercontent.com/AxT-Team/uapi-sdk-rust/main/banner.png)
 
 [![Rust](https://img.shields.io/badge/Rust-1.75+-DEA584?style=flat-square&logo=rust&logoColor=white)](https://www.rust-lang.org/)
 [![Docs](https://img.shields.io/badge/Docs-uapis.cn-2EAE5D?style=flat-square)](https://uapis.cn/)

@@ -9,6 +9,7 @@ Name | Type | Description | Notes
 **index** | Option<**i32**> |  | [optional]
 **title** | Option<**String**> |  | [optional]
 **url** | Option<**String**> |  | [optional]
+**cover** | Option<**String**> | 封面图 URL，音乐类热榜返回专辑封面，其他平台无此字段。 | [optional]
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

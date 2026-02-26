@@ -4,7 +4,6 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**code** | Option<**i32**> |  | [optional]
 **message** | Option<**String**> |  | [optional]
 **data** | Option<[**models::GetAiTranslateLanguages200ResponseData**](get_ai_translate_languages_200_response_data.md)> |  | [optional]
 **performance** | Option<[**models::GetAiTranslateLanguages200ResponsePerformance**](get_ai_translate_languages_200_response_performance.md)> |  | [optional]

@@ -13,9 +13,6 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct GetGameMinecraftUserinfo200Response {
-    /// 状态码，200代表成功。
-    #[serde(rename = "code", skip_serializing_if = "Option::is_none")]
-    pub code: Option<i32>,
     /// 玩家当前使用的皮肤图片URL。
     #[serde(rename = "skin_url", skip_serializing_if = "Option::is_none")]
     pub skin_url: Option<String>,
@@ -30,7 +27,6 @@ pub struct GetGameMinecraftUserinfo200Response {
 impl GetGameMinecraftUserinfo200Response {
     pub fn new() -> GetGameMinecraftUserinfo200Response {
         GetGameMinecraftUserinfo200Response {
-            code: None,
             skin_url: None,
             username: None,
             uuid: None,

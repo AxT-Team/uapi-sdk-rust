@@ -11,24 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
-pub struct GetNetworkUrlstatus200Response {
-    #[serde(rename = "code", skip_serializing_if = "Option::is_none")]
-    pub code: Option<i32>,
-    /// HTTP响应状态码
-    #[serde(rename = "status", skip_serializing_if = "Option::is_none")]
-    pub status: Option<i32>,
-    #[serde(rename = "url", skip_serializing_if = "Option::is_none")]
-    pub url: Option<String>,
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum GetNetworkUrlstatus200Response {
+    GetNetworkUrlstatus200ResponseOneOf(Box<models::GetNetworkUrlstatus200ResponseOneOf>),
+    GetNetworkUrlstatus200ResponseOneOf1(Box<models::GetNetworkUrlstatus200ResponseOneOf1>),
 }
 
-impl GetNetworkUrlstatus200Response {
-    pub fn new() -> GetNetworkUrlstatus200Response {
-        GetNetworkUrlstatus200Response {
-            code: None,
-            status: None,
-            url: None,
-        }
+impl Default for GetNetworkUrlstatus200Response {
+    fn default() -> Self {
+        Self::GetNetworkUrlstatus200ResponseOneOf(Default::default())
     }
 }
 

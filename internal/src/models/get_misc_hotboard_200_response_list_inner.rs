@@ -24,6 +24,9 @@ pub struct GetMiscHotboard200ResponseListInner {
     pub title: Option<String>,
     #[serde(rename = "url", skip_serializing_if = "Option::is_none")]
     pub url: Option<String>,
+    /// 封面图 URL，音乐类热榜返回专辑封面，其他平台无此字段。
+    #[serde(rename = "cover", skip_serializing_if = "Option::is_none")]
+    pub cover: Option<String>,
 }
 
 impl GetMiscHotboard200ResponseListInner {
@@ -34,6 +37,7 @@ impl GetMiscHotboard200ResponseListInner {
             index: None,
             title: None,
             url: None,
+            cover: None,
         }
     }
 }

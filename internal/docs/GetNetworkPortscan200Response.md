@@ -4,7 +4,6 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**code** | Option<**i32**> |  | [optional]
 **ip** | Option<**String**> |  | [optional]
 **port** | Option<**i32**> |  | [optional]
 **port_status** | Option<**String**> | \"open\", \"closed\", 或 \"timeout\" | [optional]

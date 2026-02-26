@@ -4,7 +4,6 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**code** | Option<**i32**> |  | [optional]
 **question** | Option<**String**> |  | [optional]
 **answer** | Option<**String**> |  | [optional]
 

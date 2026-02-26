@@ -4,7 +4,6 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**code** | Option<**i32**> |  | [optional]
 **domain** | Option<**String**> |  | [optional]
 **error** | Option<**String**> |  | [optional]
 **records** | Option<[**Vec<models::GetNetworkDns200ResponseRecordsInner>**](get_network_dns_200_response_records_inner.md)> |  | [optional]

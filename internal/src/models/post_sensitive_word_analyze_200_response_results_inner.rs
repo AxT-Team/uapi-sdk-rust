@@ -15,28 +15,56 @@ use serde::{Deserialize, Serialize};
 pub struct PostSensitiveWordAnalyze200ResponseResultsInner {
     #[serde(rename = "k", skip_serializing_if = "Option::is_none")]
     pub k: Option<String>,
-    #[serde(rename = "r", skip_serializing_if = "Option::is_none")]
-    pub r: Option<String>,
-    #[serde(rename = "s", skip_serializing_if = "Option::is_none")]
-    pub s: Option<Vec<f64>>,
-    #[serde(rename = "v", skip_serializing_if = "Option::is_none")]
-    pub v: Option<Vec<String>>,
-    #[serde(rename = "t", skip_serializing_if = "Option::is_none")]
-    pub t: Option<Vec<String>>,
-    #[serde(rename = "d", skip_serializing_if = "Option::is_none")]
-    pub d: Option<String>,
+    #[serde(rename = "label", skip_serializing_if = "Option::is_none")]
+    pub label: Option<Label>,
+    #[serde(rename = "category", skip_serializing_if = "Option::is_none")]
+    pub category: Option<Category>,
+    #[serde(rename = "confidence", skip_serializing_if = "Option::is_none")]
+    pub confidence: Option<f64>,
 }
 
 impl PostSensitiveWordAnalyze200ResponseResultsInner {
     pub fn new() -> PostSensitiveWordAnalyze200ResponseResultsInner {
         PostSensitiveWordAnalyze200ResponseResultsInner {
             k: None,
-            r: None,
-            s: None,
-            v: None,
-            t: None,
-            d: None,
+            label: None,
+            category: None,
+            confidence: None,
         }
+    }
+}
+/// 
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+pub enum Label {
+    #[serde(rename = "sensitive")]
+    Sensitive,
+    #[serde(rename = "normal")]
+    Normal,
+}
+
+impl Default for Label {
+    fn default() -> Label {
+        Self::Sensitive
+    }
+}
+/// 
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+pub enum Category {
+    #[serde(rename = "safe")]
+    Safe,
+    #[serde(rename = "threat")]
+    Threat,
+    #[serde(rename = "porn")]
+    Porn,
+    #[serde(rename = "fraud")]
+    Fraud,
+    #[serde(rename = "insult")]
+    Insult,
+}
+
+impl Default for Category {
+    fn default() -> Category {
+        Self::Safe
     }
 }
 

@@ -13,8 +13,6 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct PostAiTranslate200Response {
-    #[serde(rename = "code", skip_serializing_if = "Option::is_none")]
-    pub code: Option<i32>,
     #[serde(rename = "message", skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
     /// 标识是否为批量翻译请求。
@@ -36,7 +34,6 @@ pub struct PostAiTranslate200Response {
 impl PostAiTranslate200Response {
     pub fn new() -> PostAiTranslate200Response {
         PostAiTranslate200Response {
-            code: None,
             message: None,
             is_batch: None,
             data: None,

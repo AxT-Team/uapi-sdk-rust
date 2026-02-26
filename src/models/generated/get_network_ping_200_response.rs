@@ -16,8 +16,6 @@ pub struct GetNetworkPing200Response {
     /// 平均延迟(ms)
     #[serde(rename = "avg", skip_serializing_if = "Option::is_none")]
     pub avg: Option<f64>,
-    #[serde(rename = "code", skip_serializing_if = "Option::is_none")]
-    pub code: Option<i32>,
     #[serde(rename = "host", skip_serializing_if = "Option::is_none")]
     pub host: Option<String>,
     #[serde(rename = "ip", skip_serializing_if = "Option::is_none")]
@@ -36,7 +34,6 @@ impl GetNetworkPing200Response {
     pub fn new() -> GetNetworkPing200Response {
         GetNetworkPing200Response {
             avg: None,
-            code: None,
             host: None,
             ip: None,
             location: None,

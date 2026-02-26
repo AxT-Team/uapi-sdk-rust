@@ -5,7 +5,6 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **avg** | Option<**f64**> | 平均延迟(ms) | [optional]
-**code** | Option<**i32**> |  | [optional]
 **host** | Option<**String**> |  | [optional]
 **ip** | Option<**String**> |  | [optional]
 **location** | Option<**String**> |  | [optional]

@@ -13,79 +13,51 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct GetNetworkIpinfo200Response {
-    /// 自治系统编号 (由GeoLite2或商业版提供)
-    #[serde(rename = "asn", skip_serializing_if = "Option::is_none")]
-    pub asn: Option<String>,
-    /// IP范围起始 (仅在默认查询中提供)
-    #[serde(rename = "beginip", skip_serializing_if = "Option::is_none")]
-    pub beginip: Option<String>,
-    #[serde(rename = "code", skip_serializing_if = "Option::is_none")]
-    pub code: Option<i32>,
-    /// IP范围结束 (仅在默认查询中提供)
-    #[serde(rename = "endip", skip_serializing_if = "Option::is_none")]
-    pub endip: Option<String>,
+    /// 查询的IP地址
     #[serde(rename = "ip", skip_serializing_if = "Option::is_none")]
     pub ip: Option<String>,
-    /// 运营商
-    #[serde(rename = "isp", skip_serializing_if = "Option::is_none")]
-    pub isp: Option<String>,
-    #[serde(rename = "latitude", skip_serializing_if = "Option::is_none")]
-    pub latitude: Option<f64>,
-    /// 归属
-    #[serde(rename = "llc", skip_serializing_if = "Option::is_none")]
-    pub llc: Option<String>,
-    #[serde(rename = "longitude", skip_serializing_if = "Option::is_none")]
-    pub longitude: Option<f64>,
-    /// 格式：国家 省份 城市
+    /// 地理位置，格式：国家 省份 城市
     #[serde(rename = "region", skip_serializing_if = "Option::is_none")]
     pub region: Option<String>,
-    /// 行政区 (仅在商业查询中提供)
+    /// 运营商名称
+    #[serde(rename = "isp", skip_serializing_if = "Option::is_none")]
+    pub isp: Option<String>,
+    /// 归属机构
+    #[serde(rename = "llc", skip_serializing_if = "Option::is_none")]
+    pub llc: Option<String>,
+    /// 自治系统编号
+    #[serde(rename = "asn", skip_serializing_if = "Option::is_none")]
+    pub asn: Option<String>,
+    /// 纬度
+    #[serde(rename = "latitude", skip_serializing_if = "Option::is_none")]
+    pub latitude: Option<f64>,
+    /// 经度
+    #[serde(rename = "longitude", skip_serializing_if = "Option::is_none")]
+    pub longitude: Option<f64>,
+    /// IP段起始地址（标准查询）
+    #[serde(rename = "beginip", skip_serializing_if = "Option::is_none")]
+    pub beginip: Option<String>,
+    /// IP段结束地址（标准查询）
+    #[serde(rename = "endip", skip_serializing_if = "Option::is_none")]
+    pub endip: Option<String>,
+    /// 行政区（商业查询）
     #[serde(rename = "district", skip_serializing_if = "Option::is_none")]
     pub district: Option<String>,
-    /// 行政区划代码 (仅在商业查询中提供)
-    #[serde(rename = "area_code", skip_serializing_if = "Option::is_none")]
-    pub area_code: Option<String>,
-    /// 城市区号 (仅在商业查询中提供)
-    #[serde(rename = "city_code", skip_serializing_if = "Option::is_none")]
-    pub city_code: Option<String>,
-    /// 邮政编码 (仅在商业查询中提供)
-    #[serde(rename = "zip_code", skip_serializing_if = "Option::is_none")]
-    pub zip_code: Option<String>,
-    /// 时区 (仅在商业查询中提供)
-    #[serde(rename = "time_zone", skip_serializing_if = "Option::is_none")]
-    pub time_zone: Option<String>,
-    /// 应用场景 (仅在商业查询中提供)
-    #[serde(rename = "scenes", skip_serializing_if = "Option::is_none")]
-    pub scenes: Option<String>,
-    /// 海拔（米）(仅在商业查询中提供)
-    #[serde(rename = "elevation", skip_serializing_if = "Option::is_none")]
-    pub elevation: Option<String>,
-    /// 气象站代码 (仅在商业查询中提供)
-    #[serde(rename = "weather_station", skip_serializing_if = "Option::is_none")]
-    pub weather_station: Option<String>,
 }
 
 impl GetNetworkIpinfo200Response {
     pub fn new() -> GetNetworkIpinfo200Response {
         GetNetworkIpinfo200Response {
-            asn: None,
-            beginip: None,
-            code: None,
-            endip: None,
             ip: None,
-            isp: None,
-            latitude: None,
-            llc: None,
-            longitude: None,
             region: None,
+            isp: None,
+            llc: None,
+            asn: None,
+            latitude: None,
+            longitude: None,
+            beginip: None,
+            endip: None,
             district: None,
-            area_code: None,
-            city_code: None,
-            zip_code: None,
-            time_zone: None,
-            scenes: None,
-            elevation: None,
-            weather_station: None,
         }
     }
 }

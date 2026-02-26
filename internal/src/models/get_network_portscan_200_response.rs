@@ -13,8 +13,6 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct GetNetworkPortscan200Response {
-    #[serde(rename = "code", skip_serializing_if = "Option::is_none")]
-    pub code: Option<i32>,
     #[serde(rename = "ip", skip_serializing_if = "Option::is_none")]
     pub ip: Option<String>,
     #[serde(rename = "port", skip_serializing_if = "Option::is_none")]
@@ -29,7 +27,6 @@ pub struct GetNetworkPortscan200Response {
 impl GetNetworkPortscan200Response {
     pub fn new() -> GetNetworkPortscan200Response {
         GetNetworkPortscan200Response {
-            code: None,
             ip: None,
             port: None,
             port_status: None,

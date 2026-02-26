@@ -13,38 +13,112 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct GetMiscWeather200Response {
-    #[serde(rename = "adcode", skip_serializing_if = "Option::is_none")]
-    pub adcode: Option<String>,
-    #[serde(rename = "city", skip_serializing_if = "Option::is_none")]
-    pub city: Option<String>,
-    #[serde(rename = "humidity", skip_serializing_if = "Option::is_none")]
-    pub humidity: Option<i32>,
+    /// 省份
     #[serde(rename = "province", skip_serializing_if = "Option::is_none")]
     pub province: Option<String>,
-    #[serde(rename = "report_time", skip_serializing_if = "Option::is_none")]
-    pub report_time: Option<String>,
-    #[serde(rename = "temperature", skip_serializing_if = "Option::is_none")]
-    pub temperature: Option<i32>,
+    /// 城市名
+    #[serde(rename = "city", skip_serializing_if = "Option::is_none")]
+    pub city: Option<String>,
+    /// 行政区划代码（部分数据源可能为空）
+    #[serde(rename = "adcode", skip_serializing_if = "Option::is_none")]
+    pub adcode: Option<String>,
+    /// 天气状况描述。默认返回中文，传 `lang=en` 时返回英文。非固定枚举。
     #[serde(rename = "weather", skip_serializing_if = "Option::is_none")]
     pub weather: Option<String>,
+    /// 当前温度 °C
+    #[serde(rename = "temperature", skip_serializing_if = "Option::is_none")]
+    pub temperature: Option<f64>,
+    /// 风向
     #[serde(rename = "wind_direction", skip_serializing_if = "Option::is_none")]
     pub wind_direction: Option<String>,
+    /// 风力等级
     #[serde(rename = "wind_power", skip_serializing_if = "Option::is_none")]
     pub wind_power: Option<String>,
+    /// 相对湿度 %
+    #[serde(rename = "humidity", skip_serializing_if = "Option::is_none")]
+    pub humidity: Option<f64>,
+    /// 数据更新时间
+    #[serde(rename = "report_time", skip_serializing_if = "Option::is_none")]
+    pub report_time: Option<String>,
+    /// 体感温度 °C（extended=true 时返回）
+    #[serde(rename = "feels_like", skip_serializing_if = "Option::is_none")]
+    pub feels_like: Option<f64>,
+    /// 能见度 km（extended=true 时返回）
+    #[serde(rename = "visibility", skip_serializing_if = "Option::is_none")]
+    pub visibility: Option<f64>,
+    /// 气压 hPa（extended=true 时返回）
+    #[serde(rename = "pressure", skip_serializing_if = "Option::is_none")]
+    pub pressure: Option<f64>,
+    /// 紫外线指数（extended=true 时返回）
+    #[serde(rename = "uv", skip_serializing_if = "Option::is_none")]
+    pub uv: Option<f64>,
+    /// 当前降水量 mm（extended=true 时返回）
+    #[serde(rename = "precipitation", skip_serializing_if = "Option::is_none")]
+    pub precipitation: Option<f64>,
+    /// 云量 %（extended=true 时返回）
+    #[serde(rename = "cloud", skip_serializing_if = "Option::is_none")]
+    pub cloud: Option<f64>,
+    /// 空气质量指数 0-500（extended=true 时返回）
+    #[serde(rename = "aqi", skip_serializing_if = "Option::is_none")]
+    pub aqi: Option<f64>,
+    /// AQI 等级 1-6（extended=true 时返回）
+    #[serde(rename = "aqi_level", skip_serializing_if = "Option::is_none")]
+    pub aqi_level: Option<f64>,
+    /// AQI 等级描述（优/良/轻度污染/中度污染/重度污染/严重污染）（extended=true 时返回）
+    #[serde(rename = "aqi_category", skip_serializing_if = "Option::is_none")]
+    pub aqi_category: Option<String>,
+    /// 主要污染物（如 PM2.5、PM10、O3 等）（extended=true 时返回）
+    #[serde(rename = "aqi_primary", skip_serializing_if = "Option::is_none")]
+    pub aqi_primary: Option<String>,
+    #[serde(rename = "air_pollutants", skip_serializing_if = "Option::is_none")]
+    pub air_pollutants: Option<Box<models::GetMiscWeather200ResponseAirPollutants>>,
+    /// 当天最高温 °C（forecast=true 时返回）
+    #[serde(rename = "temp_max", skip_serializing_if = "Option::is_none")]
+    pub temp_max: Option<f64>,
+    /// 当天最低温 °C（forecast=true 时返回）
+    #[serde(rename = "temp_min", skip_serializing_if = "Option::is_none")]
+    pub temp_min: Option<f64>,
+    /// 多天天气预报，最多7天（forecast=true 时返回）
+    #[serde(rename = "forecast", skip_serializing_if = "Option::is_none")]
+    pub forecast: Option<Vec<models::GetMiscWeather200ResponseForecastInner>>,
+    /// 逐小时预报，最多24小时（hourly=true 时返回）
+    #[serde(rename = "hourly_forecast", skip_serializing_if = "Option::is_none")]
+    pub hourly_forecast: Option<Vec<models::GetMiscWeather200ResponseHourlyForecastInner>>,
+    #[serde(rename = "minutely_precip", skip_serializing_if = "Option::is_none")]
+    pub minutely_precip: Option<Box<models::GetMiscWeather200ResponseMinutelyPrecip>>,
+    #[serde(rename = "life_indices", skip_serializing_if = "Option::is_none")]
+    pub life_indices: Option<Box<models::GetMiscWeather200ResponseLifeIndices>>,
 }
 
 impl GetMiscWeather200Response {
     pub fn new() -> GetMiscWeather200Response {
         GetMiscWeather200Response {
-            adcode: None,
-            city: None,
-            humidity: None,
             province: None,
-            report_time: None,
-            temperature: None,
+            city: None,
+            adcode: None,
             weather: None,
+            temperature: None,
             wind_direction: None,
             wind_power: None,
+            humidity: None,
+            report_time: None,
+            feels_like: None,
+            visibility: None,
+            pressure: None,
+            uv: None,
+            precipitation: None,
+            cloud: None,
+            aqi: None,
+            aqi_level: None,
+            aqi_category: None,
+            aqi_primary: None,
+            air_pollutants: None,
+            temp_max: None,
+            temp_min: None,
+            forecast: None,
+            hourly_forecast: None,
+            minutely_precip: None,
+            life_indices: None,
         }
     }
 }

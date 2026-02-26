@@ -49,7 +49,7 @@ pub enum GetGameMinecraftServerstatusError {
 pub enum GetGameMinecraftUserinfoError {
     Status400(models::GetGameMinecraftUserinfo400Response),
     Status404(models::GetGameMinecraftUserinfo404Response),
-    Status502(models::GetGameMinecraftHistoryid502Response),
+    Status502(models::GetGameMinecraftUserinfo502Response),
     UnknownValue(serde_json::Value),
 }
 
@@ -100,15 +100,21 @@ pub async fn get_game_epic_free(configuration: &configuration::Configuration, ) 
     }
 }
 
-/// 想知道某个大佬以前叫什么名字吗？这个接口可以帮你追溯一个 Minecraft 玩家的“黑历史”！  ## 功能概述 通过提供一个玩家的 UUID，你可以获取到该玩家所有曾用名及其变更时间的列表。这对于识别回归的老玩家或者社区管理非常有用。  ## 使用须知 > [!NOTE] > **UUID 格式** > 查询时，请务必提供玩家的 **32位无破折号** Minecraft UUID，例如 `ee9b4ed1aac1491eb7611471be374b80`。
-pub async fn get_game_minecraft_historyid(configuration: &configuration::Configuration, uuid: &str) -> Result<models::GetGameMinecraftHistoryid200Response, Error<GetGameMinecraftHistoryidError>> {
+/// 想知道某个大佬以前叫什么名字吗？这个接口可以帮你追溯一个 Minecraft 玩家的“黑历史”！  ## 功能概述 通过提供玩家的用户名或 UUID，你可以获取到该玩家所有曾用名及其变更时间的列表。这对于识别回归的老玩家或者社区管理非常有用。  ## 使用须知 > [!NOTE] > **参数说明** > - `name` 和 `uuid` 二选一 > - UUID 支持带连字符（如 `ee9b4ed1-aac1-491e-b761-1471be374b80`）或不带连字符格式  > [!IMPORTANT] > **响应结构差异** > - 使用 `uuid` 查询：返回单个用户的历史记录 > - 使用 `name` 查询：返回所有匹配用户的列表（包括当前用户名或曾用名匹配的玩家），需判断响应中是否有 `results` 字段来区分两种模式
+pub async fn get_game_minecraft_historyid(configuration: &configuration::Configuration, name: Option<&str>, uuid: Option<&str>) -> Result<models::GetGameMinecraftHistoryid200Response, Error<GetGameMinecraftHistoryidError>> {
     // add a prefix to parameters to efficiently prevent name collisions
+    let p_query_name = name;
     let p_query_uuid = uuid;
 
     let uri_str = format!("{}/game/minecraft/historyid", configuration.base_path);
     let mut req_builder = configuration.client.request(reqwest::Method::GET, &uri_str);
 
-    req_builder = req_builder.query(&[("uuid", &p_query_uuid.to_string())]);
+    if let Some(ref param_value) = p_query_name {
+        req_builder = req_builder.query(&[("name", &param_value.to_string())]);
+    }
+    if let Some(ref param_value) = p_query_uuid {
+        req_builder = req_builder.query(&[("uuid", &param_value.to_string())]);
+    }
     if let Some(ref user_agent) = configuration.user_agent {
         req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
     }

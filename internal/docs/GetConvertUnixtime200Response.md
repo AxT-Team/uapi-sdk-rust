@@ -4,7 +4,6 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**code** | Option<**i32**> | 状态码，200代表操作成功。 | [optional]
 **datetime** | Option<**String**> | 标准格式（YYYY-MM-DD HH:mm:ss）的日期时间字符串。 | [optional]
 **timestamp** | Option<**i32**> | 转换后的10位秒级Unix时间戳。 | [optional]
 

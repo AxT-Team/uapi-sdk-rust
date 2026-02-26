@@ -13,9 +13,6 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct GetConvertUnixtime200Response {
-    /// 状态码，200代表操作成功。
-    #[serde(rename = "code", skip_serializing_if = "Option::is_none")]
-    pub code: Option<i32>,
     /// 标准格式（YYYY-MM-DD HH:mm:ss）的日期时间字符串。
     #[serde(rename = "datetime", skip_serializing_if = "Option::is_none")]
     pub datetime: Option<String>,
@@ -27,7 +24,6 @@ pub struct GetConvertUnixtime200Response {
 impl GetConvertUnixtime200Response {
     pub fn new() -> GetConvertUnixtime200Response {
         GetConvertUnixtime200Response {
-            code: None,
             datetime: None,
             timestamp: None,
         }

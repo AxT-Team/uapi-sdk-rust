@@ -59,6 +59,8 @@ pub struct GetGithubRepo200Response {
     pub collaborators: Option<Option<Vec<models::GetGithubRepo200ResponseCollaboratorsInner>>>,
     #[serde(rename = "maintainers", skip_serializing_if = "Option::is_none")]
     pub maintainers: Option<Vec<models::GetGithubRepo200ResponseCollaboratorsInner>>,
+    #[serde(rename = "latest_release", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
+    pub latest_release: Option<Option<Box<models::GetGithubRepo200ResponseLatestRelease>>>,
 }
 
 impl GetGithubRepo200Response {
@@ -87,6 +89,7 @@ impl GetGithubRepo200Response {
             languages: None,
             collaborators: None,
             maintainers: None,
+            latest_release: None,
         }
     }
 }

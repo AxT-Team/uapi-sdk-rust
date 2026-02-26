@@ -34,6 +34,39 @@ pub struct GetSocialQqGroupinfo200Response {
     /// 最后更新时间（ISO 8601格式）
     #[serde(rename = "last_updated", skip_serializing_if = "Option::is_none")]
     pub last_updated: Option<String>,
+    /// 当前成员数
+    #[serde(rename = "member_count", skip_serializing_if = "Option::is_none")]
+    pub member_count: Option<i32>,
+    /// 最大成员数
+    #[serde(rename = "max_member_count", skip_serializing_if = "Option::is_none")]
+    pub max_member_count: Option<i32>,
+    /// 活跃成员数（可选，部分群有此数据）
+    #[serde(rename = "active_member_num", skip_serializing_if = "Option::is_none")]
+    pub active_member_num: Option<i32>,
+    /// 群主QQ号（可选）
+    #[serde(rename = "owner_uin", skip_serializing_if = "Option::is_none")]
+    pub owner_uin: Option<String>,
+    /// 群主UID（可选）
+    #[serde(rename = "owner_uid", skip_serializing_if = "Option::is_none")]
+    pub owner_uid: Option<String>,
+    /// 建群时间戳（Unix时间戳，可选）
+    #[serde(rename = "create_time", skip_serializing_if = "Option::is_none")]
+    pub create_time: Option<i32>,
+    /// 建群时间格式化字符串（可选）
+    #[serde(rename = "create_time_str", skip_serializing_if = "Option::is_none")]
+    pub create_time_str: Option<String>,
+    /// 群等级（可选）
+    #[serde(rename = "group_grade", skip_serializing_if = "Option::is_none")]
+    pub group_grade: Option<i32>,
+    /// 群公告/简介（可选）
+    #[serde(rename = "group_memo", skip_serializing_if = "Option::is_none")]
+    pub group_memo: Option<String>,
+    /// 认证类型（0=未认证，可选）
+    #[serde(rename = "cert_type", skip_serializing_if = "Option::is_none")]
+    pub cert_type: Option<i32>,
+    /// 认证说明文本（可选）
+    #[serde(rename = "cert_text", skip_serializing_if = "Option::is_none")]
+    pub cert_text: Option<String>,
 }
 
 impl GetSocialQqGroupinfo200Response {
@@ -46,6 +79,17 @@ impl GetSocialQqGroupinfo200Response {
             tag: None,
             join_url: None,
             last_updated: None,
+            member_count: None,
+            max_member_count: None,
+            active_member_num: None,
+            owner_uin: None,
+            owner_uid: None,
+            create_time: None,
+            create_time_str: None,
+            group_grade: None,
+            group_memo: None,
+            cert_type: None,
+            cert_text: None,
         }
     }
 }

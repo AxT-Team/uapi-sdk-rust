@@ -11,33 +11,43 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// GetGameMinecraftHistoryid200Response : 响应结构根据查询参数不同而变化
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct GetGameMinecraftHistoryid200Response {
-    /// 状态码，200代表成功。
-    #[serde(rename = "code", skip_serializing_if = "Option::is_none")]
-    pub code: Option<i32>,
-    /// 一个包含所有历史用户名的数组，按时间倒序排列。
-    #[serde(rename = "history", skip_serializing_if = "Option::is_none")]
-    pub history: Option<Vec<models::GetGameMinecraftHistoryid200ResponseHistoryInner>>,
-    /// 玩家当前的用户名。
+    /// 【name 查询时返回】查询的用户名。
+    #[serde(rename = "query", skip_serializing_if = "Option::is_none")]
+    pub query: Option<String>,
+    /// 【name 查询时返回】匹配到的用户数量，为 0 时表示未找到。
+    #[serde(rename = "count", skip_serializing_if = "Option::is_none")]
+    pub count: Option<i32>,
+    /// 【name 查询时返回】匹配用户列表，包含当前用户名或曾用名匹配的所有玩家。
+    #[serde(rename = "results", skip_serializing_if = "Option::is_none")]
+    pub results: Option<Vec<models::GetGameMinecraftHistoryid200ResponseResultsInner>>,
+    /// 【uuid 查询时返回】玩家当前的用户名。
     #[serde(rename = "id", skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    /// 历史名称的总数（包含当前名称）。
-    #[serde(rename = "name_num", skip_serializing_if = "Option::is_none")]
-    pub name_num: Option<i32>,
-    /// 被查询玩家的32位无破折号UUID。
+    /// 【uuid 查询时返回】被查询玩家的UUID（带连字符格式）。
     #[serde(rename = "uuid", skip_serializing_if = "Option::is_none")]
     pub uuid: Option<String>,
+    /// 【uuid 查询时返回】历史名称的总数（包含当前名称）。
+    #[serde(rename = "name_num", skip_serializing_if = "Option::is_none")]
+    pub name_num: Option<i32>,
+    /// 【uuid 查询时返回】包含所有历史用户名的数组，按时间倒序排列。
+    #[serde(rename = "history", skip_serializing_if = "Option::is_none")]
+    pub history: Option<Vec<models::GetGameMinecraftHistoryid200ResponseHistoryInner>>,
 }
 
 impl GetGameMinecraftHistoryid200Response {
+    /// 响应结构根据查询参数不同而变化
     pub fn new() -> GetGameMinecraftHistoryid200Response {
         GetGameMinecraftHistoryid200Response {
-            code: None,
-            history: None,
+            query: None,
+            count: None,
+            results: None,
             id: None,
-            name_num: None,
             uuid: None,
+            name_num: None,
+            history: None,
         }
     }
 }

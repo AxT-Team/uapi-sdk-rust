@@ -13,9 +13,6 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct GetGameEpicFree200Response {
-    /// 状态码，200代表成功。
-    #[serde(rename = "code", skip_serializing_if = "Option::is_none")]
-    pub code: Option<i32>,
     /// 免费游戏列表数组。
     #[serde(rename = "data", skip_serializing_if = "Option::is_none")]
     pub data: Option<Vec<models::GetGameEpicFree200ResponseDataInner>>,
@@ -24,7 +21,6 @@ pub struct GetGameEpicFree200Response {
 impl GetGameEpicFree200Response {
     pub fn new() -> GetGameEpicFree200Response {
         GetGameEpicFree200Response {
-            code: None,
             data: None,
         }
     }

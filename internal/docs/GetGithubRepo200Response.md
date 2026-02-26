@@ -27,6 +27,7 @@ Name | Type | Description | Notes
 **languages** | Option<**std::collections::HashMap<String, i32>**> |  | [optional]
 **collaborators** | Option<[**Vec<models::GetGithubRepo200ResponseCollaboratorsInner>**](get_github_repo_200_response_collaborators_inner.md)> |  | [optional]
 **maintainers** | Option<[**Vec<models::GetGithubRepo200ResponseCollaboratorsInner>**](get_github_repo_200_response_collaborators_inner.md)> |  | [optional]
+**latest_release** | Option<[**models::GetGithubRepo200ResponseLatestRelease**](get_github_repo_200_response_latest_release.md)> |  | [optional]
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

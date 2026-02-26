@@ -13,8 +13,6 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct GetNetworkDns200Response {
-    #[serde(rename = "code", skip_serializing_if = "Option::is_none")]
-    pub code: Option<i32>,
     #[serde(rename = "domain", skip_serializing_if = "Option::is_none")]
     pub domain: Option<String>,
     #[serde(rename = "error", skip_serializing_if = "Option::is_none")]
@@ -28,7 +26,6 @@ pub struct GetNetworkDns200Response {
 impl GetNetworkDns200Response {
     pub fn new() -> GetNetworkDns200Response {
         GetNetworkDns200Response {
-            code: None,
             domain: None,
             error: None,
             records: None,

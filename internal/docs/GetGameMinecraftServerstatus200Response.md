@@ -4,7 +4,6 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**code** | Option<**i32**> | 状态码，200代表成功。 | [optional]
 **favicon_url** | Option<**String**> | 服务器图标的 Base64 Data URI。你可以直接在 `<img>` 标签的 `src` 属性中使用它。 | [optional]
 **ip** | Option<**String**> | 服务器解析后的IP地址。 | [optional]
 **max_players** | Option<**i32**> | 服务器配置的最大玩家容量。 | [optional]

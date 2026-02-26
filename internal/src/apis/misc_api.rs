@@ -32,6 +32,22 @@ pub enum GetHistoryProgrammerTodayError {
     UnknownValue(serde_json::Value),
 }
 
+/// struct for typed errors of method [`get_misc_district`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum GetMiscDistrictError {
+    Status400(models::GetMiscDistrict400Response),
+    UnknownValue(serde_json::Value),
+}
+
+/// struct for typed errors of method [`get_misc_holiday_calendar`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum GetMiscHolidayCalendarError {
+    Status400(models::GetMiscHolidayCalendar400Response),
+    UnknownValue(serde_json::Value),
+}
+
 /// struct for typed errors of method [`get_misc_hotboard`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
@@ -39,6 +55,14 @@ pub enum GetMiscHotboardError {
     Status400(models::GetMiscHotboard400Response),
     Status500(models::GetMiscHotboard500Response),
     Status502(models::GetMiscHotboard502Response),
+    UnknownValue(serde_json::Value),
+}
+
+/// struct for typed errors of method [`get_misc_lunartime`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum GetMiscLunartimeError {
+    Status400(models::GetMiscLunartime400Response),
     UnknownValue(serde_json::Value),
 }
 
@@ -96,9 +120,9 @@ pub enum GetMiscTrackingQueryError {
 #[serde(untagged)]
 pub enum GetMiscWeatherError {
     Status400(models::GetMiscWeather400Response),
-    Status410(models::GetMiscWeather410Response),
+    Status404(models::GetMiscWeather404Response),
     Status500(models::GetMiscWeather500Response),
-    Status502(models::GetMiscWeather502Response),
+    Status503(models::GetMiscWeather503Response),
     UnknownValue(serde_json::Value),
 }
 
@@ -108,6 +132,14 @@ pub enum GetMiscWeatherError {
 pub enum GetMiscWorldtimeError {
     Status400(models::GetMiscWorldtime400Response),
     Status404(models::GetMiscWorldtime404Response),
+    UnknownValue(serde_json::Value),
+}
+
+/// struct for typed errors of method [`post_misc_date_diff`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum PostMiscDateDiffError {
+    Status400(models::PostMiscDateDiff400Response),
     UnknownValue(serde_json::Value),
 }
 
@@ -187,15 +219,167 @@ pub async fn get_history_programmer_today(configuration: &configuration::Configu
     }
 }
 
-/// 想快速跟上网络热点？这个接口让你一网打尽各大主流平台的实时热榜/热搜！  ## 功能概述 你只需要指定一个平台类型，就能获取到该平台当前的热榜数据列表。每个热榜条目都包含标题、热度值和原始链接。非常适合用于制作信息聚合类应用或看板。  ## 可选值 `type` 参数接受多种不同的值，每种值对应一个不同的热榜来源。以下是目前支持的所有值：  | 分类       | 支持的 type 值 | |------------|-----------------------------------------------------------------------------------------------------------------------------------| | 视频/社区  | bilibili（哔哩哔哩弹幕网）, acfun（A站弹幕视频网站）, weibo（新浪微博热搜）, zhihu（知乎热榜）, zhihu-daily（知乎日报热榜）, douyin（抖音热榜）, kuaishou（快手热榜）, douban-movie（豆瓣电影榜单）, douban-group（豆瓣小组话题）, tieba（百度贴吧热帖）, hupu（虎扑热帖）, miyoushe（米游社话题榜）, ngabbs（NGA游戏论坛热帖）, v2ex（V2EX技术社区热帖）, 52pojie（吾爱破解热帖）, hostloc（全球主机交流论坛）, coolapk（酷安热榜） | | 新闻/资讯  | baidu（百度热搜）, thepaper（澎湃新闻热榜）, toutiao（今日头条热榜）, qq-news（腾讯新闻热榜）, sina（新浪热搜）, sina-news（新浪新闻热榜）, netease-news（网易新闻热榜）, huxiu（虎嗅网热榜）, ifanr（爱范儿热榜） | | 技术/IT    | sspai（少数派热榜）, ithome（IT之家热榜）, ithome-xijiayi（IT之家·喜加一栏目）, juejin（掘金社区热榜）, jianshu（简书热榜）, guokr（果壳热榜）, 36kr（36氪热榜）, 51cto（51CTO热榜）, csdn（CSDN博客热榜）, nodeseek（NodeSeek 技术社区）, hellogithub（HelloGitHub 项目推荐） | | 游戏       | lol（英雄联盟热帖）, genshin（原神热榜）, honkai（崩坏3热榜）, starrail（星穹铁道热榜） | | 其他       | weread（微信读书热门书籍）, weatheralarm（天气预警信息）, earthquake（地震速报）, history（历史上的今天） | 
-pub async fn get_misc_hotboard(configuration: &configuration::Configuration, r#type: &str) -> Result<models::GetMiscHotboard200Response, Error<GetMiscHotboardError>> {
+/// 一个接口，覆盖全球 243 个国家、中国省/市/区/街道四级行政区划，支持关键词搜索、行政编码查询、坐标反查三种查询模式（必须至少传入一种查询参数）。  ## 功能概述 根据用户输入的搜索条件快速查找行政区域信息。例如：中国 > 山东省 > 济南市 > 历下区 > 舜华路街道。  无需注册、无需密钥，直接调用即可获取结构化的行政区域数据。支持三种查询方式： - 传 `adcode`，按行政编码精确查询，同时返回下级区划列表 - 传 `lat` + `lng`，坐标反查附近地点 - 传 `keywords`，按关键词搜索，支持中英文  ## 中国与国际数据差异 中国数据包含 `adcode`、`citycode` 等字段，支持省/市/区/街道四级逐级查询；国际城市数据不含这些字段，但额外提供 `population`（人口）和 `timezone`（时区）。  > [!NOTE] > 部分城市（如东莞、文昌）没有区县层级，市级下方直接显示街道。街道级别的 `adcode` 返回的是所属区县的 `adcode`。
+pub async fn get_misc_district(configuration: &configuration::Configuration, keywords: Option<&str>, adcode: Option<&str>, lat: Option<f64>, lng: Option<f64>, level: Option<&str>, country: Option<&str>, limit: Option<i32>) -> Result<models::GetMiscDistrict200Response, Error<GetMiscDistrictError>> {
+    // add a prefix to parameters to efficiently prevent name collisions
+    let p_query_keywords = keywords;
+    let p_query_adcode = adcode;
+    let p_query_lat = lat;
+    let p_query_lng = lng;
+    let p_query_level = level;
+    let p_query_country = country;
+    let p_query_limit = limit;
+
+    let uri_str = format!("{}/misc/district", configuration.base_path);
+    let mut req_builder = configuration.client.request(reqwest::Method::GET, &uri_str);
+
+    if let Some(ref param_value) = p_query_keywords {
+        req_builder = req_builder.query(&[("keywords", &param_value.to_string())]);
+    }
+    if let Some(ref param_value) = p_query_adcode {
+        req_builder = req_builder.query(&[("adcode", &param_value.to_string())]);
+    }
+    if let Some(ref param_value) = p_query_lat {
+        req_builder = req_builder.query(&[("lat", &param_value.to_string())]);
+    }
+    if let Some(ref param_value) = p_query_lng {
+        req_builder = req_builder.query(&[("lng", &param_value.to_string())]);
+    }
+    if let Some(ref param_value) = p_query_level {
+        req_builder = req_builder.query(&[("level", &param_value.to_string())]);
+    }
+    if let Some(ref param_value) = p_query_country {
+        req_builder = req_builder.query(&[("country", &param_value.to_string())]);
+    }
+    if let Some(ref param_value) = p_query_limit {
+        req_builder = req_builder.query(&[("limit", &param_value.to_string())]);
+    }
+    if let Some(ref user_agent) = configuration.user_agent {
+        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
+    }
+
+    let req = req_builder.build()?;
+    let resp = configuration.client.execute(req).await?;
+
+    let status = resp.status();
+    let content_type = resp
+        .headers()
+        .get("content-type")
+        .and_then(|v| v.to_str().ok())
+        .unwrap_or("application/octet-stream");
+    let content_type = super::ContentType::from(content_type);
+
+    if !status.is_client_error() && !status.is_server_error() {
+        let content = resp.text().await?;
+        match content_type {
+            ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
+            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::GetMiscDistrict200Response`"))),
+            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::GetMiscDistrict200Response`")))),
+        }
+    } else {
+        let content = resp.text().await?;
+        let entity: Option<GetMiscDistrictError> = serde_json::from_str(&content).ok();
+        Err(Error::ResponseError(ResponseContent { status, content, entity }))
+    }
+}
+
+/// 查询指定日期、月份或年份的万年历与节假日信息。  ## 功能概述 这个接口支持三种查询方式：按天（`date`）、按月（`month`）和按年（`year`）。调用时三者选一个传入即可。  如果你只关心某一类事件，可以通过 `holiday_type` 进行筛选，例如只看法定休假/调休、公历节日、农历节日或节气。  在 `date` 模式下，传 `include_nearby=true` 可以额外返回该日期前后最近的节日；返回数量由 `nearby_limit` 控制，默认 7，最大 30。
+pub async fn get_misc_holiday_calendar(configuration: &configuration::Configuration, date: Option<&str>, month: Option<&str>, year: Option<&str>, timezone: Option<&str>, holiday_type: Option<&str>, include_nearby: Option<bool>, nearby_limit: Option<i32>) -> Result<models::GetMiscHolidayCalendar200Response, Error<GetMiscHolidayCalendarError>> {
+    // add a prefix to parameters to efficiently prevent name collisions
+    let p_query_date = date;
+    let p_query_month = month;
+    let p_query_year = year;
+    let p_query_timezone = timezone;
+    let p_query_holiday_type = holiday_type;
+    let p_query_include_nearby = include_nearby;
+    let p_query_nearby_limit = nearby_limit;
+
+    let uri_str = format!("{}/misc/holiday-calendar", configuration.base_path);
+    let mut req_builder = configuration.client.request(reqwest::Method::GET, &uri_str);
+
+    if let Some(ref param_value) = p_query_date {
+        req_builder = req_builder.query(&[("date", &param_value.to_string())]);
+    }
+    if let Some(ref param_value) = p_query_month {
+        req_builder = req_builder.query(&[("month", &param_value.to_string())]);
+    }
+    if let Some(ref param_value) = p_query_year {
+        req_builder = req_builder.query(&[("year", &param_value.to_string())]);
+    }
+    if let Some(ref param_value) = p_query_timezone {
+        req_builder = req_builder.query(&[("timezone", &param_value.to_string())]);
+    }
+    if let Some(ref param_value) = p_query_holiday_type {
+        req_builder = req_builder.query(&[("holiday_type", &param_value.to_string())]);
+    }
+    if let Some(ref param_value) = p_query_include_nearby {
+        req_builder = req_builder.query(&[("include_nearby", &param_value.to_string())]);
+    }
+    if let Some(ref param_value) = p_query_nearby_limit {
+        req_builder = req_builder.query(&[("nearby_limit", &param_value.to_string())]);
+    }
+    if let Some(ref user_agent) = configuration.user_agent {
+        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
+    }
+
+    let req = req_builder.build()?;
+    let resp = configuration.client.execute(req).await?;
+
+    let status = resp.status();
+    let content_type = resp
+        .headers()
+        .get("content-type")
+        .and_then(|v| v.to_str().ok())
+        .unwrap_or("application/octet-stream");
+    let content_type = super::ContentType::from(content_type);
+
+    if !status.is_client_error() && !status.is_server_error() {
+        let content = resp.text().await?;
+        match content_type {
+            ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
+            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::GetMiscHolidayCalendar200Response`"))),
+            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::GetMiscHolidayCalendar200Response`")))),
+        }
+    } else {
+        let content = resp.text().await?;
+        let entity: Option<GetMiscHolidayCalendarError> = serde_json::from_str(&content).ok();
+        Err(Error::ResponseError(ResponseContent { status, content, entity }))
+    }
+}
+
+/// 想快速跟上网络热点？这个接口让你一网打尽各大主流平台的实时热榜/热搜！  ## 功能概述 你只需要指定一个平台类型，就能获取到该平台当前的热榜数据列表。每个热榜条目都包含标题、热度值和原始链接。非常适合用于制作信息聚合类应用或看板。  ## 三种使用模式  ### 默认模式 只传 `type` 参数，返回该平台当前的实时热榜。  ### 时光机模式 传 `type` + `time` 参数，返回最接近指定时间的热榜快照。如果不可用或无数据，会返回空。  ### 搜索模式 传 `type` + `keyword` + `time_start` + `time_end` 参数，在指定时间范围内搜索包含关键词的热榜条目。可选传 `limit` 限制返回数量。  ### 数据源列表 传 `sources=true`，返回所有支持历史数据的平台列表。  ## 可选值 `type` 参数接受多种不同的值，每种值对应一个不同的热榜来源。以下是目前支持的所有值：  | 分类       | 支持的 type 值 | |------------|-----------------------------------------------------------------------------------------------------------------------------------| | 视频/社区  | bilibili（哔哩哔哩弹幕网）, acfun（A站弹幕视频网站）, weibo（新浪微博热搜）, zhihu（知乎热榜）, zhihu-daily（知乎日报热榜）, douyin（抖音热榜）, kuaishou（快手热榜）, douban-movie（豆瓣电影榜单）, douban-group（豆瓣小组话题）, tieba（百度贴吧热帖）, hupu（虎扑热帖）, ngabbs（NGA游戏论坛热帖）, v2ex（V2EX技术社区热帖）, 52pojie（吾爱破解热帖）, hostloc（全球主机交流论坛）, coolapk（酷安热榜） | | 新闻/资讯  | baidu（百度热搜）, thepaper（澎湃新闻热榜）, toutiao（今日头条热榜）, qq-news（腾讯新闻热榜）, sina（新浪热搜）, sina-news（新浪新闻热榜）, netease-news（网易新闻热榜）, huxiu（虎嗅网热榜）, ifanr（爱范儿热榜） | | 技术/IT    | sspai（少数派热榜）, ithome（IT之家热榜）, ithome-xijiayi（IT之家·喜加一栏目）, juejin（掘金社区热榜）, jianshu（简书热榜）, guokr（果壳热榜）, 36kr（36氪热榜）, 51cto（51CTO热榜）, csdn（CSDN博客热榜）, nodeseek（NodeSeek 技术社区）, hellogithub（HelloGitHub 项目推荐） | | 游戏       | lol（英雄联盟热帖）, genshin（原神热榜）, honkai（崩坏3热榜）, starrail（星穹铁道热榜） | | 音乐       | netease-music（网易云音乐热歌榜）, qq-music（QQ音乐热歌榜） | | 其他       | weread（微信读书热门书籍）, weatheralarm（天气预警信息）, earthquake（地震速报）, history（历史上的今天） | 
+pub async fn get_misc_hotboard(configuration: &configuration::Configuration, r#type: &str, time: Option<i64>, keyword: Option<&str>, time_start: Option<i64>, time_end: Option<i64>, limit: Option<i32>, sources: Option<bool>) -> Result<models::GetMiscHotboard200Response, Error<GetMiscHotboardError>> {
     // add a prefix to parameters to efficiently prevent name collisions
     let p_query_type = r#type;
+    let p_query_time = time;
+    let p_query_keyword = keyword;
+    let p_query_time_start = time_start;
+    let p_query_time_end = time_end;
+    let p_query_limit = limit;
+    let p_query_sources = sources;
 
     let uri_str = format!("{}/misc/hotboard", configuration.base_path);
     let mut req_builder = configuration.client.request(reqwest::Method::GET, &uri_str);
 
     req_builder = req_builder.query(&[("type", &p_query_type.to_string())]);
+    if let Some(ref param_value) = p_query_time {
+        req_builder = req_builder.query(&[("time", &param_value.to_string())]);
+    }
+    if let Some(ref param_value) = p_query_keyword {
+        req_builder = req_builder.query(&[("keyword", &param_value.to_string())]);
+    }
+    if let Some(ref param_value) = p_query_time_start {
+        req_builder = req_builder.query(&[("time_start", &param_value.to_string())]);
+    }
+    if let Some(ref param_value) = p_query_time_end {
+        req_builder = req_builder.query(&[("time_end", &param_value.to_string())]);
+    }
+    if let Some(ref param_value) = p_query_limit {
+        req_builder = req_builder.query(&[("limit", &param_value.to_string())]);
+    }
+    if let Some(ref param_value) = p_query_sources {
+        req_builder = req_builder.query(&[("sources", &param_value.to_string())]);
+    }
     if let Some(ref user_agent) = configuration.user_agent {
         req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
     }
@@ -221,6 +405,50 @@ pub async fn get_misc_hotboard(configuration: &configuration::Configuration, r#t
     } else {
         let content = resp.text().await?;
         let entity: Option<GetMiscHotboardError> = serde_json::from_str(&content).ok();
+        Err(Error::ResponseError(ResponseContent { status, content, entity }))
+    }
+}
+
+/// 需要在指定时区下查看某个时间点的农历信息？这个接口可以直接返回完整结果。  ## 功能概述 支持传入 Unix 时间戳（秒或毫秒）和 IANA 时区名，返回公历时间、星期、农历年月日、干支、生肖、节气与节日信息。不传 `ts` 时默认使用当前时间，不传 `timezone` 时默认 `Asia/Shanghai`。  ## 时区说明 - 支持标准 IANA 时区，例如 `Asia/Shanghai`、`Asia/Tokyo` - 也支持别名：`Shanghai`、`Beijing` - 时区非法时返回 400 并提示 `invalid timezone: xxx`
+pub async fn get_misc_lunartime(configuration: &configuration::Configuration, ts: Option<&str>, timezone: Option<&str>) -> Result<models::GetMiscLunartime200Response, Error<GetMiscLunartimeError>> {
+    // add a prefix to parameters to efficiently prevent name collisions
+    let p_query_ts = ts;
+    let p_query_timezone = timezone;
+
+    let uri_str = format!("{}/misc/lunartime", configuration.base_path);
+    let mut req_builder = configuration.client.request(reqwest::Method::GET, &uri_str);
+
+    if let Some(ref param_value) = p_query_ts {
+        req_builder = req_builder.query(&[("ts", &param_value.to_string())]);
+    }
+    if let Some(ref param_value) = p_query_timezone {
+        req_builder = req_builder.query(&[("timezone", &param_value.to_string())]);
+    }
+    if let Some(ref user_agent) = configuration.user_agent {
+        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
+    }
+
+    let req = req_builder.build()?;
+    let resp = configuration.client.execute(req).await?;
+
+    let status = resp.status();
+    let content_type = resp
+        .headers()
+        .get("content-type")
+        .and_then(|v| v.to_str().ok())
+        .unwrap_or("application/octet-stream");
+    let content_type = super::ContentType::from(content_type);
+
+    if !status.is_client_error() && !status.is_server_error() {
+        let content = resp.text().await?;
+        match content_type {
+            ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
+            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::GetMiscLunartime200Response`"))),
+            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::GetMiscLunartime200Response`")))),
+        }
+    } else {
+        let content = resp.text().await?;
+        let entity: Option<GetMiscLunartimeError> = serde_json::from_str(&content).ok();
         Err(Error::ResponseError(ResponseContent { status, content, entity }))
     }
 }
@@ -323,7 +551,7 @@ pub async fn get_misc_randomnumber(configuration: &configuration::Configuration,
     }
 }
 
-/// 这是一个用于将Unix时间戳转换为人类可读日期时间的旧版接口。  ## 功能概述 输入一个秒级或毫秒级的时间戳，返回其对应的本地时间和UTC时间。  > [!WARNING] > **接口已过时**：这个接口已被新的 `/convert/unixtime` 取代。新接口功能更强大，支持双向转换。我们建议你迁移到新接口。  [👉 前往新版接口文档](/docs/api-reference/get-convert-unixtime)
+/// 这是一个用于将Unix时间戳转换为人类可读日期时间的旧版接口。  ## 功能概述 输入一个秒级或毫秒级的时间戳，返回其对应的本地时间和UTC时间。  > [!WARNING] > **接口已过时**：这个接口已被新的 `/convert/unixtime` 取代。新接口功能更强大，支持双向转换。我们建议你迁移到新接口。  [➡️ 前往新版接口文档](/docs/api-reference/get-convert-unixtime)
 pub async fn get_misc_timestamp(configuration: &configuration::Configuration, ts: &str) -> Result<models::GetMiscTimestamp200Response, Error<GetMiscTimestampError>> {
     // add a prefix to parameters to efficiently prevent name collisions
     let p_query_ts = ts;
@@ -434,11 +662,12 @@ pub async fn get_misc_tracking_detect(configuration: &configuration::Configurati
     }
 }
 
-/// 买了东西想知道快递到哪儿了？这个接口帮你实时追踪物流状态。  > [!VIP] > 本API目前处于**限时免费**阶段，我们鼓励开发者集成和测试。未来，它将转为付费API，为用户提供更稳定和强大的服务。  ## 功能概述 提供一个快递单号，系统会自动识别快递公司并返回完整的物流轨迹信息。支持中通、圆通、韵达、申通、极兔、顺丰、京东、EMS、德邦等60+国内外主流快递公司。  ## 使用须知 - **自动识别**：不知道是哪家快递？系统会根据单号规则自动识别快递公司（推荐使用） - **手动指定**：如果已知快递公司，可以传递 `carrier_code` 参数，查询速度会更快 - **查询时效**：物流信息实时查询，响应时间通常在1-2秒内
-pub async fn get_misc_tracking_query(configuration: &configuration::Configuration, tracking_number: &str, carrier_code: Option<&str>) -> Result<models::GetMiscTrackingQuery200Response, Error<GetMiscTrackingQueryError>> {
+/// 买了东西想知道快递到哪儿了？这个接口帮你实时追踪物流状态。  > [!VIP] > 本API目前处于**限时免费**阶段，我们鼓励开发者集成和测试。未来，它将转为付费API，为用户提供更稳定和强大的服务。  ## 功能概述 提供一个快递单号，系统会自动识别快递公司并返回完整的物流轨迹信息。支持中通、圆通、韵达、申通、极兔、顺丰、京东、EMS、德邦等60+国内外主流快递公司。  ## 使用须知 - **自动识别**：不知道是哪家快递？系统会根据单号规则自动识别快递公司（推荐使用） - **手动指定**：如果已知快递公司，可以传递 `carrier_code` 参数，查询速度会更快 - **手机尾号验证**：部分快递公司需要验证收件人手机尾号才能查询详细物流，如果返回「暂无物流信息」，建议尝试传入 `phone` 参数 - **查询时效**：物流信息实时查询，响应时间通常在1-2秒内
+pub async fn get_misc_tracking_query(configuration: &configuration::Configuration, tracking_number: &str, carrier_code: Option<&str>, phone: Option<&str>) -> Result<models::GetMiscTrackingQuery200Response, Error<GetMiscTrackingQueryError>> {
     // add a prefix to parameters to efficiently prevent name collisions
     let p_query_tracking_number = tracking_number;
     let p_query_carrier_code = carrier_code;
+    let p_query_phone = phone;
 
     let uri_str = format!("{}/misc/tracking/query", configuration.base_path);
     let mut req_builder = configuration.client.request(reqwest::Method::GET, &uri_str);
@@ -446,6 +675,9 @@ pub async fn get_misc_tracking_query(configuration: &configuration::Configuratio
     req_builder = req_builder.query(&[("tracking_number", &p_query_tracking_number.to_string())]);
     if let Some(ref param_value) = p_query_carrier_code {
         req_builder = req_builder.query(&[("carrier_code", &param_value.to_string())]);
+    }
+    if let Some(ref param_value) = p_query_phone {
+        req_builder = req_builder.query(&[("phone", &param_value.to_string())]);
     }
     if let Some(ref user_agent) = configuration.user_agent {
         req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
@@ -476,11 +708,17 @@ pub async fn get_misc_tracking_query(configuration: &configuration::Configuratio
     }
 }
 
-/// 出门前，查一下天气总是个好习惯。这个接口为你提供精准、实时的天气数据。  ## 功能概述 你可以通过城市名称或高德地图的Adcode来查询指定地区的实时天气状况，包括天气现象、温度、湿度、风向和风力等。  ## 使用须知 - **参数优先级**：当你同时提供了 `city` (城市名) 和 `adcode` (城市编码) 两个参数时，系统会 **优先使用 `adcode`** 进行查询，因为它更精确。 - **查询范围**：为了保证查询的准确性，我们的服务仅支持标准的“省”、“市”、“区/县”级别的行政区划名称查询，不保证能查询到乡镇或具体地点。  ## 错误处理指南 - **410 Gone**: 这个特殊的错误码意味着你查询的地区无效或不受我们支持。比如你输入了“火星”，或者某个我们无法识别的村庄名称。这个状态码告诉你，这个“资源”是永久性地不可用了。
-pub async fn get_misc_weather(configuration: &configuration::Configuration, city: Option<&str>, adcode: Option<&str>) -> Result<models::GetMiscWeather200Response, Error<GetMiscWeatherError>> {
+/// 出门前，查一下天气总是个好习惯。这个接口为你提供精准、实时的天气数据，支持国内和国际城市。  ## 功能概述 这个接口支持三种查询方式： - 可以传 `adcode`，按行政区编码查询（优先级最高） - 可以传 `city`，按城市名称查询，支持中文（`北京`）和英文（`Tokyo`） - 两个都不传时，按客户端 IP 自动定位查询  支持 `lang` 参数，可选 `zh`（默认）和 `en`，城市名翻译覆盖 7000+ 城市。  ## 可选功能模块 - `extended=true`：扩展气象字段（体感温度、能见度、气压、紫外线、空气质量及污染物分项数据） - `forecast=true`：多天预报（最多7天，含日出日落、风速等详细数据） - `hourly=true`：逐小时预报（24小时） - `minutely=true`：分钟级降水预报（仅国内城市） - `indices=true`：18项生活指数（穿衣、紫外线、洗车、运动、花粉等）  ## 天气字段说明 `weather` 是天气现象文本，不是固定枚举。  常见值包括：晴、多云、阴、小雨、中雨、大雨、雷阵雨、小雪、中雪、大雪、雨夹雪、雾、霾、沙尘。  如果你的业务需要稳定分类，建议结合 `weather_code` 做自己的映射归类。
+pub async fn get_misc_weather(configuration: &configuration::Configuration, city: Option<&str>, adcode: Option<&str>, extended: Option<bool>, forecast: Option<bool>, hourly: Option<bool>, minutely: Option<bool>, indices: Option<bool>, lang: Option<&str>) -> Result<models::GetMiscWeather200Response, Error<GetMiscWeatherError>> {
     // add a prefix to parameters to efficiently prevent name collisions
     let p_query_city = city;
     let p_query_adcode = adcode;
+    let p_query_extended = extended;
+    let p_query_forecast = forecast;
+    let p_query_hourly = hourly;
+    let p_query_minutely = minutely;
+    let p_query_indices = indices;
+    let p_query_lang = lang;
 
     let uri_str = format!("{}/misc/weather", configuration.base_path);
     let mut req_builder = configuration.client.request(reqwest::Method::GET, &uri_str);
@@ -490,6 +728,24 @@ pub async fn get_misc_weather(configuration: &configuration::Configuration, city
     }
     if let Some(ref param_value) = p_query_adcode {
         req_builder = req_builder.query(&[("adcode", &param_value.to_string())]);
+    }
+    if let Some(ref param_value) = p_query_extended {
+        req_builder = req_builder.query(&[("extended", &param_value.to_string())]);
+    }
+    if let Some(ref param_value) = p_query_forecast {
+        req_builder = req_builder.query(&[("forecast", &param_value.to_string())]);
+    }
+    if let Some(ref param_value) = p_query_hourly {
+        req_builder = req_builder.query(&[("hourly", &param_value.to_string())]);
+    }
+    if let Some(ref param_value) = p_query_minutely {
+        req_builder = req_builder.query(&[("minutely", &param_value.to_string())]);
+    }
+    if let Some(ref param_value) = p_query_indices {
+        req_builder = req_builder.query(&[("indices", &param_value.to_string())]);
+    }
+    if let Some(ref param_value) = p_query_lang {
+        req_builder = req_builder.query(&[("lang", &param_value.to_string())]);
     }
     if let Some(ref user_agent) = configuration.user_agent {
         req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
@@ -554,6 +810,44 @@ pub async fn get_misc_worldtime(configuration: &configuration::Configuration, ci
     } else {
         let content = resp.text().await?;
         let entity: Option<GetMiscWorldtimeError> = serde_json::from_str(&content).ok();
+        Err(Error::ResponseError(ResponseContent { status, content, entity }))
+    }
+}
+
+/// 想知道两个日期之间相差多久？这个接口帮你精确计算时间差值。  ## 功能概述 输入开始日期和结束日期，返回它们之间的时间差，包括总天数、总小时数、总分钟数、总秒数、总周数，以及人性化显示格式（如\"1年2月3天\"）。  ## 日期格式 接口支持自动识别常见日期格式，包括：YYYY-MM-DD、YYYY/MM/DD、DD-MM-YYYY、ISO 8601（带时区）等。也可以通过`format`参数显式指定格式（如DD-MM-YYYY）。  > [!NOTE] > 当结束日期早于开始日期时，返回的数值为负数。
+pub async fn post_misc_date_diff(configuration: &configuration::Configuration, post_misc_date_diff_request: models::PostMiscDateDiffRequest) -> Result<models::PostMiscDateDiff200Response, Error<PostMiscDateDiffError>> {
+    // add a prefix to parameters to efficiently prevent name collisions
+    let p_body_post_misc_date_diff_request = post_misc_date_diff_request;
+
+    let uri_str = format!("{}/misc/date-diff", configuration.base_path);
+    let mut req_builder = configuration.client.request(reqwest::Method::POST, &uri_str);
+
+    if let Some(ref user_agent) = configuration.user_agent {
+        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
+    }
+    req_builder = req_builder.json(&p_body_post_misc_date_diff_request);
+
+    let req = req_builder.build()?;
+    let resp = configuration.client.execute(req).await?;
+
+    let status = resp.status();
+    let content_type = resp
+        .headers()
+        .get("content-type")
+        .and_then(|v| v.to_str().ok())
+        .unwrap_or("application/octet-stream");
+    let content_type = super::ContentType::from(content_type);
+
+    if !status.is_client_error() && !status.is_server_error() {
+        let content = resp.text().await?;
+        match content_type {
+            ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
+            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::PostMiscDateDiff200Response`"))),
+            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::PostMiscDateDiff200Response`")))),
+        }
+    } else {
+        let content = resp.text().await?;
+        let entity: Option<PostMiscDateDiffError> = serde_json::from_str(&content).ok();
         Err(Error::ResponseError(ResponseContent { status, content, entity }))
     }
 }

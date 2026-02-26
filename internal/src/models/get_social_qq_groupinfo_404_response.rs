@@ -13,20 +13,14 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct GetSocialQqGroupinfo404Response {
-    #[serde(rename = "code", skip_serializing_if = "Option::is_none")]
-    pub code: Option<String>,
-    #[serde(rename = "details", skip_serializing_if = "Option::is_none")]
-    pub details: Option<serde_json::Value>,
-    #[serde(rename = "message", skip_serializing_if = "Option::is_none")]
-    pub message: Option<String>,
+    #[serde(rename = "error", skip_serializing_if = "Option::is_none")]
+    pub error: Option<String>,
 }
 
 impl GetSocialQqGroupinfo404Response {
     pub fn new() -> GetSocialQqGroupinfo404Response {
         GetSocialQqGroupinfo404Response {
-            code: None,
-            details: None,
-            message: None,
+            error: None,
         }
     }
 }

@@ -19,7 +19,7 @@ pub struct PostTextAesDecryptRequest {
     /// Base64编码的密文。
     #[serde(rename = "text")]
     pub text: String,
-    /// 16�ֽڵ�IV/Nonce����Ϊ16���ַ�
+    /// 16字节的IV/Nonce，必须为16个字符
     #[serde(rename = "nonce")]
     pub nonce: String,
 }
