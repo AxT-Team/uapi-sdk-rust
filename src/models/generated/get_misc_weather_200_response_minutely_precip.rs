@@ -11,7 +11,7 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
-/// GetMiscWeather200ResponseMinutelyPrecip : 分钟级降水预报（minutely=true 时返回，仅国内城市可用）
+/// GetMiscWeather200ResponseMinutelyPrecip : 分钟级降水预报（minutely=true 时返回，仅国内城市可用，精确到2分钟）
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct GetMiscWeather200ResponseMinutelyPrecip {
     /// 降水描述
@@ -20,13 +20,13 @@ pub struct GetMiscWeather200ResponseMinutelyPrecip {
     /// 更新时间
     #[serde(rename = "update_time", skip_serializing_if = "Option::is_none")]
     pub update_time: Option<String>,
-    /// 每5分钟一个数据点，共24个
+    /// 精确到2分钟的数据点
     #[serde(rename = "data", skip_serializing_if = "Option::is_none")]
     pub data: Option<Vec<models::GetMiscWeather200ResponseMinutelyPrecipDataInner>>,
 }
 
 impl GetMiscWeather200ResponseMinutelyPrecip {
-    /// 分钟级降水预报（minutely=true 时返回，仅国内城市可用）
+    /// 分钟级降水预报（minutely=true 时返回，仅国内城市可用，精确到2分钟）
     pub fn new() -> GetMiscWeather200ResponseMinutelyPrecip {
         GetMiscWeather200ResponseMinutelyPrecip {
             summary: None,

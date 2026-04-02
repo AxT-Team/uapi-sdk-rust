@@ -13,20 +13,32 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct GetMiscHolidayCalendar200Response {
-    #[serde(rename = "code", skip_serializing_if = "Option::is_none")]
-    pub code: Option<i32>,
-    #[serde(rename = "message", skip_serializing_if = "Option::is_none")]
-    pub message: Option<String>,
-    #[serde(rename = "data", skip_serializing_if = "Option::is_none")]
-    pub data: Option<Box<models::GetMiscHolidayCalendar200ResponseData>>,
+    /// 查询模式：day、month、year。
+    #[serde(rename = "mode", skip_serializing_if = "Option::is_none")]
+    pub mode: Option<String>,
+    #[serde(rename = "query", skip_serializing_if = "Option::is_none")]
+    pub query: Option<Box<models::GetMiscHolidayCalendar200ResponseQuery>>,
+    #[serde(rename = "summary", skip_serializing_if = "Option::is_none")]
+    pub summary: Option<Box<models::GetMiscHolidayCalendar200ResponseSummary>>,
+    /// 日期明细列表。
+    #[serde(rename = "days", skip_serializing_if = "Option::is_none")]
+    pub days: Option<Vec<models::GetMiscHolidayCalendar200ResponseDaysInner>>,
+    /// 节日事件列表。
+    #[serde(rename = "holidays", skip_serializing_if = "Option::is_none")]
+    pub holidays: Option<Vec<models::GetMiscHolidayCalendar200ResponseHolidaysInner>>,
+    #[serde(rename = "nearby", skip_serializing_if = "Option::is_none")]
+    pub nearby: Option<Box<models::GetMiscHolidayCalendar200ResponseNearby>>,
 }
 
 impl GetMiscHolidayCalendar200Response {
     pub fn new() -> GetMiscHolidayCalendar200Response {
         GetMiscHolidayCalendar200Response {
-            code: None,
-            message: None,
-            data: None,
+            mode: None,
+            query: None,
+            summary: None,
+            days: None,
+            holidays: None,
+            nearby: None,
         }
     }
 }

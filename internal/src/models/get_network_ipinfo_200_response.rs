@@ -40,9 +40,6 @@ pub struct GetNetworkIpinfo200Response {
     /// IP段结束地址（标准查询）
     #[serde(rename = "endip", skip_serializing_if = "Option::is_none")]
     pub endip: Option<String>,
-    /// 行政区（商业查询）
-    #[serde(rename = "district", skip_serializing_if = "Option::is_none")]
-    pub district: Option<String>,
 }
 
 impl GetNetworkIpinfo200Response {
@@ -57,7 +54,6 @@ impl GetNetworkIpinfo200Response {
             longitude: None,
             beginip: None,
             endip: None,
-            district: None,
         }
     }
 }

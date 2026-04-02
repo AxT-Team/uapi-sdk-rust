@@ -13,32 +13,23 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct GetNetworkPingmyip200Response {
-    /// 平均延迟(ms)
-    #[serde(rename = "avg", skip_serializing_if = "Option::is_none")]
-    pub avg: Option<f64>,
-    #[serde(rename = "host", skip_serializing_if = "Option::is_none")]
-    pub host: Option<String>,
-    #[serde(rename = "ip", skip_serializing_if = "Option::is_none")]
-    pub ip: Option<String>,
-    #[serde(rename = "location", skip_serializing_if = "Option::is_none")]
-    pub location: Option<String>,
-    /// 最大延迟(ms)
-    #[serde(rename = "max", skip_serializing_if = "Option::is_none")]
-    pub max: Option<f64>,
-    /// 最小延迟(ms)
-    #[serde(rename = "min", skip_serializing_if = "Option::is_none")]
-    pub min: Option<f64>,
+    /// 当前客户端的公网 IP 地址。
+    #[serde(rename = "client_ip", skip_serializing_if = "Option::is_none")]
+    pub client_ip: Option<String>,
+    /// 是否成功完成对当前客户端 IP 的 Ping。
+    #[serde(rename = "ping_successful", skip_serializing_if = "Option::is_none")]
+    pub ping_successful: Option<bool>,
+    /// 操作结果说明。成功时通常会附带平均延迟信息。
+    #[serde(rename = "message", skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
 }
 
 impl GetNetworkPingmyip200Response {
     pub fn new() -> GetNetworkPingmyip200Response {
         GetNetworkPingmyip200Response {
-            avg: None,
-            host: None,
-            ip: None,
-            location: None,
-            max: None,
-            min: None,
+            client_ip: None,
+            ping_successful: None,
+            message: None,
         }
     }
 }

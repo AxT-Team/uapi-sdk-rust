@@ -16,7 +16,7 @@ pub struct GetMiscWeather200ResponseMinutelyPrecipDataInner {
     /// 预报时间 ISO8601
     #[serde(rename = "time", skip_serializing_if = "Option::is_none")]
     pub time: Option<String>,
-    /// 5分钟累计降水量 mm
+    /// 该时间点的降水量 mm
     #[serde(rename = "precip", skip_serializing_if = "Option::is_none")]
     pub precip: Option<f64>,
     /// 降水类型：rain / snow

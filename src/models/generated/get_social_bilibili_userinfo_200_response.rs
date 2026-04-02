@@ -13,20 +13,50 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct GetSocialBilibiliUserinfo200Response {
-    #[serde(rename = "code", skip_serializing_if = "Option::is_none")]
-    pub code: Option<i32>,
-    #[serde(rename = "data", skip_serializing_if = "Option::is_none")]
-    pub data: Option<Box<models::GetSocialBilibiliUserinfo200ResponseData>>,
-    #[serde(rename = "message", skip_serializing_if = "Option::is_none")]
-    pub message: Option<String>,
+    #[serde(rename = "mid", skip_serializing_if = "Option::is_none")]
+    pub mid: Option<i32>,
+    #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    #[serde(rename = "sex", skip_serializing_if = "Option::is_none")]
+    pub sex: Option<String>,
+    #[serde(rename = "face", skip_serializing_if = "Option::is_none")]
+    pub face: Option<String>,
+    #[serde(rename = "sign", skip_serializing_if = "Option::is_none")]
+    pub sign: Option<String>,
+    #[serde(rename = "level", skip_serializing_if = "Option::is_none")]
+    pub level: Option<i32>,
+    #[serde(rename = "birthday", skip_serializing_if = "Option::is_none")]
+    pub birthday: Option<String>,
+    #[serde(rename = "vip_type", skip_serializing_if = "Option::is_none")]
+    pub vip_type: Option<i32>,
+    #[serde(rename = "vip_status", skip_serializing_if = "Option::is_none")]
+    pub vip_status: Option<i32>,
+    #[serde(rename = "following", skip_serializing_if = "Option::is_none")]
+    pub following: Option<i32>,
+    #[serde(rename = "follower", skip_serializing_if = "Option::is_none")]
+    pub follower: Option<i32>,
+    #[serde(rename = "archive_count", skip_serializing_if = "Option::is_none")]
+    pub archive_count: Option<i32>,
+    #[serde(rename = "article_count", skip_serializing_if = "Option::is_none")]
+    pub article_count: Option<i32>,
 }
 
 impl GetSocialBilibiliUserinfo200Response {
     pub fn new() -> GetSocialBilibiliUserinfo200Response {
         GetSocialBilibiliUserinfo200Response {
-            code: None,
-            data: None,
-            message: None,
+            mid: None,
+            name: None,
+            sex: None,
+            face: None,
+            sign: None,
+            level: None,
+            birthday: None,
+            vip_type: None,
+            vip_status: None,
+            following: None,
+            follower: None,
+            archive_count: None,
+            article_count: None,
         }
     }
 }

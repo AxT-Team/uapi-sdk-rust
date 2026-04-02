@@ -13,8 +13,10 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct PostTextMd5VerifyRequest {
+    /// 用于比对的 MD5 哈希值（32 位小写十六进制字符串）。
     #[serde(rename = "hash")]
     pub hash: String,
+    /// 待校验的原始文本，会先计算其 MD5 再与 hash 进行比对。
     #[serde(rename = "text")]
     pub text: String,
 }

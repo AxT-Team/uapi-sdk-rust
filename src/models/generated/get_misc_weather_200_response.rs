@@ -19,12 +19,18 @@ pub struct GetMiscWeather200Response {
     /// 城市名
     #[serde(rename = "city", skip_serializing_if = "Option::is_none")]
     pub city: Option<String>,
+    /// 区县或更细一级的行政区名称。自动按 IP 定位时更常见。
+    #[serde(rename = "district", skip_serializing_if = "Option::is_none")]
+    pub district: Option<String>,
     /// 行政区划代码（部分数据源可能为空）
     #[serde(rename = "adcode", skip_serializing_if = "Option::is_none")]
     pub adcode: Option<String>,
     /// 天气状况描述。默认返回中文，传 `lang=en` 时返回英文。非固定枚举。
     #[serde(rename = "weather", skip_serializing_if = "Option::is_none")]
     pub weather: Option<String>,
+    /// 天气图标代码。请从[天气图标代码表](#enum-list)中查看所有可能的值。
+    #[serde(rename = "weather_icon", skip_serializing_if = "Option::is_none")]
+    pub weather_icon: Option<WeatherIcon>,
     /// 当前温度 °C
     #[serde(rename = "temperature", skip_serializing_if = "Option::is_none")]
     pub temperature: Option<f64>,
@@ -95,8 +101,10 @@ impl GetMiscWeather200Response {
         GetMiscWeather200Response {
             province: None,
             city: None,
+            district: None,
             adcode: None,
             weather: None,
+            weather_icon: None,
             temperature: None,
             wind_direction: None,
             wind_power: None,
@@ -120,6 +128,902 @@ impl GetMiscWeather200Response {
             minutely_precip: None,
             life_indices: None,
         }
+    }
+}
+/// 天气图标代码。请从[天气图标代码表](#enum-list)中查看所有可能的值。
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+pub enum WeatherIcon {
+    #[serde(rename = "100")]
+    Variant100,
+    #[serde(rename = "101")]
+    Variant101,
+    #[serde(rename = "102")]
+    Variant102,
+    #[serde(rename = "103")]
+    Variant103,
+    #[serde(rename = "104")]
+    Variant104,
+    #[serde(rename = "150")]
+    Variant150,
+    #[serde(rename = "151")]
+    Variant151,
+    #[serde(rename = "152")]
+    Variant152,
+    #[serde(rename = "153")]
+    Variant153,
+    #[serde(rename = "300")]
+    Variant300,
+    #[serde(rename = "301")]
+    Variant301,
+    #[serde(rename = "302")]
+    Variant302,
+    #[serde(rename = "303")]
+    Variant303,
+    #[serde(rename = "304")]
+    Variant304,
+    #[serde(rename = "305")]
+    Variant305,
+    #[serde(rename = "306")]
+    Variant306,
+    #[serde(rename = "307")]
+    Variant307,
+    #[serde(rename = "308")]
+    Variant308,
+    #[serde(rename = "309")]
+    Variant309,
+    #[serde(rename = "310")]
+    Variant310,
+    #[serde(rename = "311")]
+    Variant311,
+    #[serde(rename = "312")]
+    Variant312,
+    #[serde(rename = "313")]
+    Variant313,
+    #[serde(rename = "314")]
+    Variant314,
+    #[serde(rename = "315")]
+    Variant315,
+    #[serde(rename = "316")]
+    Variant316,
+    #[serde(rename = "317")]
+    Variant317,
+    #[serde(rename = "318")]
+    Variant318,
+    #[serde(rename = "350")]
+    Variant350,
+    #[serde(rename = "351")]
+    Variant351,
+    #[serde(rename = "399")]
+    Variant399,
+    #[serde(rename = "400")]
+    Variant400,
+    #[serde(rename = "401")]
+    Variant401,
+    #[serde(rename = "402")]
+    Variant402,
+    #[serde(rename = "403")]
+    Variant403,
+    #[serde(rename = "404")]
+    Variant404,
+    #[serde(rename = "405")]
+    Variant405,
+    #[serde(rename = "406")]
+    Variant406,
+    #[serde(rename = "407")]
+    Variant407,
+    #[serde(rename = "408")]
+    Variant408,
+    #[serde(rename = "409")]
+    Variant409,
+    #[serde(rename = "410")]
+    Variant410,
+    #[serde(rename = "456")]
+    Variant456,
+    #[serde(rename = "457")]
+    Variant457,
+    #[serde(rename = "499")]
+    Variant499,
+    #[serde(rename = "500")]
+    Variant500,
+    #[serde(rename = "501")]
+    Variant501,
+    #[serde(rename = "502")]
+    Variant502,
+    #[serde(rename = "503")]
+    Variant503,
+    #[serde(rename = "504")]
+    Variant504,
+    #[serde(rename = "507")]
+    Variant507,
+    #[serde(rename = "508")]
+    Variant508,
+    #[serde(rename = "509")]
+    Variant509,
+    #[serde(rename = "510")]
+    Variant510,
+    #[serde(rename = "511")]
+    Variant511,
+    #[serde(rename = "512")]
+    Variant512,
+    #[serde(rename = "513")]
+    Variant513,
+    #[serde(rename = "514")]
+    Variant514,
+    #[serde(rename = "515")]
+    Variant515,
+    #[serde(rename = "800")]
+    Variant800,
+    #[serde(rename = "801")]
+    Variant801,
+    #[serde(rename = "802")]
+    Variant802,
+    #[serde(rename = "803")]
+    Variant803,
+    #[serde(rename = "804")]
+    Variant804,
+    #[serde(rename = "805")]
+    Variant805,
+    #[serde(rename = "806")]
+    Variant806,
+    #[serde(rename = "807")]
+    Variant807,
+    #[serde(rename = "900")]
+    Variant900,
+    #[serde(rename = "901")]
+    Variant901,
+    #[serde(rename = "999")]
+    Variant999,
+    #[serde(rename = "1001")]
+    Variant1001,
+    #[serde(rename = "1002")]
+    Variant1002,
+    #[serde(rename = "1003")]
+    Variant1003,
+    #[serde(rename = "1004")]
+    Variant1004,
+    #[serde(rename = "1005")]
+    Variant1005,
+    #[serde(rename = "1006")]
+    Variant1006,
+    #[serde(rename = "1007")]
+    Variant1007,
+    #[serde(rename = "1008")]
+    Variant1008,
+    #[serde(rename = "1009")]
+    Variant1009,
+    #[serde(rename = "1010")]
+    Variant1010,
+    #[serde(rename = "1011")]
+    Variant1011,
+    #[serde(rename = "1012")]
+    Variant1012,
+    #[serde(rename = "1013")]
+    Variant1013,
+    #[serde(rename = "1014")]
+    Variant1014,
+    #[serde(rename = "1015")]
+    Variant1015,
+    #[serde(rename = "1016")]
+    Variant1016,
+    #[serde(rename = "1017")]
+    Variant1017,
+    #[serde(rename = "1018")]
+    Variant1018,
+    #[serde(rename = "1019")]
+    Variant1019,
+    #[serde(rename = "1020")]
+    Variant1020,
+    #[serde(rename = "1021")]
+    Variant1021,
+    #[serde(rename = "1022")]
+    Variant1022,
+    #[serde(rename = "1023")]
+    Variant1023,
+    #[serde(rename = "1024")]
+    Variant1024,
+    #[serde(rename = "1025")]
+    Variant1025,
+    #[serde(rename = "1026")]
+    Variant1026,
+    #[serde(rename = "1027")]
+    Variant1027,
+    #[serde(rename = "1028")]
+    Variant1028,
+    #[serde(rename = "1029")]
+    Variant1029,
+    #[serde(rename = "1030")]
+    Variant1030,
+    #[serde(rename = "1031")]
+    Variant1031,
+    #[serde(rename = "1032")]
+    Variant1032,
+    #[serde(rename = "1033")]
+    Variant1033,
+    #[serde(rename = "1034")]
+    Variant1034,
+    #[serde(rename = "1035")]
+    Variant1035,
+    #[serde(rename = "1036")]
+    Variant1036,
+    #[serde(rename = "1037")]
+    Variant1037,
+    #[serde(rename = "1038")]
+    Variant1038,
+    #[serde(rename = "1039")]
+    Variant1039,
+    #[serde(rename = "1040")]
+    Variant1040,
+    #[serde(rename = "1041")]
+    Variant1041,
+    #[serde(rename = "1042")]
+    Variant1042,
+    #[serde(rename = "1043")]
+    Variant1043,
+    #[serde(rename = "1044")]
+    Variant1044,
+    #[serde(rename = "1045")]
+    Variant1045,
+    #[serde(rename = "1046")]
+    Variant1046,
+    #[serde(rename = "1047")]
+    Variant1047,
+    #[serde(rename = "1048")]
+    Variant1048,
+    #[serde(rename = "1049")]
+    Variant1049,
+    #[serde(rename = "1050")]
+    Variant1050,
+    #[serde(rename = "1051")]
+    Variant1051,
+    #[serde(rename = "1052")]
+    Variant1052,
+    #[serde(rename = "1053")]
+    Variant1053,
+    #[serde(rename = "1054")]
+    Variant1054,
+    #[serde(rename = "1055")]
+    Variant1055,
+    #[serde(rename = "1056")]
+    Variant1056,
+    #[serde(rename = "1057")]
+    Variant1057,
+    #[serde(rename = "1058")]
+    Variant1058,
+    #[serde(rename = "1059")]
+    Variant1059,
+    #[serde(rename = "1060")]
+    Variant1060,
+    #[serde(rename = "1061")]
+    Variant1061,
+    #[serde(rename = "1062")]
+    Variant1062,
+    #[serde(rename = "1063")]
+    Variant1063,
+    #[serde(rename = "1064")]
+    Variant1064,
+    #[serde(rename = "1065")]
+    Variant1065,
+    #[serde(rename = "1066")]
+    Variant1066,
+    #[serde(rename = "1067")]
+    Variant1067,
+    #[serde(rename = "1068")]
+    Variant1068,
+    #[serde(rename = "1069")]
+    Variant1069,
+    #[serde(rename = "1071")]
+    Variant1071,
+    #[serde(rename = "1072")]
+    Variant1072,
+    #[serde(rename = "1073")]
+    Variant1073,
+    #[serde(rename = "1074")]
+    Variant1074,
+    #[serde(rename = "1075")]
+    Variant1075,
+    #[serde(rename = "1076")]
+    Variant1076,
+    #[serde(rename = "1077")]
+    Variant1077,
+    #[serde(rename = "1078")]
+    Variant1078,
+    #[serde(rename = "1079")]
+    Variant1079,
+    #[serde(rename = "1080")]
+    Variant1080,
+    #[serde(rename = "1081")]
+    Variant1081,
+    #[serde(rename = "1082")]
+    Variant1082,
+    #[serde(rename = "1084")]
+    Variant1084,
+    #[serde(rename = "1085")]
+    Variant1085,
+    #[serde(rename = "1086")]
+    Variant1086,
+    #[serde(rename = "1087")]
+    Variant1087,
+    #[serde(rename = "1088")]
+    Variant1088,
+    #[serde(rename = "1089")]
+    Variant1089,
+    #[serde(rename = "1201")]
+    Variant1201,
+    #[serde(rename = "1202")]
+    Variant1202,
+    #[serde(rename = "1203")]
+    Variant1203,
+    #[serde(rename = "1204")]
+    Variant1204,
+    #[serde(rename = "1205")]
+    Variant1205,
+    #[serde(rename = "1206")]
+    Variant1206,
+    #[serde(rename = "1207")]
+    Variant1207,
+    #[serde(rename = "1208")]
+    Variant1208,
+    #[serde(rename = "1209")]
+    Variant1209,
+    #[serde(rename = "1210")]
+    Variant1210,
+    #[serde(rename = "1211")]
+    Variant1211,
+    #[serde(rename = "1212")]
+    Variant1212,
+    #[serde(rename = "1213")]
+    Variant1213,
+    #[serde(rename = "1214")]
+    Variant1214,
+    #[serde(rename = "1215")]
+    Variant1215,
+    #[serde(rename = "1216")]
+    Variant1216,
+    #[serde(rename = "1217")]
+    Variant1217,
+    #[serde(rename = "1218")]
+    Variant1218,
+    #[serde(rename = "1219")]
+    Variant1219,
+    #[serde(rename = "1221")]
+    Variant1221,
+    #[serde(rename = "1241")]
+    Variant1241,
+    #[serde(rename = "1242")]
+    Variant1242,
+    #[serde(rename = "1243")]
+    Variant1243,
+    #[serde(rename = "1244")]
+    Variant1244,
+    #[serde(rename = "1245")]
+    Variant1245,
+    #[serde(rename = "1246")]
+    Variant1246,
+    #[serde(rename = "1247")]
+    Variant1247,
+    #[serde(rename = "1248")]
+    Variant1248,
+    #[serde(rename = "1249")]
+    Variant1249,
+    #[serde(rename = "1250")]
+    Variant1250,
+    #[serde(rename = "1251")]
+    Variant1251,
+    #[serde(rename = "1271")]
+    Variant1271,
+    #[serde(rename = "1272")]
+    Variant1272,
+    #[serde(rename = "1273")]
+    Variant1273,
+    #[serde(rename = "1274")]
+    Variant1274,
+    #[serde(rename = "1601")]
+    Variant1601,
+    #[serde(rename = "1602")]
+    Variant1602,
+    #[serde(rename = "1603")]
+    Variant1603,
+    #[serde(rename = "1604")]
+    Variant1604,
+    #[serde(rename = "1605")]
+    Variant1605,
+    #[serde(rename = "1606")]
+    Variant1606,
+    #[serde(rename = "1607")]
+    Variant1607,
+    #[serde(rename = "1608")]
+    Variant1608,
+    #[serde(rename = "1609")]
+    Variant1609,
+    #[serde(rename = "1610")]
+    Variant1610,
+    #[serde(rename = "1701")]
+    Variant1701,
+    #[serde(rename = "1702")]
+    Variant1702,
+    #[serde(rename = "1703")]
+    Variant1703,
+    #[serde(rename = "1704")]
+    Variant1704,
+    #[serde(rename = "1705")]
+    Variant1705,
+    #[serde(rename = "1706")]
+    Variant1706,
+    #[serde(rename = "1707")]
+    Variant1707,
+    #[serde(rename = "1708")]
+    Variant1708,
+    #[serde(rename = "1709")]
+    Variant1709,
+    #[serde(rename = "1710")]
+    Variant1710,
+    #[serde(rename = "1801")]
+    Variant1801,
+    #[serde(rename = "1802")]
+    Variant1802,
+    #[serde(rename = "1803")]
+    Variant1803,
+    #[serde(rename = "1804")]
+    Variant1804,
+    #[serde(rename = "1805")]
+    Variant1805,
+    #[serde(rename = "2001")]
+    Variant2001,
+    #[serde(rename = "2002")]
+    Variant2002,
+    #[serde(rename = "2003")]
+    Variant2003,
+    #[serde(rename = "2004")]
+    Variant2004,
+    #[serde(rename = "2005")]
+    Variant2005,
+    #[serde(rename = "2006")]
+    Variant2006,
+    #[serde(rename = "2007")]
+    Variant2007,
+    #[serde(rename = "2029")]
+    Variant2029,
+    #[serde(rename = "2030")]
+    Variant2030,
+    #[serde(rename = "2031")]
+    Variant2031,
+    #[serde(rename = "2032")]
+    Variant2032,
+    #[serde(rename = "2033")]
+    Variant2033,
+    #[serde(rename = "2050")]
+    Variant2050,
+    #[serde(rename = "2051")]
+    Variant2051,
+    #[serde(rename = "2052")]
+    Variant2052,
+    #[serde(rename = "2053")]
+    Variant2053,
+    #[serde(rename = "2054")]
+    Variant2054,
+    #[serde(rename = "2070")]
+    Variant2070,
+    #[serde(rename = "2071")]
+    Variant2071,
+    #[serde(rename = "2072")]
+    Variant2072,
+    #[serde(rename = "2073")]
+    Variant2073,
+    #[serde(rename = "2074")]
+    Variant2074,
+    #[serde(rename = "2075")]
+    Variant2075,
+    #[serde(rename = "2076")]
+    Variant2076,
+    #[serde(rename = "2077")]
+    Variant2077,
+    #[serde(rename = "2078")]
+    Variant2078,
+    #[serde(rename = "2079")]
+    Variant2079,
+    #[serde(rename = "2080")]
+    Variant2080,
+    #[serde(rename = "2081")]
+    Variant2081,
+    #[serde(rename = "2082")]
+    Variant2082,
+    #[serde(rename = "2083")]
+    Variant2083,
+    #[serde(rename = "2084")]
+    Variant2084,
+    #[serde(rename = "2085")]
+    Variant2085,
+    #[serde(rename = "2100")]
+    Variant2100,
+    #[serde(rename = "2101")]
+    Variant2101,
+    #[serde(rename = "2102")]
+    Variant2102,
+    #[serde(rename = "2103")]
+    Variant2103,
+    #[serde(rename = "2104")]
+    Variant2104,
+    #[serde(rename = "2105")]
+    Variant2105,
+    #[serde(rename = "2106")]
+    Variant2106,
+    #[serde(rename = "2107")]
+    Variant2107,
+    #[serde(rename = "2108")]
+    Variant2108,
+    #[serde(rename = "2109")]
+    Variant2109,
+    #[serde(rename = "2111")]
+    Variant2111,
+    #[serde(rename = "2120")]
+    Variant2120,
+    #[serde(rename = "2121")]
+    Variant2121,
+    #[serde(rename = "2122")]
+    Variant2122,
+    #[serde(rename = "2123")]
+    Variant2123,
+    #[serde(rename = "2124")]
+    Variant2124,
+    #[serde(rename = "2125")]
+    Variant2125,
+    #[serde(rename = "2126")]
+    Variant2126,
+    #[serde(rename = "2127")]
+    Variant2127,
+    #[serde(rename = "2128")]
+    Variant2128,
+    #[serde(rename = "2129")]
+    Variant2129,
+    #[serde(rename = "2130")]
+    Variant2130,
+    #[serde(rename = "2131")]
+    Variant2131,
+    #[serde(rename = "2132")]
+    Variant2132,
+    #[serde(rename = "2133")]
+    Variant2133,
+    #[serde(rename = "2134")]
+    Variant2134,
+    #[serde(rename = "2135")]
+    Variant2135,
+    #[serde(rename = "2150")]
+    Variant2150,
+    #[serde(rename = "2151")]
+    Variant2151,
+    #[serde(rename = "2152")]
+    Variant2152,
+    #[serde(rename = "2153")]
+    Variant2153,
+    #[serde(rename = "2154")]
+    Variant2154,
+    #[serde(rename = "2155")]
+    Variant2155,
+    #[serde(rename = "2156")]
+    Variant2156,
+    #[serde(rename = "2157")]
+    Variant2157,
+    #[serde(rename = "2158")]
+    Variant2158,
+    #[serde(rename = "2159")]
+    Variant2159,
+    #[serde(rename = "2160")]
+    Variant2160,
+    #[serde(rename = "2161")]
+    Variant2161,
+    #[serde(rename = "2162")]
+    Variant2162,
+    #[serde(rename = "2163")]
+    Variant2163,
+    #[serde(rename = "2164")]
+    Variant2164,
+    #[serde(rename = "2165")]
+    Variant2165,
+    #[serde(rename = "2166")]
+    Variant2166,
+    #[serde(rename = "2167")]
+    Variant2167,
+    #[serde(rename = "2190")]
+    Variant2190,
+    #[serde(rename = "2191")]
+    Variant2191,
+    #[serde(rename = "2192")]
+    Variant2192,
+    #[serde(rename = "2193")]
+    Variant2193,
+    #[serde(rename = "2200")]
+    Variant2200,
+    #[serde(rename = "2201")]
+    Variant2201,
+    #[serde(rename = "2202")]
+    Variant2202,
+    #[serde(rename = "2203")]
+    Variant2203,
+    #[serde(rename = "2204")]
+    Variant2204,
+    #[serde(rename = "2205")]
+    Variant2205,
+    #[serde(rename = "2207")]
+    Variant2207,
+    #[serde(rename = "2208")]
+    Variant2208,
+    #[serde(rename = "2209")]
+    Variant2209,
+    #[serde(rename = "2210")]
+    Variant2210,
+    #[serde(rename = "2211")]
+    Variant2211,
+    #[serde(rename = "2212")]
+    Variant2212,
+    #[serde(rename = "2213")]
+    Variant2213,
+    #[serde(rename = "2214")]
+    Variant2214,
+    #[serde(rename = "2215")]
+    Variant2215,
+    #[serde(rename = "2216")]
+    Variant2216,
+    #[serde(rename = "2217")]
+    Variant2217,
+    #[serde(rename = "2218")]
+    Variant2218,
+    #[serde(rename = "2300")]
+    Variant2300,
+    #[serde(rename = "2301")]
+    Variant2301,
+    #[serde(rename = "2302")]
+    Variant2302,
+    #[serde(rename = "2303")]
+    Variant2303,
+    #[serde(rename = "2304")]
+    Variant2304,
+    #[serde(rename = "2305")]
+    Variant2305,
+    #[serde(rename = "2306")]
+    Variant2306,
+    #[serde(rename = "2307")]
+    Variant2307,
+    #[serde(rename = "2308")]
+    Variant2308,
+    #[serde(rename = "2309")]
+    Variant2309,
+    #[serde(rename = "2311")]
+    Variant2311,
+    #[serde(rename = "2312")]
+    Variant2312,
+    #[serde(rename = "2313")]
+    Variant2313,
+    #[serde(rename = "2314")]
+    Variant2314,
+    #[serde(rename = "2315")]
+    Variant2315,
+    #[serde(rename = "2316")]
+    Variant2316,
+    #[serde(rename = "2317")]
+    Variant2317,
+    #[serde(rename = "2318")]
+    Variant2318,
+    #[serde(rename = "2319")]
+    Variant2319,
+    #[serde(rename = "2320")]
+    Variant2320,
+    #[serde(rename = "2321")]
+    Variant2321,
+    #[serde(rename = "2322")]
+    Variant2322,
+    #[serde(rename = "2323")]
+    Variant2323,
+    #[serde(rename = "2324")]
+    Variant2324,
+    #[serde(rename = "2325")]
+    Variant2325,
+    #[serde(rename = "2326")]
+    Variant2326,
+    #[serde(rename = "2327")]
+    Variant2327,
+    #[serde(rename = "2328")]
+    Variant2328,
+    #[serde(rename = "2330")]
+    Variant2330,
+    #[serde(rename = "2331")]
+    Variant2331,
+    #[serde(rename = "2332")]
+    Variant2332,
+    #[serde(rename = "2333")]
+    Variant2333,
+    #[serde(rename = "2341")]
+    Variant2341,
+    #[serde(rename = "2343")]
+    Variant2343,
+    #[serde(rename = "2345")]
+    Variant2345,
+    #[serde(rename = "2346")]
+    Variant2346,
+    #[serde(rename = "2348")]
+    Variant2348,
+    #[serde(rename = "2349")]
+    Variant2349,
+    #[serde(rename = "2350")]
+    Variant2350,
+    #[serde(rename = "2351")]
+    Variant2351,
+    #[serde(rename = "2352")]
+    Variant2352,
+    #[serde(rename = "2353")]
+    Variant2353,
+    #[serde(rename = "2354")]
+    Variant2354,
+    #[serde(rename = "2355")]
+    Variant2355,
+    #[serde(rename = "2356")]
+    Variant2356,
+    #[serde(rename = "2357")]
+    Variant2357,
+    #[serde(rename = "2358")]
+    Variant2358,
+    #[serde(rename = "2359")]
+    Variant2359,
+    #[serde(rename = "2360")]
+    Variant2360,
+    #[serde(rename = "2361")]
+    Variant2361,
+    #[serde(rename = "2362")]
+    Variant2362,
+    #[serde(rename = "2363")]
+    Variant2363,
+    #[serde(rename = "2364")]
+    Variant2364,
+    #[serde(rename = "2365")]
+    Variant2365,
+    #[serde(rename = "2366")]
+    Variant2366,
+    #[serde(rename = "2367")]
+    Variant2367,
+    #[serde(rename = "2368")]
+    Variant2368,
+    #[serde(rename = "2369")]
+    Variant2369,
+    #[serde(rename = "2370")]
+    Variant2370,
+    #[serde(rename = "2371")]
+    Variant2371,
+    #[serde(rename = "2372")]
+    Variant2372,
+    #[serde(rename = "2373")]
+    Variant2373,
+    #[serde(rename = "2374")]
+    Variant2374,
+    #[serde(rename = "2375")]
+    Variant2375,
+    #[serde(rename = "2376")]
+    Variant2376,
+    #[serde(rename = "2377")]
+    Variant2377,
+    #[serde(rename = "2378")]
+    Variant2378,
+    #[serde(rename = "2379")]
+    Variant2379,
+    #[serde(rename = "2380")]
+    Variant2380,
+    #[serde(rename = "2381")]
+    Variant2381,
+    #[serde(rename = "2382")]
+    Variant2382,
+    #[serde(rename = "2383")]
+    Variant2383,
+    #[serde(rename = "2384")]
+    Variant2384,
+    #[serde(rename = "2385")]
+    Variant2385,
+    #[serde(rename = "2386")]
+    Variant2386,
+    #[serde(rename = "2387")]
+    Variant2387,
+    #[serde(rename = "2388")]
+    Variant2388,
+    #[serde(rename = "2389")]
+    Variant2389,
+    #[serde(rename = "2390")]
+    Variant2390,
+    #[serde(rename = "2391")]
+    Variant2391,
+    #[serde(rename = "2392")]
+    Variant2392,
+    #[serde(rename = "2393")]
+    Variant2393,
+    #[serde(rename = "2394")]
+    Variant2394,
+    #[serde(rename = "2395")]
+    Variant2395,
+    #[serde(rename = "2396")]
+    Variant2396,
+    #[serde(rename = "2397")]
+    Variant2397,
+    #[serde(rename = "2398")]
+    Variant2398,
+    #[serde(rename = "2399")]
+    Variant2399,
+    #[serde(rename = "2400")]
+    Variant2400,
+    #[serde(rename = "2409")]
+    Variant2409,
+    #[serde(rename = "2411")]
+    Variant2411,
+    #[serde(rename = "2412")]
+    Variant2412,
+    #[serde(rename = "2413")]
+    Variant2413,
+    #[serde(rename = "2414")]
+    Variant2414,
+    #[serde(rename = "2415")]
+    Variant2415,
+    #[serde(rename = "2416")]
+    Variant2416,
+    #[serde(rename = "2417")]
+    Variant2417,
+    #[serde(rename = "2418")]
+    Variant2418,
+    #[serde(rename = "2419")]
+    Variant2419,
+    #[serde(rename = "2420")]
+    Variant2420,
+    #[serde(rename = "2421")]
+    Variant2421,
+    #[serde(rename = "2422")]
+    Variant2422,
+    #[serde(rename = "2423")]
+    Variant2423,
+    #[serde(rename = "2424")]
+    Variant2424,
+    #[serde(rename = "2425")]
+    Variant2425,
+    #[serde(rename = "2426")]
+    Variant2426,
+    #[serde(rename = "2501")]
+    Variant2501,
+    #[serde(rename = "2502")]
+    Variant2502,
+    #[serde(rename = "2521")]
+    Variant2521,
+    #[serde(rename = "2522")]
+    Variant2522,
+    #[serde(rename = "2523")]
+    Variant2523,
+    #[serde(rename = "2524")]
+    Variant2524,
+    #[serde(rename = "2525")]
+    Variant2525,
+    #[serde(rename = "2526")]
+    Variant2526,
+    #[serde(rename = "2527")]
+    Variant2527,
+    #[serde(rename = "2528")]
+    Variant2528,
+    #[serde(rename = "2529")]
+    Variant2529,
+    #[serde(rename = "2530")]
+    Variant2530,
+    #[serde(rename = "2531")]
+    Variant2531,
+    #[serde(rename = "2532")]
+    Variant2532,
+    #[serde(rename = "2550")]
+    Variant2550,
+    #[serde(rename = "2551")]
+    Variant2551,
+    #[serde(rename = "2552")]
+    Variant2552,
+    #[serde(rename = "2553")]
+    Variant2553,
+    #[serde(rename = "2554")]
+    Variant2554,
+    #[serde(rename = "9999")]
+    Variant9999,
+}
+
+impl Default for WeatherIcon {
+    fn default() -> WeatherIcon {
+        Self::Variant100
     }
 }
 

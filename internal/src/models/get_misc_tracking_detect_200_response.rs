@@ -13,20 +13,27 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct GetMiscTrackingDetect200Response {
-    #[serde(rename = "code", skip_serializing_if = "Option::is_none")]
-    pub code: Option<String>,
-    #[serde(rename = "message", skip_serializing_if = "Option::is_none")]
-    pub message: Option<String>,
-    #[serde(rename = "data", skip_serializing_if = "Option::is_none")]
-    pub data: Option<Box<models::GetMiscTrackingDetect200ResponseData>>,
+    /// 查询的快递单号
+    #[serde(rename = "tracking_number", skip_serializing_if = "Option::is_none")]
+    pub tracking_number: Option<String>,
+    /// 识别出的快递公司编码
+    #[serde(rename = "carrier_code", skip_serializing_if = "Option::is_none")]
+    pub carrier_code: Option<String>,
+    /// 识别出的快递公司名称
+    #[serde(rename = "carrier_name", skip_serializing_if = "Option::is_none")]
+    pub carrier_name: Option<String>,
+    /// 其他可能的快递公司列表。如果没有备选项，会返回空数组。
+    #[serde(rename = "alternatives", skip_serializing_if = "Option::is_none")]
+    pub alternatives: Option<Vec<models::GetMiscTrackingDetect200ResponseAlternativesInner>>,
 }
 
 impl GetMiscTrackingDetect200Response {
     pub fn new() -> GetMiscTrackingDetect200Response {
         GetMiscTrackingDetect200Response {
-            code: None,
-            message: None,
-            data: None,
+            tracking_number: None,
+            carrier_code: None,
+            carrier_name: None,
+            alternatives: None,
         }
     }
 }

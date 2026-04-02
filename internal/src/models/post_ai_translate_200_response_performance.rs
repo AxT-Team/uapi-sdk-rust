@@ -15,15 +15,12 @@ use serde::{Deserialize, Serialize};
 pub struct PostAiTranslate200ResponsePerformance {
     #[serde(rename = "processing_time_ms", skip_serializing_if = "Option::is_none")]
     pub processing_time_ms: Option<i32>,
-    #[serde(rename = "cache_hit", skip_serializing_if = "Option::is_none")]
-    pub cache_hit: Option<bool>,
 }
 
 impl PostAiTranslate200ResponsePerformance {
     pub fn new() -> PostAiTranslate200ResponsePerformance {
         PostAiTranslate200ResponsePerformance {
             processing_time_ms: None,
-            cache_hit: None,
         }
     }
 }

@@ -13,26 +13,20 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct GetAiTranslateLanguages200ResponsePerformance {
-    #[serde(rename = "fast_mode_available", skip_serializing_if = "Option::is_none")]
-    pub fast_mode_available: Option<bool>,
     #[serde(rename = "batch_translation_available", skip_serializing_if = "Option::is_none")]
     pub batch_translation_available: Option<bool>,
-    #[serde(rename = "max_text_length", skip_serializing_if = "Option::is_none")]
-    pub max_text_length: Option<i32>,
     #[serde(rename = "max_batch_size", skip_serializing_if = "Option::is_none")]
     pub max_batch_size: Option<i32>,
-    #[serde(rename = "typical_response_time_ms", skip_serializing_if = "Option::is_none")]
-    pub typical_response_time_ms: Option<Box<models::GetAiTranslateLanguages200ResponsePerformanceTypicalResponseTimeMs>>,
+    #[serde(rename = "max_text_length", skip_serializing_if = "Option::is_none")]
+    pub max_text_length: Option<i32>,
 }
 
 impl GetAiTranslateLanguages200ResponsePerformance {
     pub fn new() -> GetAiTranslateLanguages200ResponsePerformance {
         GetAiTranslateLanguages200ResponsePerformance {
-            fast_mode_available: None,
             batch_translation_available: None,
-            max_text_length: None,
             max_batch_size: None,
-            typical_response_time_ms: None,
+            max_text_length: None,
         }
     }
 }

@@ -13,7 +13,6 @@ Name | Type | Description | Notes
 **longitude** | Option<**f64**> | 经度 | [optional]
 **beginip** | Option<**String**> | IP段起始地址（标准查询） | [optional]
 **endip** | Option<**String**> | IP段结束地址（标准查询） | [optional]
-**district** | Option<**String**> | 行政区（商业查询） | [optional]
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

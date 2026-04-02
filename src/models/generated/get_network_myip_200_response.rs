@@ -40,9 +40,12 @@ pub struct GetNetworkMyip200Response {
     /// IP段结束地址（标准查询）
     #[serde(rename = "endip", skip_serializing_if = "Option::is_none")]
     pub endip: Option<String>,
-    /// 行政区（商业查询）
+    /// 行政区。仅 `source=commercial` 时可能返回。
     #[serde(rename = "district", skip_serializing_if = "Option::is_none")]
     pub district: Option<String>,
+    /// 时区名称。仅 `source=commercial` 时可能返回。
+    #[serde(rename = "time_zone", skip_serializing_if = "Option::is_none")]
+    pub time_zone: Option<String>,
 }
 
 impl GetNetworkMyip200Response {
@@ -58,6 +61,7 @@ impl GetNetworkMyip200Response {
             beginip: None,
             endip: None,
             district: None,
+            time_zone: None,
         }
     }
 }

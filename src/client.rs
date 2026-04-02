@@ -1,10 +1,12 @@
-use crate::errors::{ApiErrorBody, Error};
+use crate::errors::{ApiErrorBody, Error, RateLimitPolicyEntry, RateLimitStateEntry, ResponseMeta};
 use crate::services::{ClipzyZaiXianJianTieBanService,ConvertService,DailyService,GameService,ImageService,MiscService,NetworkService,PoemService,RandomService,SocialService,StatusService,TextService,TranslateService,WebparseService,MinGanCiShiBieService,ZhiNengSouSuoService
 };
 use crate::Result;
 use once_cell::sync::Lazy;
 use reqwest::header::{HeaderMap, HeaderValue, AUTHORIZATION, RETRY_AFTER, USER_AGENT};
 use reqwest::StatusCode;
+use std::collections::BTreeMap;
+use std::sync::{Arc, RwLock};
 use std::time::Duration;
 use tracing::{debug, instrument};
 use url::Url;
@@ -19,6 +21,7 @@ pub struct Client {
     pub(crate) base_url: Url,
     pub(crate) api_key: Option<String>,
     pub(crate) user_agent: String,
+    pub(crate) last_response_meta: Arc<RwLock<Option<ResponseMeta>>>,
 }
 
 impl Client {
@@ -32,6 +35,7 @@ impl Client {
             base_url: DEFAULT_BASE_URL.clone(),
             api_key: Some(api_key.into()),
             user_agent: DEFAULT_UA.to_string(),
+            last_response_meta: Arc::new(RwLock::new(None)),
         }
     }
 
@@ -48,6 +52,10 @@ impl Client {
 
     pub fn builder() -> ClientBuilder {
         ClientBuilder::default()
+    }
+
+    pub fn last_response_meta(&self) -> Option<ResponseMeta> {
+        self.last_response_meta.read().ok().and_then(|guard| guard.clone())
     }
     pub fn clipzy_zai_xian_jian_tie_ban(&self) -> ClipzyZaiXianJianTieBanService<'_> {
         ClipzyZaiXianJianTieBanService { client: self }
@@ -138,17 +146,25 @@ impl Client {
 
     async fn handle_json_response<T: serde::de::DeserializeOwned>(&self, resp: reqwest::Response) -> Result<T> {
         let status = resp.status();
-        let req_id = find_request_id(resp.headers());
-        let retry_after = parse_retry_after(resp.headers());
+        let meta = extract_response_meta(resp.headers());
+        if let Ok(mut guard) = self.last_response_meta.write() {
+            *guard = Some(meta.clone());
+        }
+        let req_id = meta.request_id.clone();
+        let retry_after = meta.retry_after_seconds;
         if status.is_success() {
             return Ok(resp.json::<T>().await?);
         }
         let text = resp.text().await.unwrap_or_default();
         let parsed = serde_json::from_str::<ApiErrorBody>(&text).ok();
         let msg = parsed.as_ref().and_then(|b| b.message.clone()).or_else(|| non_empty(text.clone()));
-        let code = parsed.as_ref().and_then(|b| b.code.clone());
-        let details = parsed.as_ref().and_then(|b| b.details.clone());
-        Err(map_status_to_error(status, code, msg, details, req_id, retry_after))
+        let code = parsed
+            .as_ref()
+            .and_then(|b| b.code.clone().or_else(|| b.error.clone()));
+        let details = parsed
+            .as_ref()
+            .and_then(|b| b.details.clone().or_else(|| b.quota.clone()).or_else(|| b.docs.clone()));
+        Err(map_status_to_error(status, code, msg, details, req_id, retry_after, Some(meta)))
     }
 }
 
@@ -181,6 +197,7 @@ impl ClientBuilder {
             base_url: self.base_url.unwrap_or_else(|| DEFAULT_BASE_URL.clone()),
             api_key: self.api_key,
             user_agent: self.user_agent.unwrap_or_else(|| DEFAULT_UA.to_string()),
+            last_response_meta: Arc::new(RwLock::new(None)),
         })
     }
 }
@@ -216,15 +233,107 @@ fn map_status_to_error(
     details: Option<serde_json::Value>,
     request_id: Option<String>,
     retry_after: Option<u64>,
+    meta: Option<ResponseMeta>,
 ) -> Error {
     let s = status.as_u16();
+    let normalized_code = code.clone().unwrap_or_default().to_uppercase();
     match status {
-        StatusCode::UNAUTHORIZED | StatusCode::FORBIDDEN => Error::AuthenticationError { status: s, message, request_id },
-        StatusCode::TOO_MANY_REQUESTS => Error::RateLimitError { status: s, message, retry_after_seconds: retry_after, request_id },
-        StatusCode::NOT_FOUND => Error::NotFound { status: s, message, request_id },
-        StatusCode::BAD_REQUEST => Error::ValidationError { status: s, message, details, request_id },
-        _ if status.is_server_error() => Error::ServerError { status: s, message, request_id },
-        _ if status.is_client_error() => Error::ApiError { status: s, code, message, details, request_id },
-        _ => Error::ApiError { status: s, code, message, details, request_id },
+        StatusCode::UNAUTHORIZED | StatusCode::FORBIDDEN => Error::AuthenticationError { status: s, message, request_id, meta },
+        StatusCode::PAYMENT_REQUIRED if normalized_code == "INSUFFICIENT_CREDITS" || normalized_code.is_empty() => Error::InsufficientCredits { status: s, message, details, request_id, meta },
+        StatusCode::TOO_MANY_REQUESTS if normalized_code == "VISITOR_MONTHLY_QUOTA_EXHAUSTED" => Error::VisitorMonthlyQuotaExhausted { status: s, message, details, request_id, meta },
+        StatusCode::TOO_MANY_REQUESTS => Error::RateLimitError { status: s, message, retry_after_seconds: retry_after, request_id, meta },
+        StatusCode::NOT_FOUND => Error::NotFound { status: s, message, request_id, meta },
+        StatusCode::BAD_REQUEST => Error::ValidationError { status: s, message, details, request_id, meta },
+        _ if status.is_server_error() => Error::ServerError { status: s, message, request_id, meta },
+        _ if status.is_client_error() => Error::ApiError { status: s, code, message, details, request_id, meta },
+        _ => Error::ApiError { status: s, code, message, details, request_id, meta },
+    }
+}
+
+fn extract_response_meta(headers: &HeaderMap) -> ResponseMeta {
+    let mut meta = ResponseMeta {
+        raw_headers: BTreeMap::new(),
+        ..Default::default()
+    };
+    for (name, value) in headers {
+        if let Ok(text) = value.to_str() {
+            meta.raw_headers.insert(name.as_str().to_ascii_lowercase(), text.to_string());
+        }
+    }
+    meta.request_id = meta.raw_headers.get("x-request-id").cloned();
+    meta.retry_after_seconds = parse_retry_after(headers);
+    meta.debit_status = meta.raw_headers.get("uapi-debit-status").cloned();
+    meta.credits_requested = meta.raw_headers.get("uapi-credits-requested").and_then(|v| v.parse::<i64>().ok());
+    meta.credits_charged = meta.raw_headers.get("uapi-credits-charged").and_then(|v| v.parse::<i64>().ok());
+    meta.credits_pricing = meta.raw_headers.get("uapi-credits-pricing").cloned();
+    meta.active_quota_buckets = meta.raw_headers.get("uapi-quota-active-buckets").and_then(|v| v.parse::<u64>().ok());
+    meta.stop_on_empty = meta.raw_headers.get("uapi-stop-on-empty").and_then(|value| match value.trim().to_ascii_lowercase().as_str() {
+        "true" => Some(true),
+        "false" => Some(false),
+        _ => None,
+    });
+    meta.rate_limit_policy_raw = meta.raw_headers.get("ratelimit-policy").cloned();
+    meta.rate_limit_raw = meta.raw_headers.get("ratelimit").cloned();
+
+    for item in parse_structured_items(meta.rate_limit_policy_raw.as_deref()) {
+        let entry = RateLimitPolicyEntry {
+            name: item.name.clone(),
+            quota: item.params.get("q").and_then(|v| v.parse::<i64>().ok()),
+            unit: item.params.get("uapi-unit").cloned(),
+            window_seconds: item.params.get("w").and_then(|v| v.parse::<u64>().ok()),
+        };
+        meta.rate_limit_policies.insert(item.name, entry);
+    }
+    for item in parse_structured_items(meta.rate_limit_raw.as_deref()) {
+        let entry = RateLimitStateEntry {
+            name: item.name.clone(),
+            remaining: item.params.get("r").and_then(|v| v.parse::<i64>().ok()),
+            unit: item.params.get("uapi-unit").cloned(),
+            reset_after_seconds: item.params.get("t").and_then(|v| v.parse::<u64>().ok()),
+        };
+        meta.rate_limits.insert(item.name, entry);
+    }
+    meta.balance_limit_cents = meta.rate_limit_policies.get("billing-balance").and_then(|entry| entry.quota);
+    meta.balance_remaining_cents = meta.rate_limits.get("billing-balance").and_then(|entry| entry.remaining);
+    meta.quota_limit_credits = meta.rate_limit_policies.get("billing-quota").and_then(|entry| entry.quota);
+    meta.quota_remaining_credits = meta.rate_limits.get("billing-quota").and_then(|entry| entry.remaining);
+    meta.visitor_quota_limit_credits = meta.rate_limit_policies.get("visitor-quota").and_then(|entry| entry.quota);
+    meta.visitor_quota_remaining_credits = meta.rate_limits.get("visitor-quota").and_then(|entry| entry.remaining);
+    meta
+}
+
+struct StructuredItem {
+    name: String,
+    params: BTreeMap<String, String>,
+}
+
+fn parse_structured_items(raw: Option<&str>) -> Vec<StructuredItem> {
+    raw.unwrap_or_default()
+        .split(',')
+        .filter_map(|chunk| {
+            let trimmed = chunk.trim();
+            if trimmed.is_empty() {
+                return None;
+            }
+            let mut segments = trimmed.split(';');
+            let name = unquote(segments.next()?);
+            let mut params = BTreeMap::new();
+            for segment in segments {
+                let part = segment.trim();
+                if let Some((key, value)) = part.split_once('=') {
+                    params.insert(key.trim().to_string(), unquote(value));
+                }
+            }
+            Some(StructuredItem { name, params })
+        })
+        .collect()
+}
+
+fn unquote(value: &str) -> String {
+    let trimmed = value.trim();
+    if trimmed.len() >= 2 && trimmed.starts_with('"') && trimmed.ends_with('"') {
+        trimmed[1..trimmed.len() - 1].to_string()
+    } else {
+        trimmed.to_string()
     }
 }

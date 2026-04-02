@@ -13,50 +13,73 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct GetGithubRepo200Response {
+    /// 仓库完整名称。
     #[serde(rename = "full_name", skip_serializing_if = "Option::is_none")]
     pub full_name: Option<String>,
+    /// 仓库简介。
     #[serde(rename = "description", skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// 仓库主页链接。
     #[serde(rename = "homepage", skip_serializing_if = "Option::is_none")]
     pub homepage: Option<String>,
+    /// 默认分支名称。
     #[serde(rename = "default_branch", skip_serializing_if = "Option::is_none")]
     pub default_branch: Option<String>,
+    /// 主要分支名称（通常与默认分支一致）。
     #[serde(rename = "primary_branch", skip_serializing_if = "Option::is_none")]
     pub primary_branch: Option<String>,
+    /// 默认分支最新提交的 SHA 哈希。
     #[serde(rename = "default_branch_sha", skip_serializing_if = "Option::is_none")]
     pub default_branch_sha: Option<String>,
+    /// 仓库可见性，常见值为 `public` 或 `private`。
     #[serde(rename = "visibility", skip_serializing_if = "Option::is_none")]
     pub visibility: Option<String>,
+    /// 仓库是否已归档。
     #[serde(rename = "archived", skip_serializing_if = "Option::is_none")]
     pub archived: Option<bool>,
+    /// 仓库是否被禁用。
     #[serde(rename = "disabled", skip_serializing_if = "Option::is_none")]
     pub disabled: Option<bool>,
+    /// 是否为 Fork 仓库。
     #[serde(rename = "fork", skip_serializing_if = "Option::is_none")]
     pub fork: Option<bool>,
+    /// 主要语言。
     #[serde(rename = "language", skip_serializing_if = "Option::is_none")]
     pub language: Option<String>,
+    /// 话题标签列表。
     #[serde(rename = "topics", skip_serializing_if = "Option::is_none")]
     pub topics: Option<Vec<String>>,
+    /// 开源许可证名称。
     #[serde(rename = "license", skip_serializing_if = "Option::is_none")]
     pub license: Option<String>,
+    /// Star 数。
     #[serde(rename = "stargazers", skip_serializing_if = "Option::is_none")]
     pub stargazers: Option<i32>,
+    /// Fork 数。
     #[serde(rename = "forks", skip_serializing_if = "Option::is_none")]
     pub forks: Option<i32>,
+    /// 开放 Issue 数。
     #[serde(rename = "open_issues", skip_serializing_if = "Option::is_none")]
     pub open_issues: Option<i32>,
+    /// 关注者数量（watchers/subscribers）。
     #[serde(rename = "watchers", skip_serializing_if = "Option::is_none")]
     pub watchers: Option<i32>,
+    /// 最后推送时间（ISO 8601）。
     #[serde(rename = "pushed_at", skip_serializing_if = "Option::is_none")]
     pub pushed_at: Option<String>,
+    /// 创建时间（ISO 8601）。
     #[serde(rename = "created_at", skip_serializing_if = "Option::is_none")]
     pub created_at: Option<String>,
+    /// 更新时间（ISO 8601）。
     #[serde(rename = "updated_at", skip_serializing_if = "Option::is_none")]
     pub updated_at: Option<String>,
+    /// 语言统计（键为语言名，值为代码字节数）。
     #[serde(rename = "languages", skip_serializing_if = "Option::is_none")]
     pub languages: Option<std::collections::HashMap<String, i32>>,
+    /// 协作者列表。受权限限制时可能为 null 或空数组。
     #[serde(rename = "collaborators", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
     pub collaborators: Option<Option<Vec<models::GetGithubRepo200ResponseCollaboratorsInner>>>,
+    /// 维护者列表（根据默认分支近期提交推断）。
     #[serde(rename = "maintainers", skip_serializing_if = "Option::is_none")]
     pub maintainers: Option<Vec<models::GetGithubRepo200ResponseCollaboratorsInner>>,
     #[serde(rename = "latest_release", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]

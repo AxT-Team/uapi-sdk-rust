@@ -4,9 +4,10 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**code** | Option<**String**> |  | [optional]
-**message** | Option<**String**> |  | [optional]
-**data** | Option<[**models::GetMiscTrackingDetect200ResponseData**](get_misc_tracking_detect_200_response_data.md)> |  | [optional]
+**tracking_number** | Option<**String**> | 查询的快递单号 | [optional]
+**carrier_code** | Option<**String**> | 识别出的快递公司编码 | [optional]
+**carrier_name** | Option<**String**> | 识别出的快递公司名称 | [optional]
+**alternatives** | Option<[**Vec<models::GetMiscTrackingDetect200ResponseAlternativesInner>**](get_misc_tracking_detect_200_response_alternatives_inner.md)> | 其他可能的快递公司列表。如果没有备选项，会返回空数组。 | [optional]
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

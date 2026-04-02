@@ -22,9 +22,20 @@ pub struct GetSocialBilibiliVideoinfo200ResponsePagesInner {
     /// 分P的标题。对于单P视频，通常是视频主标题。
     #[serde(rename = "part", skip_serializing_if = "Option::is_none")]
     pub part: Option<String>,
+    /// 视频来源。
+    #[serde(rename = "from", skip_serializing_if = "Option::is_none")]
+    pub from: Option<String>,
     /// 该分P的持续时间，单位为秒。
     #[serde(rename = "duration", skip_serializing_if = "Option::is_none")]
     pub duration: Option<f64>,
+    /// 外部视频源 ID，通常为空。
+    #[serde(rename = "vid", skip_serializing_if = "Option::is_none")]
+    pub vid: Option<String>,
+    /// 外链地址，通常为空。
+    #[serde(rename = "weblink", skip_serializing_if = "Option::is_none")]
+    pub weblink: Option<String>,
+    #[serde(rename = "dimension", skip_serializing_if = "Option::is_none")]
+    pub dimension: Option<Box<models::GetSocialBilibiliVideoinfo200ResponsePagesInnerDimension>>,
 }
 
 impl GetSocialBilibiliVideoinfo200ResponsePagesInner {
@@ -33,7 +44,11 @@ impl GetSocialBilibiliVideoinfo200ResponsePagesInner {
             cid: None,
             page: None,
             part: None,
+            from: None,
             duration: None,
+            vid: None,
+            weblink: None,
+            dimension: None,
         }
     }
 }

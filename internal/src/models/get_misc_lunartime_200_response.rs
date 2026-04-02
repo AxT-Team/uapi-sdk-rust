@@ -13,22 +13,99 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct GetMiscLunartime200Response {
-    /// 业务状态码，200 表示成功。
-    #[serde(rename = "code", skip_serializing_if = "Option::is_none")]
-    pub code: Option<i32>,
-    /// 状态描述。
-    #[serde(rename = "message", skip_serializing_if = "Option::is_none")]
-    pub message: Option<String>,
-    #[serde(rename = "data", skip_serializing_if = "Option::is_none")]
-    pub data: Option<Box<models::GetMiscLunartime200ResponseData>>,
+    /// 原始 ts 入参。
+    #[serde(rename = "query_timestamp", skip_serializing_if = "Option::is_none")]
+    pub query_timestamp: Option<String>,
+    /// 原始 timezone 入参。
+    #[serde(rename = "query_timezone", skip_serializing_if = "Option::is_none")]
+    pub query_timezone: Option<String>,
+    /// 解析后的时区。
+    #[serde(rename = "timezone", skip_serializing_if = "Option::is_none")]
+    pub timezone: Option<String>,
+    /// 本地化时间，格式 YYYY-MM-DD HH:mm:ss。
+    #[serde(rename = "datetime", skip_serializing_if = "Option::is_none")]
+    pub datetime: Option<String>,
+    /// RFC3339 时间格式。
+    #[serde(rename = "datetime_rfc3339", skip_serializing_if = "Option::is_none")]
+    pub datetime_rfc3339: Option<String>,
+    /// 秒级 Unix 时间戳。
+    #[serde(rename = "timestamp_unix", skip_serializing_if = "Option::is_none")]
+    pub timestamp_unix: Option<i32>,
+    /// 星期英文。
+    #[serde(rename = "weekday", skip_serializing_if = "Option::is_none")]
+    pub weekday: Option<String>,
+    /// 星期中文。
+    #[serde(rename = "weekday_cn", skip_serializing_if = "Option::is_none")]
+    pub weekday_cn: Option<String>,
+    /// 农历年份（数字）。
+    #[serde(rename = "lunar_year", skip_serializing_if = "Option::is_none")]
+    pub lunar_year: Option<i32>,
+    /// 农历月份（数字）。
+    #[serde(rename = "lunar_month", skip_serializing_if = "Option::is_none")]
+    pub lunar_month: Option<i32>,
+    /// 农历日期（数字）。
+    #[serde(rename = "lunar_day", skip_serializing_if = "Option::is_none")]
+    pub lunar_day: Option<i32>,
+    /// 是否闰月。
+    #[serde(rename = "is_leap_month", skip_serializing_if = "Option::is_none")]
+    pub is_leap_month: Option<bool>,
+    /// 农历年份中文表示。
+    #[serde(rename = "lunar_year_cn", skip_serializing_if = "Option::is_none")]
+    pub lunar_year_cn: Option<String>,
+    /// 农历月份中文表示。
+    #[serde(rename = "lunar_month_cn", skip_serializing_if = "Option::is_none")]
+    pub lunar_month_cn: Option<String>,
+    /// 农历日期中文表示。
+    #[serde(rename = "lunar_day_cn", skip_serializing_if = "Option::is_none")]
+    pub lunar_day_cn: Option<String>,
+    /// 干支年。
+    #[serde(rename = "ganzhi_year", skip_serializing_if = "Option::is_none")]
+    pub ganzhi_year: Option<String>,
+    /// 干支月。
+    #[serde(rename = "ganzhi_month", skip_serializing_if = "Option::is_none")]
+    pub ganzhi_month: Option<String>,
+    /// 干支日。
+    #[serde(rename = "ganzhi_day", skip_serializing_if = "Option::is_none")]
+    pub ganzhi_day: Option<String>,
+    /// 生肖。
+    #[serde(rename = "zodiac", skip_serializing_if = "Option::is_none")]
+    pub zodiac: Option<String>,
+    /// 节气名称。有值时返回，无值时可能为空字符串或不返回。
+    #[serde(rename = "solar_term", skip_serializing_if = "Option::is_none")]
+    pub solar_term: Option<String>,
+    /// 农历节日数组。
+    #[serde(rename = "lunar_festivals", skip_serializing_if = "Option::is_none")]
+    pub lunar_festivals: Option<Vec<String>>,
+    /// 公历节日数组。
+    #[serde(rename = "solar_festivals", skip_serializing_if = "Option::is_none")]
+    pub solar_festivals: Option<Vec<String>>,
 }
 
 impl GetMiscLunartime200Response {
     pub fn new() -> GetMiscLunartime200Response {
         GetMiscLunartime200Response {
-            code: None,
-            message: None,
-            data: None,
+            query_timestamp: None,
+            query_timezone: None,
+            timezone: None,
+            datetime: None,
+            datetime_rfc3339: None,
+            timestamp_unix: None,
+            weekday: None,
+            weekday_cn: None,
+            lunar_year: None,
+            lunar_month: None,
+            lunar_day: None,
+            is_leap_month: None,
+            lunar_year_cn: None,
+            lunar_month_cn: None,
+            lunar_day_cn: None,
+            ganzhi_year: None,
+            ganzhi_month: None,
+            ganzhi_day: None,
+            zodiac: None,
+            solar_term: None,
+            lunar_festivals: None,
+            solar_festivals: None,
         }
     }
 }

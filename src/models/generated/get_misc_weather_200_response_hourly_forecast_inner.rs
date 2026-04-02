@@ -55,7 +55,7 @@ pub struct GetMiscWeather200ResponseHourlyForecastInner {
     /// 降水概率 %（可选）
     #[serde(rename = "pop", skip_serializing_if = "Option::is_none")]
     pub pop: Option<f64>,
-    /// 紫外线指数（可选）
+    /// 紫外线指数（可选，国内城市通常不返回）
     #[serde(rename = "uv_index", skip_serializing_if = "Option::is_none")]
     pub uv_index: Option<f64>,
 }

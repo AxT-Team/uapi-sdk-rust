@@ -13,7 +13,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct PostTranslateTextRequest {
-    /// 待翻译的文本内容。
+    /// 待翻译的文本内容，最大长度3000字符。
     #[serde(rename = "text")]
     pub text: String,
 }

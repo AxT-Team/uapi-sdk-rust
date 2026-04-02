@@ -13,12 +13,16 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct GetGithubRepo200ResponseCollaboratorsInner {
+    /// GitHub 登录名。
     #[serde(rename = "login", skip_serializing_if = "Option::is_none")]
     pub login: Option<String>,
+    /// 显示名称。
     #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// 公开邮箱。
     #[serde(rename = "email", skip_serializing_if = "Option::is_none")]
     pub email: Option<String>,
+    /// GitHub 主页链接。
     #[serde(rename = "url", skip_serializing_if = "Option::is_none")]
     pub url: Option<String>,
 }

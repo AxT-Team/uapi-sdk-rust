@@ -18,53 +18,23 @@ pub struct PostTranslateStreamRequest {
     pub query: String,
     /// 目标语言，支持：中文、英文
     #[serde(rename = "to_lang")]
-    pub to_lang: ToLang,
+    pub to_lang: String,
     /// 源语言，支持：中文、英文、auto（自动检测）。默认为auto
     #[serde(rename = "from_lang", skip_serializing_if = "Option::is_none")]
-    pub from_lang: Option<FromLang>,
+    pub from_lang: Option<String>,
     /// 语气参数，可选
     #[serde(rename = "tone", skip_serializing_if = "Option::is_none")]
     pub tone: Option<String>,
 }
 
 impl PostTranslateStreamRequest {
-    pub fn new(query: String, to_lang: ToLang) -> PostTranslateStreamRequest {
+    pub fn new(query: String, to_lang: String) -> PostTranslateStreamRequest {
         PostTranslateStreamRequest {
             query,
             to_lang,
             from_lang: None,
             tone: None,
         }
-    }
-}
-/// 目标语言，支持：中文、英文
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
-pub enum ToLang {
-    #[serde(rename = "中文")]
-    ,
-    #[serde(rename = "英文")]
-    2,
-}
-
-impl Default for ToLang {
-    fn default() -> ToLang {
-        Self::
-    }
-}
-/// 源语言，支持：中文、英文、auto（自动检测）。默认为auto
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
-pub enum FromLang {
-    #[serde(rename = "中文")]
-    ,
-    #[serde(rename = "英文")]
-    2,
-    #[serde(rename = "auto")]
-    Auto,
-}
-
-impl Default for FromLang {
-    fn default() -> FromLang {
-        Self::
     }
 }
 

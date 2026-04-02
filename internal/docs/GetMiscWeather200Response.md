@@ -6,8 +6,10 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **province** | Option<**String**> | 省份 | [optional]
 **city** | Option<**String**> | 城市名 | [optional]
+**district** | Option<**String**> | 区县或更细一级的行政区名称。自动按 IP 定位时更常见。 | [optional]
 **adcode** | Option<**String**> | 行政区划代码（部分数据源可能为空） | [optional]
 **weather** | Option<**String**> | 天气状况描述。默认返回中文，传 `lang=en` 时返回英文。非固定枚举。 | [optional]
+**weather_icon** | Option<**String**> | 天气图标代码。请从[天气图标代码表](#enum-list)中查看所有可能的值。 | [optional]
 **temperature** | Option<**f64**> | 当前温度 °C | [optional]
 **wind_direction** | Option<**String**> | 风向 | [optional]
 **wind_power** | Option<**String**> | 风力等级 | [optional]

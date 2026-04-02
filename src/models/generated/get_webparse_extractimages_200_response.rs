@@ -13,20 +13,19 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct GetWebparseExtractimages200Response {
-    #[serde(rename = "count", skip_serializing_if = "Option::is_none")]
-    pub count: Option<i32>,
-    #[serde(rename = "images", skip_serializing_if = "Option::is_none")]
-    pub images: Option<Vec<String>>,
-    #[serde(rename = "url", skip_serializing_if = "Option::is_none")]
-    pub url: Option<String>,
+    /// 实际解析的网页地址。
+    #[serde(rename = "page_url", skip_serializing_if = "Option::is_none")]
+    pub page_url: Option<String>,
+    /// 页面中提取到的图片链接列表。
+    #[serde(rename = "image_urls", skip_serializing_if = "Option::is_none")]
+    pub image_urls: Option<Vec<String>>,
 }
 
 impl GetWebparseExtractimages200Response {
     pub fn new() -> GetWebparseExtractimages200Response {
         GetWebparseExtractimages200Response {
-            count: None,
-            images: None,
-            url: None,
+            page_url: None,
+            image_urls: None,
         }
     }
 }

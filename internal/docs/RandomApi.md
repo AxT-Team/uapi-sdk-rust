@@ -115,7 +115,7 @@ No authorization required
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**post_answerbook_ask_request** | [**PostAnswerbookAskRequest**](PostAnswerbookAskRequest.md) | 包含问题的JSON对象 | [required] |
+**post_answerbook_ask_request** | [**PostAnswerbookAskRequest**](PostAnswerbookAskRequest.md) |  | [required] |
 
 ### Return type
 

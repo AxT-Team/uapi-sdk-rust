@@ -22,6 +22,9 @@ pub struct GetSocialBilibiliVideoinfo200Response {
     /// 稿件分P总数。如果是单P视频，则为1。
     #[serde(rename = "videos", skip_serializing_if = "Option::is_none")]
     pub videos: Option<f64>,
+    /// 视频所属的子分区 ID。
+    #[serde(rename = "tid", skip_serializing_if = "Option::is_none")]
+    pub tid: Option<f64>,
     /// 视频所属的子分区名称。
     #[serde(rename = "tname", skip_serializing_if = "Option::is_none")]
     pub tname: Option<String>,
@@ -43,16 +46,50 @@ pub struct GetSocialBilibiliVideoinfo200Response {
     /// 视频简介。可能会包含HTML换行符。
     #[serde(rename = "desc", skip_serializing_if = "Option::is_none")]
     pub desc: Option<String>,
+    /// 结构化简介片段。
+    #[serde(rename = "desc_v2", skip_serializing_if = "Option::is_none")]
+    pub desc_v2: Option<Vec<models::GetSocialBilibiliVideoinfo200ResponseDescV2Inner>>,
+    /// 视频状态码。
+    #[serde(rename = "state", skip_serializing_if = "Option::is_none")]
+    pub state: Option<f64>,
     /// 稿件总时长（所有分P累加），单位为秒。
     #[serde(rename = "duration", skip_serializing_if = "Option::is_none")]
     pub duration: Option<f64>,
+    #[serde(rename = "rights", skip_serializing_if = "Option::is_none")]
+    pub rights: Option<Box<models::GetSocialBilibiliVideoinfo200ResponseRights>>,
     #[serde(rename = "owner", skip_serializing_if = "Option::is_none")]
     pub owner: Option<Box<models::GetSocialBilibiliVideoinfo200ResponseOwner>>,
     #[serde(rename = "stat", skip_serializing_if = "Option::is_none")]
     pub stat: Option<Box<models::GetSocialBilibiliVideoinfo200ResponseStat>>,
+    /// 投稿时附带的动态文字。
+    #[serde(rename = "dynamic", skip_serializing_if = "Option::is_none")]
+    pub dynamic: Option<String>,
+    /// 主分P的 CID（弹幕 ID）。
+    #[serde(rename = "cid", skip_serializing_if = "Option::is_none")]
+    pub cid: Option<f64>,
+    #[serde(rename = "dimension", skip_serializing_if = "Option::is_none")]
+    pub dimension: Option<Box<models::GetSocialBilibiliVideoinfo200ResponseDimension>>,
+    /// 不缓存标记。
+    #[serde(rename = "no_cache", skip_serializing_if = "Option::is_none")]
+    pub no_cache: Option<bool>,
     /// 视频分P列表。即使是单P视频，该数组也包含一个元素。
     #[serde(rename = "pages", skip_serializing_if = "Option::is_none")]
     pub pages: Option<Vec<models::GetSocialBilibiliVideoinfo200ResponsePagesInner>>,
+    #[serde(rename = "subtitle", skip_serializing_if = "Option::is_none")]
+    pub subtitle: Option<Box<models::GetSocialBilibiliVideoinfo200ResponseSubtitle>>,
+    /// 联合投稿成员列表。
+    #[serde(rename = "staff", skip_serializing_if = "Option::is_none")]
+    pub staff: Option<Vec<models::GetSocialBilibiliVideoinfo200ResponseStaffInner>>,
+    #[serde(rename = "ugc_season", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
+    pub ugc_season: Option<Option<Box<models::GetSocialBilibiliVideoinfo200ResponseUgcSeason>>>,
+    /// 是否为付费合集。
+    #[serde(rename = "is_chargeable_season", skip_serializing_if = "Option::is_none")]
+    pub is_chargeable_season: Option<bool>,
+    /// 是否为剧情类视频。
+    #[serde(rename = "is_story", skip_serializing_if = "Option::is_none")]
+    pub is_story: Option<bool>,
+    #[serde(rename = "honor_reply", skip_serializing_if = "Option::is_none")]
+    pub honor_reply: Option<Box<models::GetSocialBilibiliVideoinfo200ResponseHonorReply>>,
 }
 
 impl GetSocialBilibiliVideoinfo200Response {
@@ -61,6 +98,7 @@ impl GetSocialBilibiliVideoinfo200Response {
             bvid: None,
             aid: None,
             videos: None,
+            tid: None,
             tname: None,
             copyright: None,
             pic: None,
@@ -68,10 +106,23 @@ impl GetSocialBilibiliVideoinfo200Response {
             pubdate: None,
             ctime: None,
             desc: None,
+            desc_v2: None,
+            state: None,
             duration: None,
+            rights: None,
             owner: None,
             stat: None,
+            dynamic: None,
+            cid: None,
+            dimension: None,
+            no_cache: None,
             pages: None,
+            subtitle: None,
+            staff: None,
+            ugc_season: None,
+            is_chargeable_season: None,
+            is_story: None,
+            honor_reply: None,
         }
     }
 }

@@ -11,33 +11,18 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
-/// PostAiTranslate200ResponseData : 单个翻译的详细结果，仅在单个翻译时返回。
+/// PostAiTranslate200ResponseData : 翻译结果的详细信息。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct PostAiTranslate200ResponseData {
-    #[serde(rename = "original_text", skip_serializing_if = "Option::is_none")]
-    pub original_text: Option<String>,
     #[serde(rename = "translated_text", skip_serializing_if = "Option::is_none")]
     pub translated_text: Option<String>,
-    #[serde(rename = "detected_lang", skip_serializing_if = "Option::is_none")]
-    pub detected_lang: Option<String>,
-    #[serde(rename = "confidence_score", skip_serializing_if = "Option::is_none")]
-    pub confidence_score: Option<f64>,
-    #[serde(rename = "alternatives", skip_serializing_if = "Option::is_none")]
-    pub alternatives: Option<Vec<String>>,
-    #[serde(rename = "explanation", skip_serializing_if = "Option::is_none")]
-    pub explanation: Option<Box<models::PostAiTranslate200ResponseDataExplanation>>,
 }
 
 impl PostAiTranslate200ResponseData {
-    /// 单个翻译的详细结果，仅在单个翻译时返回。
+    /// 翻译结果的详细信息。
     pub fn new() -> PostAiTranslate200ResponseData {
         PostAiTranslate200ResponseData {
-            original_text: None,
             translated_text: None,
-            detected_lang: None,
-            confidence_score: None,
-            alternatives: None,
-            explanation: None,
         }
     }
 }

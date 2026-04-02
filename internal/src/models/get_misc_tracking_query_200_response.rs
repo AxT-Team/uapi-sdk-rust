@@ -13,20 +13,31 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct GetMiscTrackingQuery200Response {
-    #[serde(rename = "code", skip_serializing_if = "Option::is_none")]
-    pub code: Option<String>,
-    #[serde(rename = "message", skip_serializing_if = "Option::is_none")]
-    pub message: Option<String>,
-    #[serde(rename = "data", skip_serializing_if = "Option::is_none")]
-    pub data: Option<Box<models::GetMiscTrackingQuery200ResponseData>>,
+    /// 快递单号
+    #[serde(rename = "tracking_number", skip_serializing_if = "Option::is_none")]
+    pub tracking_number: Option<String>,
+    /// 快递公司编码
+    #[serde(rename = "carrier_code", skip_serializing_if = "Option::is_none")]
+    pub carrier_code: Option<String>,
+    /// 快递公司名称
+    #[serde(rename = "carrier_name", skip_serializing_if = "Option::is_none")]
+    pub carrier_name: Option<String>,
+    /// 物流轨迹数量
+    #[serde(rename = "track_count", skip_serializing_if = "Option::is_none")]
+    pub track_count: Option<i32>,
+    /// 物流轨迹列表，按时间倒序排列
+    #[serde(rename = "tracks", skip_serializing_if = "Option::is_none")]
+    pub tracks: Option<Vec<models::GetMiscTrackingQuery200ResponseTracksInner>>,
 }
 
 impl GetMiscTrackingQuery200Response {
     pub fn new() -> GetMiscTrackingQuery200Response {
         GetMiscTrackingQuery200Response {
-            code: None,
-            message: None,
-            data: None,
+            tracking_number: None,
+            carrier_code: None,
+            carrier_name: None,
+            track_count: None,
+            tracks: None,
         }
     }
 }

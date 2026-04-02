@@ -14,6 +14,9 @@ use serde::{Deserialize, Serialize};
 /// GetSocialBilibiliVideoinfo200ResponseStat : 视频的核心数据统计。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct GetSocialBilibiliVideoinfo200ResponseStat {
+    /// AV 号。
+    #[serde(rename = "aid", skip_serializing_if = "Option::is_none")]
+    pub aid: Option<f64>,
     /// 播放数。
     #[serde(rename = "view", skip_serializing_if = "Option::is_none")]
     pub view: Option<f64>,
@@ -35,12 +38,28 @@ pub struct GetSocialBilibiliVideoinfo200ResponseStat {
     /// 获赞数。
     #[serde(rename = "like", skip_serializing_if = "Option::is_none")]
     pub like: Option<f64>,
+    /// 当前全站/分区排名。
+    #[serde(rename = "now_rank", skip_serializing_if = "Option::is_none")]
+    pub now_rank: Option<f64>,
+    /// 历史排名。
+    #[serde(rename = "his_rank", skip_serializing_if = "Option::is_none")]
+    pub his_rank: Option<f64>,
+    /// 点踩量（通常为 0）。
+    #[serde(rename = "dislike", skip_serializing_if = "Option::is_none")]
+    pub dislike: Option<f64>,
+    /// 评分/评估文案，通常为空。
+    #[serde(rename = "evaluation", skip_serializing_if = "Option::is_none")]
+    pub evaluation: Option<String>,
+    /// 视频类型相关历史字段。
+    #[serde(rename = "vt", skip_serializing_if = "Option::is_none")]
+    pub vt: Option<f64>,
 }
 
 impl GetSocialBilibiliVideoinfo200ResponseStat {
     /// 视频的核心数据统计。
     pub fn new() -> GetSocialBilibiliVideoinfo200ResponseStat {
         GetSocialBilibiliVideoinfo200ResponseStat {
+            aid: None,
             view: None,
             danmaku: None,
             reply: None,
@@ -48,6 +67,11 @@ impl GetSocialBilibiliVideoinfo200ResponseStat {
             coin: None,
             share: None,
             like: None,
+            now_rank: None,
+            his_rank: None,
+            dislike: None,
+            evaluation: None,
+            vt: None,
         }
     }
 }

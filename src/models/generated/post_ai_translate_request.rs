@@ -13,12 +13,9 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct PostAiTranslateRequest {
-    /// 单个翻译时使用的待翻译文本，与texts参数二选一。最大长度10,000字符。
-    #[serde(rename = "text", skip_serializing_if = "Option::is_none")]
-    pub text: Option<String>,
-    /// 批量翻译时使用的待翻译文本列表，与text参数二选一。最多50条，总计最大100,000字符。
-    #[serde(rename = "texts", skip_serializing_if = "Option::is_none")]
-    pub texts: Option<Vec<String>>,
+    /// 待翻译的文本内容。最大长度10,000字符。
+    #[serde(rename = "text")]
+    pub text: String,
     /// 源语言代码，可选。如果不指定，系统会自动检测源语言。
     #[serde(rename = "source_lang", skip_serializing_if = "Option::is_none")]
     pub source_lang: Option<String>,
@@ -31,25 +28,16 @@ pub struct PostAiTranslateRequest {
     /// 是否保留原文格式，包括换行、缩进等。
     #[serde(rename = "preserve_format", skip_serializing_if = "Option::is_none")]
     pub preserve_format: Option<bool>,
-    /// 是否启用快速模式。快速模式响应时间约800ms，准确率95%+；普通模式响应时间约2000ms，准确率98%+。
-    #[serde(rename = "fast_mode", skip_serializing_if = "Option::is_none")]
-    pub fast_mode: Option<bool>,
-    /// 批量翻译时的最大并发数，范围1-10。仅在批量翻译时有效。
-    #[serde(rename = "max_concurrency", skip_serializing_if = "Option::is_none")]
-    pub max_concurrency: Option<i32>,
 }
 
 impl PostAiTranslateRequest {
-    pub fn new() -> PostAiTranslateRequest {
+    pub fn new(text: String) -> PostAiTranslateRequest {
         PostAiTranslateRequest {
-            text: None,
-            texts: None,
+            text,
             source_lang: None,
             style: None,
             context: None,
             preserve_format: None,
-            fast_mode: None,
-            max_concurrency: None,
         }
     }
 }

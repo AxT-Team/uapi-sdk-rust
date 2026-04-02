@@ -25,9 +25,12 @@ pub struct GetSocialBilibiliLiveroom200Response {
     /// 主播的粉丝数（关注数量）。
     #[serde(rename = "attention", skip_serializing_if = "Option::is_none")]
     pub attention: Option<f64>,
-    /// 直播间当前的人气值。注意这不是真实在线人数。
+    /// 直播间当前的人气值（对应你文档里的 PopularValue，不代表真实在线人数）。
     #[serde(rename = "online", skip_serializing_if = "Option::is_none")]
     pub online: Option<f64>,
+    /// 是否为竖屏直播。
+    #[serde(rename = "is_portrait", skip_serializing_if = "Option::is_none")]
+    pub is_portrait: Option<bool>,
     /// 直播状态。0:未开播, 1:直播中, 2:轮播中。
     #[serde(rename = "live_status", skip_serializing_if = "Option::is_none")]
     pub live_status: Option<f64>,
@@ -37,6 +40,9 @@ pub struct GetSocialBilibiliLiveroom200Response {
     /// 父分区名称。
     #[serde(rename = "parent_area_name", skip_serializing_if = "Option::is_none")]
     pub parent_area_name: Option<String>,
+    /// 父分区 ID。
+    #[serde(rename = "parent_area_id", skip_serializing_if = "Option::is_none")]
+    pub parent_area_id: Option<f64>,
     /// 子分区名称。
     #[serde(rename = "area_name", skip_serializing_if = "Option::is_none")]
     pub area_name: Option<String>,
@@ -55,15 +61,17 @@ pub struct GetSocialBilibiliLiveroom200Response {
     /// 本次直播开始的时间，格式为 `YYYY-MM-DD HH:mm:ss`。如果未开播，则为空字符串。
     #[serde(rename = "live_time", skip_serializing_if = "Option::is_none")]
     pub live_time: Option<String>,
+    /// 关键帧封面图链接。
+    #[serde(rename = "keyframe", skip_serializing_if = "Option::is_none")]
+    pub keyframe: Option<String>,
     /// 直播间设置的标签，以逗号分隔。
     #[serde(rename = "tags", skip_serializing_if = "Option::is_none")]
     pub tags: Option<String>,
     /// 直播间热词列表，通常用于弹幕互动。
     #[serde(rename = "hot_words", skip_serializing_if = "Option::is_none")]
     pub hot_words: Option<Vec<String>>,
-    /// 主播佩戴的头像框、大航海等级等信息，结构可能比较复杂。
-    #[serde(rename = "new_pendants", skip_serializing_if = "Option::is_none")]
-    pub new_pendants: Option<serde_json::Value>,
+    #[serde(rename = "new_pendants", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
+    pub new_pendants: Option<Option<Box<models::GetSocialBilibiliLiveroom200ResponseNewPendants>>>,
 }
 
 impl GetSocialBilibiliLiveroom200Response {
@@ -74,15 +82,18 @@ impl GetSocialBilibiliLiveroom200Response {
             short_id: None,
             attention: None,
             online: None,
+            is_portrait: None,
             live_status: None,
             area_id: None,
             parent_area_name: None,
+            parent_area_id: None,
             area_name: None,
             background: None,
             title: None,
             user_cover: None,
             description: None,
             live_time: None,
+            keyframe: None,
             tags: None,
             hot_words: None,
             new_pendants: None,

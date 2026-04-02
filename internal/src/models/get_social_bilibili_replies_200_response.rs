@@ -15,20 +15,52 @@ use serde::{Deserialize, Serialize};
 pub struct GetSocialBilibiliReplies200Response {
     #[serde(rename = "page", skip_serializing_if = "Option::is_none")]
     pub page: Option<Box<models::GetSocialBilibiliReplies200ResponsePage>>,
+    /// 评论区配置。不同视频或不同权限下可能为 null。
+    #[serde(rename = "config", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
+    pub config: Option<Option<serde_json::Value>>,
     /// 热门评论列表。结构与 `replies` 中的对象一致。如果当前页是第一页，且有热门评论，则此数组非空。
     #[serde(rename = "hots", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
     pub hots: Option<Option<Vec<serde_json::Value>>>,
     /// 当前页的评论列表。
     #[serde(rename = "replies", skip_serializing_if = "Option::is_none")]
     pub replies: Option<Vec<models::GetSocialBilibiliReplies200ResponseRepliesInner>>,
+    /// UP 主相关信息。无数据时为 null。
+    #[serde(rename = "upper", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
+    pub upper: Option<Option<serde_json::Value>>,
+    /// 置顶评论信息。没有置顶评论时为 null。
+    #[serde(rename = "top", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
+    pub top: Option<Option<serde_json::Value>>,
+    /// 评论区公告信息。没有公告时为 null。
+    #[serde(rename = "notice", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
+    pub notice: Option<Option<serde_json::Value>>,
+    /// 评论区投票相关状态值。没有投票时通常为 0。
+    #[serde(rename = "vote", skip_serializing_if = "Option::is_none")]
+    pub vote: Option<f64>,
+    /// 评论折叠相关信息。没有数据时为 null。
+    #[serde(rename = "folder", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
+    pub folder: Option<Option<serde_json::Value>>,
+    /// 评论区控制信息。没有数据时为 null。
+    #[serde(rename = "control", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
+    pub control: Option<Option<serde_json::Value>>,
+    /// 游标翻页信息。部分场景下为 null。
+    #[serde(rename = "cursor", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
+    pub cursor: Option<Option<serde_json::Value>>,
 }
 
 impl GetSocialBilibiliReplies200Response {
     pub fn new() -> GetSocialBilibiliReplies200Response {
         GetSocialBilibiliReplies200Response {
             page: None,
+            config: None,
             hots: None,
             replies: None,
+            upper: None,
+            top: None,
+            notice: None,
+            vote: None,
+            folder: None,
+            control: None,
+            cursor: None,
         }
     }
 }

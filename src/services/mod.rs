@@ -14,7 +14,7 @@ pub struct ClipzyZaiXianJianTieBanService<'a> {
 impl<'a> ClipzyZaiXianJianTieBanService<'a> {
 /// 步骤2 (方法一): 获取加密数据
     #[instrument(skip(self, params))]
-    pub async fn get_clipzy_get(&self, params: GetClipzyGetParams) -> Result<Value> {
+    pub async fn get_clipzy_get(&self, params: GetClipzyGetParams) -> Result<crate::models::GetClipzyGet200Response> {
         let mut path = "/api/v1/api/get".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -37,7 +37,7 @@ impl<'a> ClipzyZaiXianJianTieBanService<'a> {
     }
 /// 步骤2 (方法二): 获取原始文本
     #[instrument(skip(self, params))]
-    pub async fn get_clipzy_raw(&self, params: GetClipzyRawParams) -> Result<Value> {
+    pub async fn get_clipzy_raw(&self, params: GetClipzyRawParams) -> Result<String> {
         let mut path = "/api/v1/api/raw/{id}".to_string();
         {
             let encoded = encode(&params.id_path).into_owned();
@@ -64,7 +64,7 @@ impl<'a> ClipzyZaiXianJianTieBanService<'a> {
     }
 /// 步骤1：上传加密数据
     #[instrument(skip(self, params))]
-    pub async fn post_clipzy_store(&self, params: PostClipzyStoreParams) -> Result<Value> {
+    pub async fn post_clipzy_store(&self, params: PostClipzyStoreParams) -> Result<crate::models::PostClipzyStore200Response> {
         let mut path = "/api/v1/api/store".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -138,7 +138,7 @@ pub struct ConvertService<'a> {
 impl<'a> ConvertService<'a> {
 /// 时间戳转换
     #[instrument(skip(self, params))]
-    pub async fn get_convert_unixtime(&self, params: GetConvertUnixtimeParams) -> Result<Value> {
+    pub async fn get_convert_unixtime(&self, params: GetConvertUnixtimeParams) -> Result<crate::models::GetConvertUnixtime200Response> {
         let mut path = "/api/v1/convert/unixtime".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -161,7 +161,7 @@ impl<'a> ConvertService<'a> {
     }
 /// JSON 格式化
     #[instrument(skip(self, params))]
-    pub async fn post_convert_json(&self, params: PostConvertJsonParams) -> Result<Value> {
+    pub async fn post_convert_json(&self, params: PostConvertJsonParams) -> Result<crate::models::PostConvertJson200Response> {
         let mut path = "/api/v1/convert/json".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -220,7 +220,7 @@ pub struct DailyService<'a> {
 impl<'a> DailyService<'a> {
 /// 每日新闻图
     #[instrument(skip(self))]
-    pub async fn get_daily_news_image(&self) -> Result<Value> {
+    pub async fn get_daily_news_image(&self) -> Result<Vec<u8>> {
         let mut path = "/api/v1/daily/news-image".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -250,7 +250,7 @@ pub struct GameService<'a> {
 impl<'a> GameService<'a> {
 /// Epic 免费游戏
     #[instrument(skip(self))]
-    pub async fn get_game_epic_free(&self) -> Result<Value> {
+    pub async fn get_game_epic_free(&self) -> Result<crate::models::GetGameEpicFree200Response> {
         let mut path = "/api/v1/game/epic-free".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -272,7 +272,7 @@ impl<'a> GameService<'a> {
     }
 /// 查询 MC 曾用名
     #[instrument(skip(self, params))]
-    pub async fn get_game_minecraft_historyid(&self, params: GetGameMinecraftHistoryidParams) -> Result<Value> {
+    pub async fn get_game_minecraft_historyid(&self, params: GetGameMinecraftHistoryidParams) -> Result<crate::models::GetGameMinecraftHistoryid200Response> {
         let mut path = "/api/v1/game/minecraft/historyid".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -300,7 +300,7 @@ impl<'a> GameService<'a> {
     }
 /// 查询 MC 服务器
     #[instrument(skip(self, params))]
-    pub async fn get_game_minecraft_serverstatus(&self, params: GetGameMinecraftServerstatusParams) -> Result<Value> {
+    pub async fn get_game_minecraft_serverstatus(&self, params: GetGameMinecraftServerstatusParams) -> Result<crate::models::GetGameMinecraftServerstatus200Response> {
         let mut path = "/api/v1/game/minecraft/serverstatus".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -323,7 +323,7 @@ impl<'a> GameService<'a> {
     }
 /// 查询 MC 玩家
     #[instrument(skip(self, params))]
-    pub async fn get_game_minecraft_userinfo(&self, params: GetGameMinecraftUserinfoParams) -> Result<Value> {
+    pub async fn get_game_minecraft_userinfo(&self, params: GetGameMinecraftUserinfoParams) -> Result<crate::models::GetGameMinecraftUserinfo200Response> {
         let mut path = "/api/v1/game/minecraft/userinfo".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -346,7 +346,7 @@ impl<'a> GameService<'a> {
     }
 /// 查询 Steam 用户
     #[instrument(skip(self, params))]
-    pub async fn get_game_steam_summary(&self, params: GetGameSteamSummaryParams) -> Result<Value> {
+    pub async fn get_game_steam_summary(&self, params: GetGameSteamSummaryParams) -> Result<crate::models::GetGameSteamSummary200Response> {
         let mut path = "/api/v1/game/steam/summary".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -472,7 +472,7 @@ pub struct ImageService<'a> {
 impl<'a> ImageService<'a> {
 /// 获取Gravatar头像
     #[instrument(skip(self, params))]
-    pub async fn get_avatar_gravatar(&self, params: GetAvatarGravatarParams) -> Result<Value> {
+    pub async fn get_avatar_gravatar(&self, params: GetAvatarGravatarParams) -> Result<Vec<u8>> {
         let mut path = "/api/v1/avatar/gravatar".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -509,7 +509,7 @@ impl<'a> ImageService<'a> {
     }
 /// 必应壁纸
     #[instrument(skip(self))]
-    pub async fn get_image_bing_daily(&self) -> Result<Value> {
+    pub async fn get_image_bing_daily(&self) -> Result<Vec<u8>> {
         let mut path = "/api/v1/image/bing-daily".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -531,7 +531,7 @@ impl<'a> ImageService<'a> {
     }
 /// 生成摸摸头GIF (QQ号)
     #[instrument(skip(self, params))]
-    pub async fn get_image_motou(&self, params: GetImageMotouParams) -> Result<Value> {
+    pub async fn get_image_motou(&self, params: GetImageMotouParams) -> Result<Vec<u8>> {
         let mut path = "/api/v1/image/motou".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -557,7 +557,7 @@ impl<'a> ImageService<'a> {
     }
 /// 生成二维码
     #[instrument(skip(self, params))]
-    pub async fn get_image_qrcode(&self, params: GetImageQrcodeParams) -> Result<Value> {
+    pub async fn get_image_qrcode(&self, params: GetImageQrcodeParams) -> Result<crate::models::GetImageQrcode200Response> {
         let mut path = "/api/v1/image/qrcode".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -595,7 +595,7 @@ impl<'a> ImageService<'a> {
     }
 /// 图片转 Base64
     #[instrument(skip(self, params))]
-    pub async fn get_image_tobase_64(&self, params: GetImageTobase64Params) -> Result<Value> {
+    pub async fn get_image_tobase_64(&self, params: GetImageTobase64Params) -> Result<crate::models::GetImageTobase64200Response> {
         let mut path = "/api/v1/image/tobase64".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -618,7 +618,7 @@ impl<'a> ImageService<'a> {
     }
 /// 无损压缩图片
     #[instrument(skip(self, params))]
-    pub async fn post_image_compress(&self, params: PostImageCompressParams) -> Result<Value> {
+    pub async fn post_image_compress(&self, params: PostImageCompressParams) -> Result<Vec<u8>> {
         let mut path = "/api/v1/image/compress".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -646,7 +646,7 @@ impl<'a> ImageService<'a> {
     }
 /// 通过Base64编码上传图片
     #[instrument(skip(self, params))]
-    pub async fn post_image_frombase_64(&self, params: PostImageFrombase64Params) -> Result<Value> {
+    pub async fn post_image_frombase_64(&self, params: PostImageFrombase64Params) -> Result<crate::models::PostImageFrombase64200Response> {
         let mut path = "/api/v1/image/frombase64".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -668,7 +668,7 @@ impl<'a> ImageService<'a> {
     }
 /// 生成摸摸头GIF
     #[instrument(skip(self, params))]
-    pub async fn post_image_motou(&self, params: PostImageMotouParams) -> Result<Value> {
+    pub async fn post_image_motou(&self, params: PostImageMotouParams) -> Result<Vec<u8>> {
         let mut path = "/api/v1/image/motou".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -690,7 +690,7 @@ impl<'a> ImageService<'a> {
     }
 /// 图片敏感检测
     #[instrument(skip(self, params))]
-    pub async fn post_image_nsfw(&self, params: PostImageNsfwParams) -> Result<Value> {
+    pub async fn post_image_nsfw(&self, params: PostImageNsfwParams) -> Result<crate::models::PostImageNsfw200Response> {
         let mut path = "/api/v1/image/nsfw".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -712,7 +712,7 @@ impl<'a> ImageService<'a> {
     }
 /// 生成你们怎么不说话了表情包
     #[instrument(skip(self, params))]
-    pub async fn post_image_speechless(&self, params: PostImageSpeechlessParams) -> Result<Value> {
+    pub async fn post_image_speechless(&self, params: PostImageSpeechlessParams) -> Result<Vec<u8>> {
         let mut path = "/api/v1/image/speechless".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -734,7 +734,7 @@ impl<'a> ImageService<'a> {
     }
 /// SVG转图片
     #[instrument(skip(self, params))]
-    pub async fn post_image_svg(&self, params: PostImageSvgParams) -> Result<Value> {
+    pub async fn post_image_svg(&self, params: PostImageSvgParams) -> Result<Vec<u8>> {
         let mut path = "/api/v1/image/svg".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -1030,7 +1030,7 @@ pub struct MiscService<'a> {
 impl<'a> MiscService<'a> {
 /// 程序员历史事件
     #[instrument(skip(self, params))]
-    pub async fn get_history_programmer(&self, params: GetHistoryProgrammerParams) -> Result<Value> {
+    pub async fn get_history_programmer(&self, params: GetHistoryProgrammerParams) -> Result<crate::models::GetHistoryProgrammer200Response> {
         let mut path = "/api/v1/history/programmer".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -1054,7 +1054,7 @@ impl<'a> MiscService<'a> {
     }
 /// 程序员历史上的今天
     #[instrument(skip(self))]
-    pub async fn get_history_programmer_today(&self) -> Result<Value> {
+    pub async fn get_history_programmer_today(&self) -> Result<crate::models::GetHistoryProgrammerToday200Response> {
         let mut path = "/api/v1/history/programmer/today".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -1076,7 +1076,7 @@ impl<'a> MiscService<'a> {
     }
 /// Adcode 国内外行政区域查询
     #[instrument(skip(self, params))]
-    pub async fn get_misc_district(&self, params: GetMiscDistrictParams) -> Result<Value> {
+    pub async fn get_misc_district(&self, params: GetMiscDistrictParams) -> Result<crate::models::GetMiscDistrict200Response> {
         let mut path = "/api/v1/misc/district".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -1119,7 +1119,7 @@ impl<'a> MiscService<'a> {
     }
 /// 查询节假日与万年历
     #[instrument(skip(self, params))]
-    pub async fn get_misc_holiday_calendar(&self, params: GetMiscHolidayCalendarParams) -> Result<Value> {
+    pub async fn get_misc_holiday_calendar(&self, params: GetMiscHolidayCalendarParams) -> Result<crate::models::GetMiscHolidayCalendar200Response> {
         let mut path = "/api/v1/misc/holiday-calendar".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -1162,7 +1162,7 @@ impl<'a> MiscService<'a> {
     }
 /// 查询热榜
     #[instrument(skip(self, params))]
-    pub async fn get_misc_hotboard(&self, params: GetMiscHotboardParams) -> Result<Value> {
+    pub async fn get_misc_hotboard(&self, params: GetMiscHotboardParams) -> Result<crate::models::GetMiscHotboard200Response> {
         let mut path = "/api/v1/misc/hotboard".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -1203,7 +1203,7 @@ impl<'a> MiscService<'a> {
     }
 /// 查询农历时间
     #[instrument(skip(self, params))]
-    pub async fn get_misc_lunartime(&self, params: GetMiscLunartimeParams) -> Result<Value> {
+    pub async fn get_misc_lunartime(&self, params: GetMiscLunartimeParams) -> Result<crate::models::GetMiscLunartime200Response> {
         let mut path = "/api/v1/misc/lunartime".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -1231,7 +1231,7 @@ impl<'a> MiscService<'a> {
     }
 /// 查询手机归属地
     #[instrument(skip(self, params))]
-    pub async fn get_misc_phoneinfo(&self, params: GetMiscPhoneinfoParams) -> Result<Value> {
+    pub async fn get_misc_phoneinfo(&self, params: GetMiscPhoneinfoParams) -> Result<crate::models::GetMiscPhoneinfo200Response> {
         let mut path = "/api/v1/misc/phoneinfo".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -1254,7 +1254,7 @@ impl<'a> MiscService<'a> {
     }
 /// 随机数生成
     #[instrument(skip(self, params))]
-    pub async fn get_misc_randomnumber(&self, params: GetMiscRandomnumberParams) -> Result<Value> {
+    pub async fn get_misc_randomnumber(&self, params: GetMiscRandomnumberParams) -> Result<crate::models::GetMiscRandomnumber200Response> {
         let mut path = "/api/v1/misc/randomnumber".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -1294,7 +1294,7 @@ impl<'a> MiscService<'a> {
     }
 /// 转换时间戳 (旧版，推荐使用/convert/unixtime)
     #[instrument(skip(self, params))]
-    pub async fn get_misc_timestamp(&self, params: GetMiscTimestampParams) -> Result<Value> {
+    pub async fn get_misc_timestamp(&self, params: GetMiscTimestampParams) -> Result<crate::models::GetMiscTimestamp200Response> {
         let mut path = "/api/v1/misc/timestamp".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -1317,7 +1317,7 @@ impl<'a> MiscService<'a> {
     }
 /// 获取支持的快递公司列表
     #[instrument(skip(self))]
-    pub async fn get_misc_tracking_carriers(&self) -> Result<Value> {
+    pub async fn get_misc_tracking_carriers(&self) -> Result<crate::models::GetMiscTrackingCarriers200Response> {
         let mut path = "/api/v1/misc/tracking/carriers".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -1339,7 +1339,7 @@ impl<'a> MiscService<'a> {
     }
 /// 识别快递公司
     #[instrument(skip(self, params))]
-    pub async fn get_misc_tracking_detect(&self, params: GetMiscTrackingDetectParams) -> Result<Value> {
+    pub async fn get_misc_tracking_detect(&self, params: GetMiscTrackingDetectParams) -> Result<crate::models::GetMiscTrackingDetect200Response> {
         let mut path = "/api/v1/misc/tracking/detect".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -1362,7 +1362,7 @@ impl<'a> MiscService<'a> {
     }
 /// 查询快递物流信息
     #[instrument(skip(self, params))]
-    pub async fn get_misc_tracking_query(&self, params: GetMiscTrackingQueryParams) -> Result<Value> {
+    pub async fn get_misc_tracking_query(&self, params: GetMiscTrackingQueryParams) -> Result<crate::models::GetMiscTrackingQuery200Response> {
         let mut path = "/api/v1/misc/tracking/query".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -1391,7 +1391,7 @@ impl<'a> MiscService<'a> {
     }
 /// 查询天气
     #[instrument(skip(self, params))]
-    pub async fn get_misc_weather(&self, params: GetMiscWeatherParams) -> Result<Value> {
+    pub async fn get_misc_weather(&self, params: GetMiscWeatherParams) -> Result<crate::models::GetMiscWeather200Response> {
         let mut path = "/api/v1/misc/weather".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -1437,7 +1437,7 @@ impl<'a> MiscService<'a> {
     }
 /// 查询世界时间
     #[instrument(skip(self, params))]
-    pub async fn get_misc_worldtime(&self, params: GetMiscWorldtimeParams) -> Result<Value> {
+    pub async fn get_misc_worldtime(&self, params: GetMiscWorldtimeParams) -> Result<crate::models::GetMiscWorldtime200Response> {
         let mut path = "/api/v1/misc/worldtime".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -1460,7 +1460,7 @@ impl<'a> MiscService<'a> {
     }
 /// 计算两个日期之间的时间差值
     #[instrument(skip(self, params))]
-    pub async fn post_misc_date_diff(&self, params: PostMiscDateDiffParams) -> Result<Value> {
+    pub async fn post_misc_date_diff(&self, params: PostMiscDateDiffParams) -> Result<crate::models::PostMiscDateDiff200Response> {
         let mut path = "/api/v1/misc/date-diff".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -1884,7 +1884,7 @@ pub struct NetworkService<'a> {
 impl<'a> NetworkService<'a> {
 /// 执行DNS解析查询
     #[instrument(skip(self, params))]
-    pub async fn get_network_dns(&self, params: GetNetworkDnsParams) -> Result<Value> {
+    pub async fn get_network_dns(&self, params: GetNetworkDnsParams) -> Result<crate::models::GetNetworkDns200Response> {
         let mut path = "/api/v1/network/dns".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -1910,7 +1910,7 @@ impl<'a> NetworkService<'a> {
     }
 /// 查询域名ICP备案信息
     #[instrument(skip(self, params))]
-    pub async fn get_network_icp(&self, params: GetNetworkIcpParams) -> Result<Value> {
+    pub async fn get_network_icp(&self, params: GetNetworkIcpParams) -> Result<crate::models::GetNetworkIcp200Response> {
         let mut path = "/api/v1/network/icp".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -1933,7 +1933,7 @@ impl<'a> NetworkService<'a> {
     }
 /// 查询 IP
     #[instrument(skip(self, params))]
-    pub async fn get_network_ipinfo(&self, params: GetNetworkIpinfoParams) -> Result<Value> {
+    pub async fn get_network_ipinfo(&self, params: GetNetworkIpinfoParams) -> Result<crate::models::GetNetworkIpinfo200Response> {
         let mut path = "/api/v1/network/ipinfo".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -1959,7 +1959,7 @@ impl<'a> NetworkService<'a> {
     }
 /// 查询我的 IP
     #[instrument(skip(self, params))]
-    pub async fn get_network_myip(&self, params: GetNetworkMyipParams) -> Result<Value> {
+    pub async fn get_network_myip(&self, params: GetNetworkMyipParams) -> Result<crate::models::GetNetworkMyip200Response> {
         let mut path = "/api/v1/network/myip".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -1984,7 +1984,7 @@ impl<'a> NetworkService<'a> {
     }
 /// Ping 主机
     #[instrument(skip(self, params))]
-    pub async fn get_network_ping(&self, params: GetNetworkPingParams) -> Result<Value> {
+    pub async fn get_network_ping(&self, params: GetNetworkPingParams) -> Result<crate::models::GetNetworkPing200Response> {
         let mut path = "/api/v1/network/ping".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -2007,7 +2007,7 @@ impl<'a> NetworkService<'a> {
     }
 /// Ping 我的 IP
     #[instrument(skip(self))]
-    pub async fn get_network_pingmyip(&self) -> Result<Value> {
+    pub async fn get_network_pingmyip(&self) -> Result<crate::models::GetNetworkPingmyip200Response> {
         let mut path = "/api/v1/network/pingmyip".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -2029,7 +2029,7 @@ impl<'a> NetworkService<'a> {
     }
 /// 端口扫描
     #[instrument(skip(self, params))]
-    pub async fn get_network_portscan(&self, params: GetNetworkPortscanParams) -> Result<Value> {
+    pub async fn get_network_portscan(&self, params: GetNetworkPortscanParams) -> Result<crate::models::GetNetworkPortscan200Response> {
         let mut path = "/api/v1/network/portscan".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -2056,7 +2056,7 @@ impl<'a> NetworkService<'a> {
     }
 /// 检查URL的可访问性状态
     #[instrument(skip(self, params))]
-    pub async fn get_network_urlstatus(&self, params: GetNetworkUrlstatusParams) -> Result<Value> {
+    pub async fn get_network_urlstatus(&self, params: GetNetworkUrlstatusParams) -> Result<crate::models::GetNetworkUrlstatus200Response> {
         let mut path = "/api/v1/network/urlstatus".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -2079,7 +2079,7 @@ impl<'a> NetworkService<'a> {
     }
 /// 查询域名的WHOIS注册信息
     #[instrument(skip(self, params))]
-    pub async fn get_network_whois(&self, params: GetNetworkWhoisParams) -> Result<Value> {
+    pub async fn get_network_whois(&self, params: GetNetworkWhoisParams) -> Result<crate::models::GetNetworkWhois200Response> {
         let mut path = "/api/v1/network/whois".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -2105,7 +2105,7 @@ impl<'a> NetworkService<'a> {
     }
 /// 检查域名在微信中的访问状态
     #[instrument(skip(self, params))]
-    pub async fn get_network_wxdomain(&self, params: GetNetworkWxdomainParams) -> Result<Value> {
+    pub async fn get_network_wxdomain(&self, params: GetNetworkWxdomainParams) -> Result<crate::models::GetNetworkWxdomain200Response> {
         let mut path = "/api/v1/network/wxdomain".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -2283,7 +2283,7 @@ pub struct PoemService<'a> {
 impl<'a> PoemService<'a> {
 /// 一言
     #[instrument(skip(self))]
-    pub async fn get_saying(&self) -> Result<Value> {
+    pub async fn get_saying(&self) -> Result<crate::models::GetSaying200Response> {
         let mut path = "/api/v1/saying".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -2313,7 +2313,7 @@ pub struct RandomService<'a> {
 impl<'a> RandomService<'a> {
 /// 答案之书
     #[instrument(skip(self, params))]
-    pub async fn get_answerbook_ask(&self, params: GetAnswerbookAskParams) -> Result<Value> {
+    pub async fn get_answerbook_ask(&self, params: GetAnswerbookAskParams) -> Result<crate::models::GetAnswerbookAsk200Response> {
         let mut path = "/api/v1/answerbook/ask".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -2336,7 +2336,7 @@ impl<'a> RandomService<'a> {
     }
 /// 随机图片
     #[instrument(skip(self, params))]
-    pub async fn get_random_image(&self, params: GetRandomImageParams) -> Result<Value> {
+    pub async fn get_random_image(&self, params: GetRandomImageParams) -> Result<Vec<u8>> {
         let mut path = "/api/v1/random/image".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -2364,7 +2364,7 @@ impl<'a> RandomService<'a> {
     }
 /// 随机字符串
     #[instrument(skip(self, params))]
-    pub async fn get_random_string(&self, params: GetRandomStringParams) -> Result<Value> {
+    pub async fn get_random_string(&self, params: GetRandomStringParams) -> Result<crate::models::GetRandomString200Response> {
         let mut path = "/api/v1/random/string".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -2392,7 +2392,7 @@ impl<'a> RandomService<'a> {
     }
 /// 答案之书 (POST)
     #[instrument(skip(self, params))]
-    pub async fn post_answerbook_ask(&self, params: PostAnswerbookAskParams) -> Result<Value> {
+    pub async fn post_answerbook_ask(&self, params: PostAnswerbookAskParams) -> Result<crate::models::PostAnswerbookAsk200Response> {
         let mut path = "/api/v1/answerbook/ask".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -2497,7 +2497,7 @@ pub struct SocialService<'a> {
 impl<'a> SocialService<'a> {
 /// 查询 GitHub 仓库
     #[instrument(skip(self, params))]
-    pub async fn get_github_repo(&self, params: GetGithubRepoParams) -> Result<Value> {
+    pub async fn get_github_repo(&self, params: GetGithubRepoParams) -> Result<crate::models::GetGithubRepo200Response> {
         let mut path = "/api/v1/github/repo".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -2520,7 +2520,7 @@ impl<'a> SocialService<'a> {
     }
 /// 查询 B站投稿
     #[instrument(skip(self, params))]
-    pub async fn get_social_bilibili_archives(&self, params: GetSocialBilibiliArchivesParams) -> Result<Value> {
+    pub async fn get_social_bilibili_archives(&self, params: GetSocialBilibiliArchivesParams) -> Result<crate::models::GetSocialBilibiliArchives200Response> {
         let mut path = "/api/v1/social/bilibili/archives".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -2555,7 +2555,7 @@ impl<'a> SocialService<'a> {
     }
 /// 查询 B站直播间
     #[instrument(skip(self, params))]
-    pub async fn get_social_bilibili_liveroom(&self, params: GetSocialBilibiliLiveroomParams) -> Result<Value> {
+    pub async fn get_social_bilibili_liveroom(&self, params: GetSocialBilibiliLiveroomParams) -> Result<crate::models::GetSocialBilibiliLiveroom200Response> {
         let mut path = "/api/v1/social/bilibili/liveroom".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -2583,7 +2583,7 @@ impl<'a> SocialService<'a> {
     }
 /// 查询 B站评论
     #[instrument(skip(self, params))]
-    pub async fn get_social_bilibili_replies(&self, params: GetSocialBilibiliRepliesParams) -> Result<Value> {
+    pub async fn get_social_bilibili_replies(&self, params: GetSocialBilibiliRepliesParams) -> Result<crate::models::GetSocialBilibiliReplies200Response> {
         let mut path = "/api/v1/social/bilibili/replies".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -2615,7 +2615,7 @@ impl<'a> SocialService<'a> {
     }
 /// 查询 B站用户
     #[instrument(skip(self, params))]
-    pub async fn get_social_bilibili_userinfo(&self, params: GetSocialBilibiliUserinfoParams) -> Result<Value> {
+    pub async fn get_social_bilibili_userinfo(&self, params: GetSocialBilibiliUserinfoParams) -> Result<crate::models::GetSocialBilibiliUserinfo200Response> {
         let mut path = "/api/v1/social/bilibili/userinfo".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -2638,7 +2638,7 @@ impl<'a> SocialService<'a> {
     }
 /// 查询 B站视频
     #[instrument(skip(self, params))]
-    pub async fn get_social_bilibili_videoinfo(&self, params: GetSocialBilibiliVideoinfoParams) -> Result<Value> {
+    pub async fn get_social_bilibili_videoinfo(&self, params: GetSocialBilibiliVideoinfoParams) -> Result<crate::models::GetSocialBilibiliVideoinfo200Response> {
         let mut path = "/api/v1/social/bilibili/videoinfo".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -2666,7 +2666,7 @@ impl<'a> SocialService<'a> {
     }
 /// 查询 QQ 群信息
     #[instrument(skip(self, params))]
-    pub async fn get_social_qq_groupinfo(&self, params: GetSocialQqGroupinfoParams) -> Result<Value> {
+    pub async fn get_social_qq_groupinfo(&self, params: GetSocialQqGroupinfoParams) -> Result<crate::models::GetSocialQqGroupinfo200Response> {
         let mut path = "/api/v1/social/qq/groupinfo".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -2689,7 +2689,7 @@ impl<'a> SocialService<'a> {
     }
 /// 查询 QQ 信息
     #[instrument(skip(self, params))]
-    pub async fn get_social_qq_userinfo(&self, params: GetSocialQqUserinfoParams) -> Result<Value> {
+    pub async fn get_social_qq_userinfo(&self, params: GetSocialQqUserinfoParams) -> Result<crate::models::GetSocialQqUserinfo200Response> {
         let mut path = "/api/v1/social/qq/userinfo".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -2885,7 +2885,7 @@ pub struct StatusService<'a> {
 impl<'a> StatusService<'a> {
 /// 限流状态
     #[instrument(skip(self, params))]
-    pub async fn get_status_ratelimit(&self, params: GetStatusRatelimitParams) -> Result<Value> {
+    pub async fn get_status_ratelimit(&self, params: GetStatusRatelimitParams) -> Result<crate::models::GetStatusRatelimit200Response> {
         let mut path = "/api/v1/status/ratelimit".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -2911,7 +2911,7 @@ impl<'a> StatusService<'a> {
     }
 /// 获取API端点使用统计
     #[instrument(skip(self, params))]
-    pub async fn get_status_usage(&self, params: GetStatusUsageParams) -> Result<Value> {
+    pub async fn get_status_usage(&self, params: GetStatusUsageParams) -> Result<crate::models::GetStatusUsage200Response> {
         let mut path = "/api/v1/status/usage".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -2973,7 +2973,7 @@ pub struct TextService<'a> {
 impl<'a> TextService<'a> {
 /// MD5 哈希
     #[instrument(skip(self, params))]
-    pub async fn get_text_md_5(&self, params: GetTextMd5Params) -> Result<Value> {
+    pub async fn get_text_md_5(&self, params: GetTextMd5Params) -> Result<crate::models::GetTextMd5200Response> {
         let mut path = "/api/v1/text/md5".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -2996,7 +2996,7 @@ impl<'a> TextService<'a> {
     }
 /// AES 解密
     #[instrument(skip(self, params))]
-    pub async fn post_text_aes_decrypt(&self, params: PostTextAesDecryptParams) -> Result<Value> {
+    pub async fn post_text_aes_decrypt(&self, params: PostTextAesDecryptParams) -> Result<crate::models::PostTextAesDecrypt200Response> {
         let mut path = "/api/v1/text/aes/decrypt".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -3018,7 +3018,7 @@ impl<'a> TextService<'a> {
     }
 /// AES高级解密
     #[instrument(skip(self, params))]
-    pub async fn post_text_aes_decrypt_advanced(&self, params: PostTextAesDecryptAdvancedParams) -> Result<Value> {
+    pub async fn post_text_aes_decrypt_advanced(&self, params: PostTextAesDecryptAdvancedParams) -> Result<crate::models::PostTextAesDecryptAdvanced200Response> {
         let mut path = "/api/v1/text/aes/decrypt-advanced".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -3040,7 +3040,7 @@ impl<'a> TextService<'a> {
     }
 /// AES 加密
     #[instrument(skip(self, params))]
-    pub async fn post_text_aes_encrypt(&self, params: PostTextAesEncryptParams) -> Result<Value> {
+    pub async fn post_text_aes_encrypt(&self, params: PostTextAesEncryptParams) -> Result<crate::models::PostTextAesEncrypt200Response> {
         let mut path = "/api/v1/text/aes/encrypt".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -3062,7 +3062,7 @@ impl<'a> TextService<'a> {
     }
 /// AES高级加密
     #[instrument(skip(self, params))]
-    pub async fn post_text_aes_encrypt_advanced(&self, params: PostTextAesEncryptAdvancedParams) -> Result<Value> {
+    pub async fn post_text_aes_encrypt_advanced(&self, params: PostTextAesEncryptAdvancedParams) -> Result<crate::models::PostTextAesEncryptAdvanced200Response> {
         let mut path = "/api/v1/text/aes/encrypt-advanced".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -3084,7 +3084,7 @@ impl<'a> TextService<'a> {
     }
 /// 文本分析
     #[instrument(skip(self, params))]
-    pub async fn post_text_analyze(&self, params: PostTextAnalyzeParams) -> Result<Value> {
+    pub async fn post_text_analyze(&self, params: PostTextAnalyzeParams) -> Result<crate::models::PostTextAnalyze200Response> {
         let mut path = "/api/v1/text/analyze".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -3106,7 +3106,7 @@ impl<'a> TextService<'a> {
     }
 /// Base64 解码
     #[instrument(skip(self, params))]
-    pub async fn post_text_base_64_decode(&self, params: PostTextBase64DecodeParams) -> Result<Value> {
+    pub async fn post_text_base_64_decode(&self, params: PostTextBase64DecodeParams) -> Result<crate::models::PostTextBase64Decode200Response> {
         let mut path = "/api/v1/text/base64/decode".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -3128,7 +3128,7 @@ impl<'a> TextService<'a> {
     }
 /// Base64 编码
     #[instrument(skip(self, params))]
-    pub async fn post_text_base_64_encode(&self, params: PostTextBase64EncodeParams) -> Result<Value> {
+    pub async fn post_text_base_64_encode(&self, params: PostTextBase64EncodeParams) -> Result<crate::models::PostTextBase64Encode200Response> {
         let mut path = "/api/v1/text/base64/encode".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -3150,7 +3150,7 @@ impl<'a> TextService<'a> {
     }
 /// 格式转换
     #[instrument(skip(self, params))]
-    pub async fn post_text_convert(&self, params: PostTextConvertParams) -> Result<Value> {
+    pub async fn post_text_convert(&self, params: PostTextConvertParams) -> Result<crate::models::PostTextConvert200Response> {
         let mut path = "/api/v1/text/convert".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -3172,7 +3172,7 @@ impl<'a> TextService<'a> {
     }
 /// MD5 哈希 (POST)
     #[instrument(skip(self, params))]
-    pub async fn post_text_md_5(&self, params: PostTextMd5Params) -> Result<Value> {
+    pub async fn post_text_md_5(&self, params: PostTextMd5Params) -> Result<crate::models::GetTextMd5200Response> {
         let mut path = "/api/v1/text/md5".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -3194,7 +3194,7 @@ impl<'a> TextService<'a> {
     }
 /// MD5 校验
     #[instrument(skip(self, params))]
-    pub async fn post_text_md_5_verify(&self, params: PostTextMd5VerifyParams) -> Result<Value> {
+    pub async fn post_text_md_5_verify(&self, params: PostTextMd5VerifyParams) -> Result<crate::models::PostTextMd5Verify200Response> {
         let mut path = "/api/v1/text/md5/verify".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -3406,7 +3406,7 @@ pub struct TranslateService<'a> {
 impl<'a> TranslateService<'a> {
 /// AI翻译配置
     #[instrument(skip(self))]
-    pub async fn get_ai_translate_languages(&self) -> Result<Value> {
+    pub async fn get_ai_translate_languages(&self) -> Result<crate::models::GetAiTranslateLanguages200Response> {
         let mut path = "/api/v1/ai/translate/languages".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -3428,7 +3428,7 @@ impl<'a> TranslateService<'a> {
     }
 /// AI智能翻译
     #[instrument(skip(self, params))]
-    pub async fn post_ai_translate(&self, params: PostAiTranslateParams) -> Result<Value> {
+    pub async fn post_ai_translate(&self, params: PostAiTranslateParams) -> Result<crate::models::PostAiTranslate200Response> {
         let mut path = "/api/v1/ai/translate".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -3451,7 +3451,7 @@ impl<'a> TranslateService<'a> {
     }
 /// 流式翻译（中英互译）
     #[instrument(skip(self, params))]
-    pub async fn post_translate_stream(&self, params: PostTranslateStreamParams) -> Result<Value> {
+    pub async fn post_translate_stream(&self, params: PostTranslateStreamParams) -> Result<String> {
         let mut path = "/api/v1/translate/stream".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -3473,7 +3473,7 @@ impl<'a> TranslateService<'a> {
     }
 /// 翻译
     #[instrument(skip(self, params))]
-    pub async fn post_translate_text(&self, params: PostTranslateTextParams) -> Result<Value> {
+    pub async fn post_translate_text(&self, params: PostTranslateTextParams) -> Result<crate::models::PostTranslateText200Response> {
         let mut path = "/api/v1/translate/text".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -3559,7 +3559,7 @@ pub struct WebparseService<'a> {
 impl<'a> WebparseService<'a> {
 /// 转换任务状态
     #[instrument(skip(self, params))]
-    pub async fn get_web_tomarkdown_async_status(&self, params: GetWebTomarkdownAsyncStatusParams) -> Result<Value> {
+    pub async fn get_web_tomarkdown_async_status(&self, params: GetWebTomarkdownAsyncStatusParams) -> Result<crate::models::GetWebTomarkdownAsyncStatus200Response> {
         let mut path = "/api/v1/web/tomarkdown/async/{task_id}".to_string();
         {
             let encoded = encode(&params.task_id_path).into_owned();
@@ -3585,7 +3585,7 @@ impl<'a> WebparseService<'a> {
     }
 /// 提取网页图片
     #[instrument(skip(self, params))]
-    pub async fn get_webparse_extractimages(&self, params: GetWebparseExtractimagesParams) -> Result<Value> {
+    pub async fn get_webparse_extractimages(&self, params: GetWebparseExtractimagesParams) -> Result<crate::models::GetWebparseExtractimages200Response> {
         let mut path = "/api/v1/webparse/extractimages".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -3608,7 +3608,7 @@ impl<'a> WebparseService<'a> {
     }
 /// 提取网页元数据
     #[instrument(skip(self, params))]
-    pub async fn get_webparse_metadata(&self, params: GetWebparseMetadataParams) -> Result<Value> {
+    pub async fn get_webparse_metadata(&self, params: GetWebparseMetadataParams) -> Result<crate::models::GetWebparseMetadata200Response> {
         let mut path = "/api/v1/webparse/metadata".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -3631,7 +3631,7 @@ impl<'a> WebparseService<'a> {
     }
 /// 网页转 Markdown
     #[instrument(skip(self, params))]
-    pub async fn post_web_tomarkdown_async(&self, params: PostWebTomarkdownAsyncParams) -> Result<Value> {
+    pub async fn post_web_tomarkdown_async(&self, params: PostWebTomarkdownAsyncParams) -> Result<crate::models::PostWebTomarkdownAsync202Response> {
         let mut path = "/api/v1/web/tomarkdown/async".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -3713,7 +3713,7 @@ pub struct MinGanCiShiBieService<'a> {
 impl<'a> MinGanCiShiBieService<'a> {
 /// 敏感词分析 (GET)
     #[instrument(skip(self, params))]
-    pub async fn get_sensitive_word_analyze_query(&self, params: GetSensitiveWordAnalyzeQueryParams) -> Result<Value> {
+    pub async fn get_sensitive_word_analyze_query(&self, params: GetSensitiveWordAnalyzeQueryParams) -> Result<crate::models::PostSensitiveWordAnalyze200Response> {
         let mut path = "/api/v1/sensitive-word/analyze-query".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -3736,7 +3736,7 @@ impl<'a> MinGanCiShiBieService<'a> {
     }
 /// 分析敏感词
     #[instrument(skip(self, params))]
-    pub async fn post_sensitive_word_analyze(&self, params: PostSensitiveWordAnalyzeParams) -> Result<Value> {
+    pub async fn post_sensitive_word_analyze(&self, params: PostSensitiveWordAnalyzeParams) -> Result<crate::models::PostSensitiveWordAnalyze200Response> {
         let mut path = "/api/v1/sensitive-word/analyze".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -3758,7 +3758,7 @@ impl<'a> MinGanCiShiBieService<'a> {
     }
 /// 敏感词检测（快速）
     #[instrument(skip(self, params))]
-    pub async fn post_sensitive_word_quick_check(&self, params: PostSensitiveWordQuickCheckParams) -> Result<Value> {
+    pub async fn post_sensitive_word_quick_check(&self, params: PostSensitiveWordQuickCheckParams) -> Result<crate::models::PostSensitiveWordQuickCheck200Response> {
         let mut path = "/api/v1/text/profanitycheck".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -3834,7 +3834,7 @@ pub struct ZhiNengSouSuoService<'a> {
 impl<'a> ZhiNengSouSuoService<'a> {
 /// 搜索引擎配置
     #[instrument(skip(self))]
-    pub async fn get_search_engines(&self) -> Result<Value> {
+    pub async fn get_search_engines(&self) -> Result<crate::models::GetSearchEngines200Response> {
         let mut path = "/api/v1/search/engines".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -3856,7 +3856,7 @@ impl<'a> ZhiNengSouSuoService<'a> {
     }
 /// 智能搜索
     #[instrument(skip(self, params))]
-    pub async fn post_search_aggregate(&self, params: PostSearchAggregateParams) -> Result<Value> {
+    pub async fn post_search_aggregate(&self, params: PostSearchAggregateParams) -> Result<crate::models::PostSearchAggregate200Response> {
         let mut path = "/api/v1/search/aggregate".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();

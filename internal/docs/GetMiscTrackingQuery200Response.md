@@ -4,9 +4,11 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**code** | Option<**String**> |  | [optional]
-**message** | Option<**String**> |  | [optional]
-**data** | Option<[**models::GetMiscTrackingQuery200ResponseData**](get_misc_tracking_query_200_response_data.md)> |  | [optional]
+**tracking_number** | Option<**String**> | 快递单号 | [optional]
+**carrier_code** | Option<**String**> | 快递公司编码 | [optional]
+**carrier_name** | Option<**String**> | 快递公司名称 | [optional]
+**track_count** | Option<**i32**> | 物流轨迹数量 | [optional]
+**tracks** | Option<[**Vec<models::GetMiscTrackingQuery200ResponseTracksInner>**](get_misc_tracking_query_200_response_tracks_inner.md)> | 物流轨迹列表，按时间倒序排列 | [optional]
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

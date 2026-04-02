@@ -19,8 +19,6 @@ pub struct PostAiTranslate500Response {
     pub message: Option<String>,
     #[serde(rename = "error", skip_serializing_if = "Option::is_none")]
     pub error: Option<String>,
-    #[serde(rename = "is_batch", skip_serializing_if = "Option::is_none")]
-    pub is_batch: Option<bool>,
 }
 
 impl PostAiTranslate500Response {
@@ -29,7 +27,6 @@ impl PostAiTranslate500Response {
             code: None,
             message: None,
             error: None,
-            is_batch: None,
         }
     }
 }

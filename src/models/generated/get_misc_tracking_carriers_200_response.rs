@@ -13,20 +13,19 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct GetMiscTrackingCarriers200Response {
-    #[serde(rename = "code", skip_serializing_if = "Option::is_none")]
-    pub code: Option<String>,
-    #[serde(rename = "message", skip_serializing_if = "Option::is_none")]
-    pub message: Option<String>,
-    #[serde(rename = "data", skip_serializing_if = "Option::is_none")]
-    pub data: Option<Box<models::GetMiscTrackingCarriers200ResponseData>>,
+    /// 快递公司列表
+    #[serde(rename = "carriers", skip_serializing_if = "Option::is_none")]
+    pub carriers: Option<Vec<models::GetMiscTrackingCarriers200ResponseCarriersInner>>,
+    /// 支持的快递公司总数
+    #[serde(rename = "total", skip_serializing_if = "Option::is_none")]
+    pub total: Option<i32>,
 }
 
 impl GetMiscTrackingCarriers200Response {
     pub fn new() -> GetMiscTrackingCarriers200Response {
         GetMiscTrackingCarriers200Response {
-            code: None,
-            message: None,
-            data: None,
+            carriers: None,
+            total: None,
         }
     }
 }

@@ -11,44 +11,17 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
-pub struct GetMiscHotboard200Response {
-    /// 热榜条目列表。
-    #[serde(rename = "list", skip_serializing_if = "Option::is_none")]
-    pub list: Option<Vec<models::GetMiscHotboard200ResponseListInner>>,
-    #[serde(rename = "type", skip_serializing_if = "Option::is_none")]
-    pub r#type: Option<String>,
-    #[serde(rename = "update_time", skip_serializing_if = "Option::is_none")]
-    pub update_time: Option<String>,
-    /// 时光机模式返回的快照实际时间戳（毫秒）。
-    #[serde(rename = "snapshot_time", skip_serializing_if = "Option::is_none")]
-    pub snapshot_time: Option<i32>,
-    /// 搜索模式返回的搜索关键词。
-    #[serde(rename = "keyword", skip_serializing_if = "Option::is_none")]
-    pub keyword: Option<String>,
-    /// 搜索模式返回的结果数量。
-    #[serde(rename = "count", skip_serializing_if = "Option::is_none")]
-    pub count: Option<i32>,
-    /// 搜索模式返回的结果数组。
-    #[serde(rename = "results", skip_serializing_if = "Option::is_none")]
-    pub results: Option<Vec<models::GetMiscHotboard200ResponseResultsInner>>,
-    /// 数据源列表模式返回的可用历史数据源数组。
-    #[serde(rename = "sources", skip_serializing_if = "Option::is_none")]
-    pub sources: Option<Vec<String>>,
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum GetMiscHotboard200Response {
+    GetMiscHotboard200ResponseOneOf(Box<models::GetMiscHotboard200ResponseOneOf>),
+    GetMiscHotboard200ResponseOneOf1(Box<models::GetMiscHotboard200ResponseOneOf1>),
+    GetMiscHotboard200ResponseOneOf2(Box<models::GetMiscHotboard200ResponseOneOf2>),
 }
 
-impl GetMiscHotboard200Response {
-    pub fn new() -> GetMiscHotboard200Response {
-        GetMiscHotboard200Response {
-            list: None,
-            r#type: None,
-            update_time: None,
-            snapshot_time: None,
-            keyword: None,
-            count: None,
-            results: None,
-            sources: None,
-        }
+impl Default for GetMiscHotboard200Response {
+    fn default() -> Self {
+        Self::GetMiscHotboard200ResponseOneOf(Default::default())
     }
 }
 
