@@ -12,7 +12,7 @@ use tracing::{debug, instrument};
 use url::Url;
 
 static DEFAULT_BASE: &str = "https://uapis.cn/";
-static DEFAULT_UA: &str = "uapi-sdk-rust/0.1.0";
+static DEFAULT_UA: &str = "uapi-sdk-rust/0.1.13";
 static DEFAULT_BASE_URL: Lazy<Url> = Lazy::new(|| Url::parse(DEFAULT_BASE).expect("valid default base"));
 
 #[derive(Clone, Debug)]
@@ -120,7 +120,9 @@ impl Client {
         let mut req = self.http.request(method.clone(), url.clone());
 
         let mut merged = HeaderMap::new();
-        merged.insert(USER_AGENT, HeaderValue::from_static(DEFAULT_UA));
+        let user_agent = HeaderValue::from_str(&self.user_agent)
+            .unwrap_or_else(|_| HeaderValue::from_static(DEFAULT_UA));
+        merged.insert(USER_AGENT, user_agent);
         if let Some(t) = &self.api_key {
             let value = format!("Bearer {}", t);
             if let Ok(h) = HeaderValue::from_str(&value) {
