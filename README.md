@@ -18,15 +18,18 @@ cargo add uapi-sdk-rust
 
 ```rust
 use uapi_sdk_rust::{Client, Result};
+use uapi_sdk_rust::services::GetMiscHotboardParams;
 
 #[tokio::main]
 async fn main() -> Result<()> {
     let client = Client::new("YOUR_API_KEY");
-    let result = client.social().get_social_qq_userinfo("10001").await?;
+    let result = client.misc().get_misc_hotboard(GetMiscHotboardParams::new("weibo")).await?;
     println!("{result:?}");
     Ok(())
 }
 ```
+
+这个接口默认只要传 `type` 就可以拿当前热榜。`time_query`、`keyword_query`、`time_start_query`、`time_end_query`、`limit_query`、`sources_query` 都是按场景再传的可选参数。
 
 ## 特性
 
