@@ -2,7 +2,7 @@
 
 ![Banner](https://raw.githubusercontent.com/AxT-Team/uapi-sdk-rust/main/banner.png)
 
-[![Rust](https://img.shields.io/badge/Rust-1.75+-DEA584?style=flat-square&logo=rust&logoColor=white)](https://www.rust-lang.org/)
+[![Rust](https://img.shields.io/badge/Rust-1.87+-DEA584?style=flat-square&logo=rust&logoColor=white)](https://www.rust-lang.org/)
 [![Docs](https://img.shields.io/badge/Docs-uapis.cn-2EAE5D?style=flat-square)](https://uapis.cn/)
 [![crates.io](https://img.shields.io/crates/v/uapi-sdk-rust?style=flat-square&logo=rust)](https://crates.io/crates/uapi-sdk-rust)
 [![docs.rs](https://img.shields.io/docsrs/uapi-sdk-rust?label=docs.rs&style=flat-square)](https://docs.rs/uapi-sdk-rust)
