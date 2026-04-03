@@ -17,7 +17,7 @@ cargo add uapi-sdk-rust
 ```
 
 ```rust
-use _::{Client, Result};
+use uapi_sdk_rust::{Client, Result};
 
 #[tokio::main]
 async fn main() -> Result<()> {
@@ -41,6 +41,54 @@ async fn main() -> Result<()> {
 `Client::builder()` / `Client::new()` / `Client::from_env()` 允许你在保持默认 15 秒超时与 `Authorization` 头的同时，自由覆盖 Base URL、Token、代理乃至注入自定义的 `reqwest::Client`。
 
 如果你需要查看字段细节或内部逻辑，仓库中的 `./internal` 目录同步保留了由 `openapi-generator` 生成的完整结构体，随时可供参考。
+
+## 响应元信息
+
+每次请求完成后，SDK 会自动把响应 Header 解析成结构化的 `ResponseMeta`，你不用自己拆原始字符串。
+
+成功时可以通过 `client.last_response_meta()` 读取，失败时可以通过 `e.meta()` 读取，两条路径拿到的是同一套字段。
+
+```rust
+use uapi_sdk_rust::{Client, Result};
+
+#[tokio::main]
+async fn main() -> Result<()> {
+    let client = Client::new("<TOKEN>");
+
+    // 成功路径
+    let _result = client.social().get_social_qq_userinfo("10001").await?;
+    if let Some(meta) = client.last_response_meta() {
+        println!("余额剩余: {} 分", meta.balance_remaining_cents.unwrap_or(0));
+        println!("资源包剩余: {} 积分", meta.quota_remaining_credits.unwrap_or(0));
+        println!("Request ID: {:?}", meta.request_id);
+    }
+
+    // 失败路径
+    match client.social().get_social_qq_userinfo("10001").await {
+        Err(e) => {
+            if let Some(meta) = e.meta() {
+                println!("限流，{}s 后重试", meta.retry_after_seconds.unwrap_or(0));
+                println!("Request ID: {:?}", meta.request_id);
+            }
+        }
+        Ok(_) => {}
+    }
+
+    Ok(())
+}
+```
+
+常用字段一览：
+
+| 字段 | 说明 |
+|------|------|
+| `balance_remaining_cents` | 账户余额剩余（分） |
+| `quota_remaining_credits` | 资源包剩余积分 |
+| `visitor_quota_remaining_credits` | 访客配额剩余积分 |
+| `retry_after_seconds` | 触发限流后的建议等待时长 |
+| `request_id` | 请求唯一 ID，排障时使用 |
+| `debit_status` | 本次计费状态 |
+| `rate_limit_policies` / `rate_limits` | 完整结构化限流策略数据 |
 
 ## 模型
 
