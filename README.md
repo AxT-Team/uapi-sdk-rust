@@ -59,10 +59,21 @@ async fn main() -> Result<()> {
     let client = Client::new("YOUR_API_KEY");
 
     // 成功路径
-    let _result = client.social().get_social_qq_userinfo("10001").await?;
+    client.social().get_social_qq_userinfo("10001").await?;
     if let Some(meta) = client.last_response_meta() {
+        println!("这次请求原价: {} 积分", meta.credits_requested.unwrap_or(0));
+        println!("这次实际扣费: {} 积分", meta.credits_charged.unwrap_or(0));
+        println!("特殊计价: {}", meta.credits_pricing.as_deref().unwrap_or("原价"));
         println!("余额剩余: {} 分", meta.balance_remaining_cents.unwrap_or(0));
         println!("资源包剩余: {} 积分", meta.quota_remaining_credits.unwrap_or(0));
+        println!("当前有效额度桶: {}", meta.active_quota_buckets.unwrap_or(0));
+        println!("额度用空即停: {}", meta.stop_on_empty.unwrap_or(false));
+        println!(
+            "Key QPS: {} / {} {}",
+            meta.billing_key_rate_remaining.unwrap_or(0),
+            meta.billing_key_rate_limit.unwrap_or(0),
+            meta.billing_key_rate_unit.as_deref().unwrap_or("req")
+        );
         println!("Request ID: {:?}", meta.request_id);
     }
 
@@ -70,7 +81,13 @@ async fn main() -> Result<()> {
     match client.social().get_social_qq_userinfo("10001").await {
         Err(e) => {
             if let Some(meta) = e.meta() {
-                println!("限流，{}s 后重试", meta.retry_after_seconds.unwrap_or(0));
+                println!("Retry-After 秒数: {:?}", meta.retry_after_seconds);
+                println!("Retry-After 原始值: {:?}", meta.retry_after_raw);
+                println!(
+                    "访客 QPS: {} / {}",
+                    meta.visitor_rate_remaining.unwrap_or(0),
+                    meta.visitor_rate_limit.unwrap_or(0)
+                );
                 println!("Request ID: {:?}", meta.request_id);
             }
         }
@@ -85,12 +102,18 @@ async fn main() -> Result<()> {
 
 | 字段 | 说明 |
 |------|------|
+| `credits_requested` | 这次请求原本要扣多少积分，也就是请求价 |
+| `credits_charged` | 这次请求实际扣了多少积分 |
+| `credits_pricing` | 特殊计价原因，例如缓存半价 `cache-hit-half-price` |
 | `balance_remaining_cents` | 账户余额剩余（分） |
 | `quota_remaining_credits` | 资源包剩余积分 |
-| `visitor_quota_remaining_credits` | 访客配额剩余积分 |
-| `retry_after_seconds` | 触发限流后的建议等待时长 |
+| `active_quota_buckets` | 当前还有多少个有效额度桶参与计费 |
+| `stop_on_empty` | 额度耗尽后是否直接停止服务 |
+| `retry_after_seconds` / `retry_after_raw` | 限流后的等待时长；当服务端返回 HTTP 时间字符串时看 `retry_after_raw` |
 | `request_id` | 请求唯一 ID，排障时使用 |
-| `debit_status` | 本次计费状态 |
+| `billing_key_rate_limit` / `billing_key_rate_remaining` | Billing Key 当前 QPS 规则的上限与剩余 |
+| `billing_ip_rate_limit` / `billing_ip_rate_remaining` | Billing Key 单 IP 当前 QPS 规则的上限与剩余 |
+| `visitor_rate_limit` / `visitor_rate_remaining` | 访客当前 QPS 规则的上限与剩余 |
 | `rate_limit_policies` / `rate_limits` | 完整结构化限流策略数据 |
 
 ## 模型
