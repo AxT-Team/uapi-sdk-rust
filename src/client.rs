@@ -11,7 +11,7 @@ use std::time::Duration;
 use tracing::{debug, instrument};
 use url::Url;
 
-static DEFAULT_BASE: &str = "https://uapis.cn/api/v1/";
+static DEFAULT_BASE: &str = "https://uapis.cn/";
 static DEFAULT_UA: &str = "uapi-sdk-rust/0.1.0";
 static DEFAULT_BASE_URL: Lazy<Url> = Lazy::new(|| Url::parse(DEFAULT_BASE).expect("valid default base"));
 
@@ -44,7 +44,7 @@ impl Client {
         let mut cli = Self::new(token);
         if let Ok(base) = std::env::var("UAPI_BASE_URL") {
             if let Ok(url) = Url::parse(&base) {
-                cli.base_url = url;
+                cli.base_url = normalize_base_url(url);
             }
         }
         Some(cli)
@@ -179,7 +179,7 @@ pub struct ClientBuilder {
 
 impl ClientBuilder {
     pub fn api_key<T: Into<String>>(mut self, api_key: T) -> Self { self.api_key = Some(api_key.into()); self }
-    pub fn base_url(mut self, base: Url) -> Self { self.base_url = Some(base); self }
+    pub fn base_url(mut self, base: Url) -> Self { self.base_url = Some(normalize_base_url(base)); self }
     pub fn timeout(mut self, secs: u64) -> Self { self.timeout = Some(Duration::from_secs(secs)); self }
     pub fn user_agent<T: Into<String>>(mut self, ua: T) -> Self { self.user_agent = Some(ua.into()); self }
     pub fn http_client(mut self, cli: reqwest::Client) -> Self { self.client = Some(cli); self }
@@ -200,6 +200,18 @@ impl ClientBuilder {
             last_response_meta: Arc::new(RwLock::new(None)),
         })
     }
+}
+
+fn normalize_base_url(mut base: Url) -> Url {
+    let trimmed = base.path().trim_end_matches('/');
+    let without_api_prefix = trimmed.strip_suffix("/api/v1").unwrap_or(trimmed);
+    let normalized = without_api_prefix.trim_end_matches('/');
+    if normalized.is_empty() {
+        base.set_path("/");
+    } else {
+        base.set_path(&format!("{normalized}/"));
+    }
+    base
 }
 
 fn find_request_id(headers: &HeaderMap) -> Option<String> {

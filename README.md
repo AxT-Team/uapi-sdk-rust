@@ -21,7 +21,7 @@ use uapi_sdk_rust::{Client, Result};
 
 #[tokio::main]
 async fn main() -> Result<()> {
-    let client = Client::new("<TOKEN>");
+    let client = Client::new("YOUR_API_KEY");
     let result = client.social().get_social_qq_userinfo("10001").await?;
     println!("{result:?}");
     Ok(())
@@ -53,7 +53,7 @@ use uapi_sdk_rust::{Client, Result};
 
 #[tokio::main]
 async fn main() -> Result<()> {
-    let client = Client::new("<TOKEN>");
+    let client = Client::new("YOUR_API_KEY");
 
     // 成功路径
     let _result = client.social().get_social_qq_userinfo("10001").await?;
