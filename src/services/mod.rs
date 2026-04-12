@@ -19,6 +19,9 @@ impl<'a> ClipzyZaiXianJianTieBanService<'a> {
 
         let mut query: Vec<(String, String)> = Vec::new();
         query.push(("id".to_string(), params.id_query.clone()));
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -32,6 +35,7 @@ impl<'a> ClipzyZaiXianJianTieBanService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -46,6 +50,9 @@ impl<'a> ClipzyZaiXianJianTieBanService<'a> {
 
         let mut query: Vec<(String, String)> = Vec::new();
         query.push(("key".to_string(), params.key_query.clone()));
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -59,6 +66,7 @@ impl<'a> ClipzyZaiXianJianTieBanService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -68,6 +76,9 @@ impl<'a> ClipzyZaiXianJianTieBanService<'a> {
         let mut path = "/api/v1/api/store".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -81,6 +92,7 @@ impl<'a> ClipzyZaiXianJianTieBanService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -89,13 +101,25 @@ impl<'a> ClipzyZaiXianJianTieBanService<'a> {
 #[derive(Debug, Clone)]
 pub struct GetClipzyGetParams {
     pub id_query: String,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl GetClipzyGetParams {
     pub fn new(id_query: impl Into<String>) -> Self {
         Self {
             id_query: id_query.into(),
+            disable_cache: None,
+            _t: None,
         }
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
     }
 }
 
@@ -103,6 +127,8 @@ impl GetClipzyGetParams {
 pub struct GetClipzyRawParams {
     pub id_path: String,
     pub key_query: String,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl GetClipzyRawParams {
@@ -110,20 +136,42 @@ impl GetClipzyRawParams {
         Self {
             id_path: id_path.into(),
             key_query: key_query.into(),
+            disable_cache: None,
+            _t: None,
         }
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
     }
 }
 
 #[derive(Debug, Clone)]
 pub struct PostClipzyStoreParams {
     pub body: Option<Value>,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl PostClipzyStoreParams {
     pub fn new() -> Self {
         Self {
             body: None,
+            disable_cache: None,
+            _t: None,
         }
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
     }
     pub fn body(mut self, value: Value) -> Self {
         self.body = Some(value);
@@ -143,6 +191,9 @@ impl<'a> ConvertService<'a> {
 
         let mut query: Vec<(String, String)> = Vec::new();
         query.push(("time".to_string(), params.time_query.clone()));
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -156,6 +207,7 @@ impl<'a> ConvertService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -165,6 +217,9 @@ impl<'a> ConvertService<'a> {
         let mut path = "/api/v1/convert/json".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -178,6 +233,7 @@ impl<'a> ConvertService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -186,26 +242,50 @@ impl<'a> ConvertService<'a> {
 #[derive(Debug, Clone)]
 pub struct GetConvertUnixtimeParams {
     pub time_query: String,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl GetConvertUnixtimeParams {
     pub fn new(time_query: impl Into<String>) -> Self {
         Self {
             time_query: time_query.into(),
+            disable_cache: None,
+            _t: None,
         }
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
     }
 }
 
 #[derive(Debug, Clone)]
 pub struct PostConvertJsonParams {
     pub body: Option<Value>,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl PostConvertJsonParams {
     pub fn new() -> Self {
         Self {
             body: None,
+            disable_cache: None,
+            _t: None,
         }
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
     }
     pub fn body(mut self, value: Value) -> Self {
         self.body = Some(value);
@@ -237,6 +317,7 @@ impl<'a> DailyService<'a> {
                 headers,
                 query,
                 body,
+                None,
             )
             .await
     }
@@ -267,6 +348,7 @@ impl<'a> GameService<'a> {
                 headers,
                 query,
                 body,
+                None,
             )
             .await
     }
@@ -282,6 +364,9 @@ impl<'a> GameService<'a> {
         if let Some(value) = &params.uuid_query {
             query.push(("uuid".to_string(), value.clone()));
         }
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -295,6 +380,7 @@ impl<'a> GameService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -305,6 +391,9 @@ impl<'a> GameService<'a> {
 
         let mut query: Vec<(String, String)> = Vec::new();
         query.push(("server".to_string(), params.server_query.clone()));
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -318,6 +407,7 @@ impl<'a> GameService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -328,6 +418,9 @@ impl<'a> GameService<'a> {
 
         let mut query: Vec<(String, String)> = Vec::new();
         query.push(("username".to_string(), params.username_query.clone()));
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -341,6 +434,7 @@ impl<'a> GameService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -362,6 +456,9 @@ impl<'a> GameService<'a> {
         if let Some(value) = &params.key_query {
             query.push(("key".to_string(), value.clone()));
         }
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -375,6 +472,7 @@ impl<'a> GameService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -385,6 +483,8 @@ impl<'a> GameService<'a> {
 pub struct GetGameMinecraftHistoryidParams {
     pub name_query: Option<String>,
     pub uuid_query: Option<String>,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl GetGameMinecraftHistoryidParams {
@@ -392,6 +492,8 @@ impl GetGameMinecraftHistoryidParams {
         Self {
             name_query: None,
             uuid_query: None,
+            disable_cache: None,
+            _t: None,
         }
     }
     pub fn name_query(mut self, value: impl Into<String>) -> Self {
@@ -402,31 +504,63 @@ impl GetGameMinecraftHistoryidParams {
         self.uuid_query = Some(value.into());
         self
     }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
+    }
 }
 
 #[derive(Debug, Clone)]
 pub struct GetGameMinecraftServerstatusParams {
     pub server_query: String,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl GetGameMinecraftServerstatusParams {
     pub fn new(server_query: impl Into<String>) -> Self {
         Self {
             server_query: server_query.into(),
+            disable_cache: None,
+            _t: None,
         }
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
     }
 }
 
 #[derive(Debug, Clone)]
 pub struct GetGameMinecraftUserinfoParams {
     pub username_query: String,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl GetGameMinecraftUserinfoParams {
     pub fn new(username_query: impl Into<String>) -> Self {
         Self {
             username_query: username_query.into(),
+            disable_cache: None,
+            _t: None,
         }
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
     }
 }
 
@@ -436,6 +570,8 @@ pub struct GetGameSteamSummaryParams {
     pub id_query: Option<String>,
     pub id_3_query: Option<String>,
     pub key_query: Option<String>,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl GetGameSteamSummaryParams {
@@ -445,6 +581,8 @@ impl GetGameSteamSummaryParams {
             id_query: None,
             id_3_query: None,
             key_query: None,
+            disable_cache: None,
+            _t: None,
         }
     }
     pub fn steamid_query(mut self, value: impl Into<String>) -> Self {
@@ -461,6 +599,14 @@ impl GetGameSteamSummaryParams {
     }
     pub fn key_query(mut self, value: impl Into<String>) -> Self {
         self.key_query = Some(value.into());
+        self
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
         self
     }
 }
@@ -491,6 +637,9 @@ impl<'a> ImageService<'a> {
         if let Some(value) = &params.r_query {
             query.push(("r".to_string(), value.clone()));
         }
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -504,6 +653,7 @@ impl<'a> ImageService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -526,6 +676,7 @@ impl<'a> ImageService<'a> {
                 headers,
                 query,
                 body,
+                None,
             )
             .await
     }
@@ -538,6 +689,9 @@ impl<'a> ImageService<'a> {
         query.push(("qq".to_string(), params.qq_query.clone()));
         if let Some(value) = &params.bg_color_query {
             query.push(("bg_color".to_string(), value.clone()));
+        }
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
         }
         let query = if query.is_empty() { None } else { Some(query) };
 
@@ -552,6 +706,7 @@ impl<'a> ImageService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -577,6 +732,9 @@ impl<'a> ImageService<'a> {
         if let Some(value) = &params.bgcolor_query {
             query.push(("bgcolor".to_string(), value.clone()));
         }
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -590,6 +748,7 @@ impl<'a> ImageService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -600,6 +759,9 @@ impl<'a> ImageService<'a> {
 
         let mut query: Vec<(String, String)> = Vec::new();
         query.push(("url".to_string(), params.url_query.clone()));
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -613,6 +775,7 @@ impl<'a> ImageService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -628,6 +791,9 @@ impl<'a> ImageService<'a> {
         if let Some(value) = &params.format_query {
             query.push(("format".to_string(), value.clone()));
         }
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -641,6 +807,7 @@ impl<'a> ImageService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -650,6 +817,9 @@ impl<'a> ImageService<'a> {
         let mut path = "/api/v1/image/frombase64".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -663,6 +833,7 @@ impl<'a> ImageService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -672,6 +843,9 @@ impl<'a> ImageService<'a> {
         let mut path = "/api/v1/image/motou".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -685,6 +859,7 @@ impl<'a> ImageService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -694,6 +869,9 @@ impl<'a> ImageService<'a> {
         let mut path = "/api/v1/image/nsfw".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -707,6 +885,7 @@ impl<'a> ImageService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -716,6 +895,9 @@ impl<'a> ImageService<'a> {
         let mut path = "/api/v1/image/speechless".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -729,6 +911,7 @@ impl<'a> ImageService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -750,6 +933,9 @@ impl<'a> ImageService<'a> {
         if let Some(value) = &params.quality_query {
             query.push(("quality".to_string(), value.clone()));
         }
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -763,6 +949,7 @@ impl<'a> ImageService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -775,6 +962,8 @@ pub struct GetAvatarGravatarParams {
     pub s_query: Option<String>,
     pub d_query: Option<String>,
     pub r_query: Option<String>,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl GetAvatarGravatarParams {
@@ -785,6 +974,8 @@ impl GetAvatarGravatarParams {
             s_query: None,
             d_query: None,
             r_query: None,
+            disable_cache: None,
+            _t: None,
         }
     }
     pub fn email_query(mut self, value: impl Into<String>) -> Self {
@@ -807,6 +998,14 @@ impl GetAvatarGravatarParams {
         self.r_query = Some(value.into());
         self
     }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
+    }
 }
 
 
@@ -814,6 +1013,8 @@ impl GetAvatarGravatarParams {
 pub struct GetImageMotouParams {
     pub qq_query: String,
     pub bg_color_query: Option<String>,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl GetImageMotouParams {
@@ -821,10 +1022,20 @@ impl GetImageMotouParams {
         Self {
             qq_query: qq_query.into(),
             bg_color_query: None,
+            disable_cache: None,
+            _t: None,
         }
     }
     pub fn bg_color_query(mut self, value: impl Into<String>) -> Self {
         self.bg_color_query = Some(value.into());
+        self
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
         self
     }
 }
@@ -837,6 +1048,8 @@ pub struct GetImageQrcodeParams {
     pub transparent_query: Option<String>,
     pub fgcolor_query: Option<String>,
     pub bgcolor_query: Option<String>,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl GetImageQrcodeParams {
@@ -848,6 +1061,8 @@ impl GetImageQrcodeParams {
             transparent_query: None,
             fgcolor_query: None,
             bgcolor_query: None,
+            disable_cache: None,
+            _t: None,
         }
     }
     pub fn size_query(mut self, value: impl Into<String>) -> Self {
@@ -870,18 +1085,38 @@ impl GetImageQrcodeParams {
         self.bgcolor_query = Some(value.into());
         self
     }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
+    }
 }
 
 #[derive(Debug, Clone)]
 pub struct GetImageTobase64Params {
     pub url_query: String,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl GetImageTobase64Params {
     pub fn new(url_query: impl Into<String>) -> Self {
         Self {
             url_query: url_query.into(),
+            disable_cache: None,
+            _t: None,
         }
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
     }
 }
 
@@ -890,6 +1125,8 @@ pub struct PostImageCompressParams {
     pub level_query: Option<String>,
     pub format_query: Option<String>,
     pub body: Option<Value>,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl PostImageCompressParams {
@@ -898,6 +1135,8 @@ impl PostImageCompressParams {
             level_query: None,
             format_query: None,
             body: None,
+            disable_cache: None,
+            _t: None,
         }
     }
     pub fn level_query(mut self, value: impl Into<String>) -> Self {
@@ -906,6 +1145,14 @@ impl PostImageCompressParams {
     }
     pub fn format_query(mut self, value: impl Into<String>) -> Self {
         self.format_query = Some(value.into());
+        self
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
         self
     }
     pub fn body(mut self, value: Value) -> Self {
@@ -917,13 +1164,25 @@ impl PostImageCompressParams {
 #[derive(Debug, Clone)]
 pub struct PostImageFrombase64Params {
     pub body: Option<Value>,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl PostImageFrombase64Params {
     pub fn new() -> Self {
         Self {
             body: None,
+            disable_cache: None,
+            _t: None,
         }
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
     }
     pub fn body(mut self, value: Value) -> Self {
         self.body = Some(value);
@@ -934,13 +1193,25 @@ impl PostImageFrombase64Params {
 #[derive(Debug, Clone)]
 pub struct PostImageMotouParams {
     pub body: Option<Value>,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl PostImageMotouParams {
     pub fn new() -> Self {
         Self {
             body: None,
+            disable_cache: None,
+            _t: None,
         }
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
     }
     pub fn body(mut self, value: Value) -> Self {
         self.body = Some(value);
@@ -951,13 +1222,25 @@ impl PostImageMotouParams {
 #[derive(Debug, Clone)]
 pub struct PostImageNsfwParams {
     pub body: Option<Value>,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl PostImageNsfwParams {
     pub fn new() -> Self {
         Self {
             body: None,
+            disable_cache: None,
+            _t: None,
         }
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
     }
     pub fn body(mut self, value: Value) -> Self {
         self.body = Some(value);
@@ -968,13 +1251,25 @@ impl PostImageNsfwParams {
 #[derive(Debug, Clone)]
 pub struct PostImageSpeechlessParams {
     pub body: Option<Value>,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl PostImageSpeechlessParams {
     pub fn new() -> Self {
         Self {
             body: None,
+            disable_cache: None,
+            _t: None,
         }
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
     }
     pub fn body(mut self, value: Value) -> Self {
         self.body = Some(value);
@@ -989,6 +1284,8 @@ pub struct PostImageSvgParams {
     pub height_query: Option<String>,
     pub quality_query: Option<String>,
     pub body: Option<Value>,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl PostImageSvgParams {
@@ -999,6 +1296,8 @@ impl PostImageSvgParams {
             height_query: None,
             quality_query: None,
             body: None,
+            disable_cache: None,
+            _t: None,
         }
     }
     pub fn format_query(mut self, value: impl Into<String>) -> Self {
@@ -1015,6 +1314,14 @@ impl PostImageSvgParams {
     }
     pub fn quality_query(mut self, value: impl Into<String>) -> Self {
         self.quality_query = Some(value.into());
+        self
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
         self
     }
     pub fn body(mut self, value: Value) -> Self {
@@ -1036,6 +1343,9 @@ impl<'a> MiscService<'a> {
         let mut query: Vec<(String, String)> = Vec::new();
         query.push(("month".to_string(), params.month_query.clone()));
         query.push(("day".to_string(), params.day_query.clone()));
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -1049,6 +1359,7 @@ impl<'a> MiscService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -1071,6 +1382,7 @@ impl<'a> MiscService<'a> {
                 headers,
                 query,
                 body,
+                None,
             )
             .await
     }
@@ -1101,6 +1413,9 @@ impl<'a> MiscService<'a> {
         if let Some(value) = &params.limit_query {
             query.push(("limit".to_string(), value.clone()));
         }
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -1114,6 +1429,7 @@ impl<'a> MiscService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -1144,6 +1460,9 @@ impl<'a> MiscService<'a> {
         if let Some(value) = &params.nearby_limit_query {
             query.push(("nearby_limit".to_string(), value.clone()));
         }
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -1157,6 +1476,7 @@ impl<'a> MiscService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -1185,6 +1505,9 @@ impl<'a> MiscService<'a> {
         if let Some(value) = &params.sources_query {
             query.push(("sources".to_string(), value.clone()));
         }
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -1198,6 +1521,7 @@ impl<'a> MiscService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -1213,6 +1537,9 @@ impl<'a> MiscService<'a> {
         if let Some(value) = &params.timezone_query {
             query.push(("timezone".to_string(), value.clone()));
         }
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -1226,6 +1553,7 @@ impl<'a> MiscService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -1236,6 +1564,9 @@ impl<'a> MiscService<'a> {
 
         let mut query: Vec<(String, String)> = Vec::new();
         query.push(("phone".to_string(), params.phone_query.clone()));
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -1249,6 +1580,7 @@ impl<'a> MiscService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -1276,6 +1608,9 @@ impl<'a> MiscService<'a> {
         if let Some(value) = &params.decimal_places_query {
             query.push(("decimal_places".to_string(), value.clone()));
         }
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -1289,6 +1624,7 @@ impl<'a> MiscService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -1299,6 +1635,9 @@ impl<'a> MiscService<'a> {
 
         let mut query: Vec<(String, String)> = Vec::new();
         query.push(("ts".to_string(), params.ts_query.clone()));
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -1312,6 +1651,7 @@ impl<'a> MiscService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -1334,6 +1674,7 @@ impl<'a> MiscService<'a> {
                 headers,
                 query,
                 body,
+                None,
             )
             .await
     }
@@ -1344,6 +1685,9 @@ impl<'a> MiscService<'a> {
 
         let mut query: Vec<(String, String)> = Vec::new();
         query.push(("tracking_number".to_string(), params.tracking_number_query.clone()));
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -1357,6 +1701,7 @@ impl<'a> MiscService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -1373,6 +1718,9 @@ impl<'a> MiscService<'a> {
         if let Some(value) = &params.phone_query {
             query.push(("phone".to_string(), value.clone()));
         }
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -1386,6 +1734,7 @@ impl<'a> MiscService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -1419,6 +1768,9 @@ impl<'a> MiscService<'a> {
         if let Some(value) = &params.lang_query {
             query.push(("lang".to_string(), value.clone()));
         }
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -1432,6 +1784,7 @@ impl<'a> MiscService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -1442,6 +1795,9 @@ impl<'a> MiscService<'a> {
 
         let mut query: Vec<(String, String)> = Vec::new();
         query.push(("city".to_string(), params.city_query.clone()));
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -1455,6 +1811,7 @@ impl<'a> MiscService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -1464,6 +1821,9 @@ impl<'a> MiscService<'a> {
         let mut path = "/api/v1/misc/date-diff".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -1477,6 +1837,7 @@ impl<'a> MiscService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -1486,6 +1847,8 @@ impl<'a> MiscService<'a> {
 pub struct GetHistoryProgrammerParams {
     pub month_query: String,
     pub day_query: String,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl GetHistoryProgrammerParams {
@@ -1493,7 +1856,17 @@ impl GetHistoryProgrammerParams {
         Self {
             month_query: month_query.into(),
             day_query: day_query.into(),
+            disable_cache: None,
+            _t: None,
         }
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
     }
 }
 
@@ -1507,6 +1880,8 @@ pub struct GetMiscDistrictParams {
     pub level_query: Option<String>,
     pub country_query: Option<String>,
     pub limit_query: Option<String>,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl GetMiscDistrictParams {
@@ -1519,6 +1894,8 @@ impl GetMiscDistrictParams {
             level_query: None,
             country_query: None,
             limit_query: None,
+            disable_cache: None,
+            _t: None,
         }
     }
     pub fn keywords_query(mut self, value: impl Into<String>) -> Self {
@@ -1549,6 +1926,14 @@ impl GetMiscDistrictParams {
         self.limit_query = Some(value.into());
         self
     }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
+    }
 }
 
 #[derive(Debug, Clone)]
@@ -1560,6 +1945,8 @@ pub struct GetMiscHolidayCalendarParams {
     pub holiday_type_query: Option<String>,
     pub include_nearby_query: Option<String>,
     pub nearby_limit_query: Option<String>,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl GetMiscHolidayCalendarParams {
@@ -1572,6 +1959,8 @@ impl GetMiscHolidayCalendarParams {
             holiday_type_query: None,
             include_nearby_query: None,
             nearby_limit_query: None,
+            disable_cache: None,
+            _t: None,
         }
     }
     pub fn date_query(mut self, value: impl Into<String>) -> Self {
@@ -1602,6 +1991,14 @@ impl GetMiscHolidayCalendarParams {
         self.nearby_limit_query = Some(value.into());
         self
     }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
+    }
 }
 
 #[derive(Debug, Clone)]
@@ -1613,6 +2010,8 @@ pub struct GetMiscHotboardParams {
     pub time_end_query: Option<String>,
     pub limit_query: Option<String>,
     pub sources_query: Option<String>,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl GetMiscHotboardParams {
@@ -1625,6 +2024,8 @@ impl GetMiscHotboardParams {
             time_end_query: None,
             limit_query: None,
             sources_query: None,
+            disable_cache: None,
+            _t: None,
         }
     }
     pub fn time_query(mut self, value: impl Into<String>) -> Self {
@@ -1651,12 +2052,22 @@ impl GetMiscHotboardParams {
         self.sources_query = Some(value.into());
         self
     }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
+    }
 }
 
 #[derive(Debug, Clone)]
 pub struct GetMiscLunartimeParams {
     pub ts_query: Option<String>,
     pub timezone_query: Option<String>,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl GetMiscLunartimeParams {
@@ -1664,6 +2075,8 @@ impl GetMiscLunartimeParams {
         Self {
             ts_query: None,
             timezone_query: None,
+            disable_cache: None,
+            _t: None,
         }
     }
     pub fn ts_query(mut self, value: impl Into<String>) -> Self {
@@ -1674,18 +2087,38 @@ impl GetMiscLunartimeParams {
         self.timezone_query = Some(value.into());
         self
     }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
+    }
 }
 
 #[derive(Debug, Clone)]
 pub struct GetMiscPhoneinfoParams {
     pub phone_query: String,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl GetMiscPhoneinfoParams {
     pub fn new(phone_query: impl Into<String>) -> Self {
         Self {
             phone_query: phone_query.into(),
+            disable_cache: None,
+            _t: None,
         }
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
     }
 }
 
@@ -1697,6 +2130,8 @@ pub struct GetMiscRandomnumberParams {
     pub allow_repeat_query: Option<String>,
     pub allow_decimal_query: Option<String>,
     pub decimal_places_query: Option<String>,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl GetMiscRandomnumberParams {
@@ -1708,6 +2143,8 @@ impl GetMiscRandomnumberParams {
             allow_repeat_query: None,
             allow_decimal_query: None,
             decimal_places_query: None,
+            disable_cache: None,
+            _t: None,
         }
     }
     pub fn min_query(mut self, value: impl Into<String>) -> Self {
@@ -1734,18 +2171,38 @@ impl GetMiscRandomnumberParams {
         self.decimal_places_query = Some(value.into());
         self
     }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
+    }
 }
 
 #[derive(Debug, Clone)]
 pub struct GetMiscTimestampParams {
     pub ts_query: String,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl GetMiscTimestampParams {
     pub fn new(ts_query: impl Into<String>) -> Self {
         Self {
             ts_query: ts_query.into(),
+            disable_cache: None,
+            _t: None,
         }
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
     }
 }
 
@@ -1753,13 +2210,25 @@ impl GetMiscTimestampParams {
 #[derive(Debug, Clone)]
 pub struct GetMiscTrackingDetectParams {
     pub tracking_number_query: String,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl GetMiscTrackingDetectParams {
     pub fn new(tracking_number_query: impl Into<String>) -> Self {
         Self {
             tracking_number_query: tracking_number_query.into(),
+            disable_cache: None,
+            _t: None,
         }
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
     }
 }
 
@@ -1768,6 +2237,8 @@ pub struct GetMiscTrackingQueryParams {
     pub tracking_number_query: String,
     pub carrier_code_query: Option<String>,
     pub phone_query: Option<String>,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl GetMiscTrackingQueryParams {
@@ -1776,6 +2247,8 @@ impl GetMiscTrackingQueryParams {
             tracking_number_query: tracking_number_query.into(),
             carrier_code_query: None,
             phone_query: None,
+            disable_cache: None,
+            _t: None,
         }
     }
     pub fn carrier_code_query(mut self, value: impl Into<String>) -> Self {
@@ -1784,6 +2257,14 @@ impl GetMiscTrackingQueryParams {
     }
     pub fn phone_query(mut self, value: impl Into<String>) -> Self {
         self.phone_query = Some(value.into());
+        self
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
         self
     }
 }
@@ -1798,6 +2279,8 @@ pub struct GetMiscWeatherParams {
     pub minutely_query: Option<String>,
     pub indices_query: Option<String>,
     pub lang_query: Option<String>,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl GetMiscWeatherParams {
@@ -1811,6 +2294,8 @@ impl GetMiscWeatherParams {
             minutely_query: None,
             indices_query: None,
             lang_query: None,
+            disable_cache: None,
+            _t: None,
         }
     }
     pub fn city_query(mut self, value: impl Into<String>) -> Self {
@@ -1845,31 +2330,63 @@ impl GetMiscWeatherParams {
         self.lang_query = Some(value.into());
         self
     }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
+    }
 }
 
 #[derive(Debug, Clone)]
 pub struct GetMiscWorldtimeParams {
     pub city_query: String,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl GetMiscWorldtimeParams {
     pub fn new(city_query: impl Into<String>) -> Self {
         Self {
             city_query: city_query.into(),
+            disable_cache: None,
+            _t: None,
         }
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
     }
 }
 
 #[derive(Debug, Clone)]
 pub struct PostMiscDateDiffParams {
     pub body: Option<Value>,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl PostMiscDateDiffParams {
     pub fn new() -> Self {
         Self {
             body: None,
+            disable_cache: None,
+            _t: None,
         }
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
     }
     pub fn body(mut self, value: Value) -> Self {
         self.body = Some(value);
@@ -1892,6 +2409,9 @@ impl<'a> NetworkService<'a> {
         if let Some(value) = &params.type_query {
             query.push(("type".to_string(), value.clone()));
         }
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -1905,6 +2425,7 @@ impl<'a> NetworkService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -1915,6 +2436,9 @@ impl<'a> NetworkService<'a> {
 
         let mut query: Vec<(String, String)> = Vec::new();
         query.push(("domain".to_string(), params.domain_query.clone()));
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -1928,6 +2452,7 @@ impl<'a> NetworkService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -1941,30 +2466,8 @@ impl<'a> NetworkService<'a> {
         if let Some(value) = &params.source_query {
             query.push(("source".to_string(), value.clone()));
         }
-        let query = if query.is_empty() { None } else { Some(query) };
-
-        let mut extra_headers = HeaderMap::new();
-        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
-        let body = None;
-
-        self.client
-            .request_json(
-                Method::GET,
-                &path,
-                headers,
-                query,
-                body,
-            )
-            .await
-    }
-/// 查询我的 IP
-    #[instrument(skip(self, params))]
-    pub async fn get_network_myip(&self, params: GetNetworkMyipParams) -> Result<crate::models::GetNetworkMyip200Response> {
-        let mut path = "/api/v1/network/myip".to_string();
-
-        let mut query: Vec<(String, String)> = Vec::new();
-        if let Some(value) = &params.source_query {
-            query.push(("source".to_string(), value.clone()));
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
         }
         let query = if query.is_empty() { None } else { Some(query) };
 
@@ -1979,16 +2482,22 @@ impl<'a> NetworkService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
-/// Ping 主机
+/// 查询我的 IP
     #[instrument(skip(self, params))]
-    pub async fn get_network_ping(&self, params: GetNetworkPingParams) -> Result<crate::models::GetNetworkPing200Response> {
-        let mut path = "/api/v1/network/ping".to_string();
+    pub async fn get_network_myip(&self, params: GetNetworkMyipParams) -> Result<crate::models::GetNetworkMyip200Response> {
+        let mut path = "/api/v1/network/myip".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
-        query.push(("host".to_string(), params.host_query.clone()));
+        if let Some(value) = &params.source_query {
+            query.push(("source".to_string(), value.clone()));
+        }
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -2002,6 +2511,34 @@ impl<'a> NetworkService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
+            )
+            .await
+    }
+/// Ping 主机
+    #[instrument(skip(self, params))]
+    pub async fn get_network_ping(&self, params: GetNetworkPingParams) -> Result<crate::models::GetNetworkPing200Response> {
+        let mut path = "/api/v1/network/ping".to_string();
+
+        let mut query: Vec<(String, String)> = Vec::new();
+        query.push(("host".to_string(), params.host_query.clone()));
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
+        let query = if query.is_empty() { None } else { Some(query) };
+
+        let mut extra_headers = HeaderMap::new();
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
+        let body = None;
+
+        self.client
+            .request_json(
+                Method::GET,
+                &path,
+                headers,
+                query,
+                body,
+                params.disable_cache,
             )
             .await
     }
@@ -2024,6 +2561,7 @@ impl<'a> NetworkService<'a> {
                 headers,
                 query,
                 body,
+                None,
             )
             .await
     }
@@ -2038,6 +2576,9 @@ impl<'a> NetworkService<'a> {
         if let Some(value) = &params.protocol_query {
             query.push(("protocol".to_string(), value.clone()));
         }
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -2051,6 +2592,7 @@ impl<'a> NetworkService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -2061,6 +2603,9 @@ impl<'a> NetworkService<'a> {
 
         let mut query: Vec<(String, String)> = Vec::new();
         query.push(("url".to_string(), params.url_query.clone()));
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -2074,6 +2619,7 @@ impl<'a> NetworkService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -2087,6 +2633,9 @@ impl<'a> NetworkService<'a> {
         if let Some(value) = &params.format_query {
             query.push(("format".to_string(), value.clone()));
         }
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -2100,6 +2649,7 @@ impl<'a> NetworkService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -2110,6 +2660,9 @@ impl<'a> NetworkService<'a> {
 
         let mut query: Vec<(String, String)> = Vec::new();
         query.push(("domain".to_string(), params.domain_query.clone()));
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -2123,6 +2676,7 @@ impl<'a> NetworkService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -2132,6 +2686,8 @@ impl<'a> NetworkService<'a> {
 pub struct GetNetworkDnsParams {
     pub domain_query: String,
     pub type_query: Option<String>,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl GetNetworkDnsParams {
@@ -2139,10 +2695,20 @@ impl GetNetworkDnsParams {
         Self {
             domain_query: domain_query.into(),
             type_query: None,
+            disable_cache: None,
+            _t: None,
         }
     }
     pub fn type_query(mut self, value: impl Into<String>) -> Self {
         self.type_query = Some(value.into());
+        self
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
         self
     }
 }
@@ -2150,13 +2716,25 @@ impl GetNetworkDnsParams {
 #[derive(Debug, Clone)]
 pub struct GetNetworkIcpParams {
     pub domain_query: String,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl GetNetworkIcpParams {
     pub fn new(domain_query: impl Into<String>) -> Self {
         Self {
             domain_query: domain_query.into(),
+            disable_cache: None,
+            _t: None,
         }
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
     }
 }
 
@@ -2164,6 +2742,8 @@ impl GetNetworkIcpParams {
 pub struct GetNetworkIpinfoParams {
     pub ip_query: String,
     pub source_query: Option<String>,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl GetNetworkIpinfoParams {
@@ -2171,10 +2751,20 @@ impl GetNetworkIpinfoParams {
         Self {
             ip_query: ip_query.into(),
             source_query: None,
+            disable_cache: None,
+            _t: None,
         }
     }
     pub fn source_query(mut self, value: impl Into<String>) -> Self {
         self.source_query = Some(value.into());
+        self
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
         self
     }
 }
@@ -2182,16 +2772,28 @@ impl GetNetworkIpinfoParams {
 #[derive(Debug, Clone)]
 pub struct GetNetworkMyipParams {
     pub source_query: Option<String>,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl GetNetworkMyipParams {
     pub fn new() -> Self {
         Self {
             source_query: None,
+            disable_cache: None,
+            _t: None,
         }
     }
     pub fn source_query(mut self, value: impl Into<String>) -> Self {
         self.source_query = Some(value.into());
+        self
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
         self
     }
 }
@@ -2199,13 +2801,25 @@ impl GetNetworkMyipParams {
 #[derive(Debug, Clone)]
 pub struct GetNetworkPingParams {
     pub host_query: String,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl GetNetworkPingParams {
     pub fn new(host_query: impl Into<String>) -> Self {
         Self {
             host_query: host_query.into(),
+            disable_cache: None,
+            _t: None,
         }
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
     }
 }
 
@@ -2215,6 +2829,8 @@ pub struct GetNetworkPortscanParams {
     pub host_query: String,
     pub port_query: String,
     pub protocol_query: Option<String>,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl GetNetworkPortscanParams {
@@ -2223,10 +2839,20 @@ impl GetNetworkPortscanParams {
             host_query: host_query.into(),
             port_query: port_query.into(),
             protocol_query: None,
+            disable_cache: None,
+            _t: None,
         }
     }
     pub fn protocol_query(mut self, value: impl Into<String>) -> Self {
         self.protocol_query = Some(value.into());
+        self
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
         self
     }
 }
@@ -2234,13 +2860,25 @@ impl GetNetworkPortscanParams {
 #[derive(Debug, Clone)]
 pub struct GetNetworkUrlstatusParams {
     pub url_query: String,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl GetNetworkUrlstatusParams {
     pub fn new(url_query: impl Into<String>) -> Self {
         Self {
             url_query: url_query.into(),
+            disable_cache: None,
+            _t: None,
         }
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
     }
 }
 
@@ -2248,6 +2886,8 @@ impl GetNetworkUrlstatusParams {
 pub struct GetNetworkWhoisParams {
     pub domain_query: String,
     pub format_query: Option<String>,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl GetNetworkWhoisParams {
@@ -2255,10 +2895,20 @@ impl GetNetworkWhoisParams {
         Self {
             domain_query: domain_query.into(),
             format_query: None,
+            disable_cache: None,
+            _t: None,
         }
     }
     pub fn format_query(mut self, value: impl Into<String>) -> Self {
         self.format_query = Some(value.into());
+        self
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
         self
     }
 }
@@ -2266,13 +2916,25 @@ impl GetNetworkWhoisParams {
 #[derive(Debug, Clone)]
 pub struct GetNetworkWxdomainParams {
     pub domain_query: String,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl GetNetworkWxdomainParams {
     pub fn new(domain_query: impl Into<String>) -> Self {
         Self {
             domain_query: domain_query.into(),
+            disable_cache: None,
+            _t: None,
         }
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
     }
 }
 #[derive(Debug, Clone)]
@@ -2300,6 +2962,7 @@ impl<'a> PoemService<'a> {
                 headers,
                 query,
                 body,
+                None,
             )
             .await
     }
@@ -2318,6 +2981,9 @@ impl<'a> RandomService<'a> {
 
         let mut query: Vec<(String, String)> = Vec::new();
         query.push(("question".to_string(), params.question_query.clone()));
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -2331,6 +2997,7 @@ impl<'a> RandomService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -2346,6 +3013,9 @@ impl<'a> RandomService<'a> {
         if let Some(value) = &params.type_query {
             query.push(("type".to_string(), value.clone()));
         }
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -2359,6 +3029,7 @@ impl<'a> RandomService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -2374,6 +3045,9 @@ impl<'a> RandomService<'a> {
         if let Some(value) = &params.type_query {
             query.push(("type".to_string(), value.clone()));
         }
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -2387,6 +3061,7 @@ impl<'a> RandomService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -2396,6 +3071,9 @@ impl<'a> RandomService<'a> {
         let mut path = "/api/v1/answerbook/ask".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -2409,6 +3087,7 @@ impl<'a> RandomService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -2417,13 +3096,25 @@ impl<'a> RandomService<'a> {
 #[derive(Debug, Clone)]
 pub struct GetAnswerbookAskParams {
     pub question_query: String,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl GetAnswerbookAskParams {
     pub fn new(question_query: impl Into<String>) -> Self {
         Self {
             question_query: question_query.into(),
+            disable_cache: None,
+            _t: None,
         }
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
     }
 }
 
@@ -2431,6 +3122,8 @@ impl GetAnswerbookAskParams {
 pub struct GetRandomImageParams {
     pub category_query: Option<String>,
     pub type_query: Option<String>,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl GetRandomImageParams {
@@ -2438,6 +3131,8 @@ impl GetRandomImageParams {
         Self {
             category_query: None,
             type_query: None,
+            disable_cache: None,
+            _t: None,
         }
     }
     pub fn category_query(mut self, value: impl Into<String>) -> Self {
@@ -2448,12 +3143,22 @@ impl GetRandomImageParams {
         self.type_query = Some(value.into());
         self
     }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
+    }
 }
 
 #[derive(Debug, Clone)]
 pub struct GetRandomStringParams {
     pub length_query: Option<String>,
     pub type_query: Option<String>,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl GetRandomStringParams {
@@ -2461,6 +3166,8 @@ impl GetRandomStringParams {
         Self {
             length_query: None,
             type_query: None,
+            disable_cache: None,
+            _t: None,
         }
     }
     pub fn length_query(mut self, value: impl Into<String>) -> Self {
@@ -2471,18 +3178,38 @@ impl GetRandomStringParams {
         self.type_query = Some(value.into());
         self
     }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
+    }
 }
 
 #[derive(Debug, Clone)]
 pub struct PostAnswerbookAskParams {
     pub body: Option<Value>,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl PostAnswerbookAskParams {
     pub fn new() -> Self {
         Self {
             body: None,
+            disable_cache: None,
+            _t: None,
         }
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
     }
     pub fn body(mut self, value: Value) -> Self {
         self.body = Some(value);
@@ -2502,6 +3229,9 @@ impl<'a> SocialService<'a> {
 
         let mut query: Vec<(String, String)> = Vec::new();
         query.push(("repo".to_string(), params.repo_query.clone()));
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -2515,6 +3245,7 @@ impl<'a> SocialService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -2537,6 +3268,9 @@ impl<'a> SocialService<'a> {
         if let Some(value) = &params.pn_query {
             query.push(("pn".to_string(), value.clone()));
         }
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -2550,6 +3284,7 @@ impl<'a> SocialService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -2565,6 +3300,9 @@ impl<'a> SocialService<'a> {
         if let Some(value) = &params.room_id_query {
             query.push(("room_id".to_string(), value.clone()));
         }
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -2578,6 +3316,7 @@ impl<'a> SocialService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -2597,6 +3336,9 @@ impl<'a> SocialService<'a> {
         if let Some(value) = &params.pn_query {
             query.push(("pn".to_string(), value.clone()));
         }
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -2610,6 +3352,7 @@ impl<'a> SocialService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -2620,6 +3363,9 @@ impl<'a> SocialService<'a> {
 
         let mut query: Vec<(String, String)> = Vec::new();
         query.push(("uid".to_string(), params.uid_query.clone()));
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -2633,6 +3379,7 @@ impl<'a> SocialService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -2648,6 +3395,9 @@ impl<'a> SocialService<'a> {
         if let Some(value) = &params.bvid_query {
             query.push(("bvid".to_string(), value.clone()));
         }
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -2661,6 +3411,7 @@ impl<'a> SocialService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -2671,6 +3422,9 @@ impl<'a> SocialService<'a> {
 
         let mut query: Vec<(String, String)> = Vec::new();
         query.push(("group_id".to_string(), params.group_id_query.clone()));
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -2684,6 +3438,7 @@ impl<'a> SocialService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -2694,6 +3449,9 @@ impl<'a> SocialService<'a> {
 
         let mut query: Vec<(String, String)> = Vec::new();
         query.push(("qq".to_string(), params.qq_query.clone()));
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -2707,6 +3465,7 @@ impl<'a> SocialService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -2715,13 +3474,25 @@ impl<'a> SocialService<'a> {
 #[derive(Debug, Clone)]
 pub struct GetGithubRepoParams {
     pub repo_query: String,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl GetGithubRepoParams {
     pub fn new(repo_query: impl Into<String>) -> Self {
         Self {
             repo_query: repo_query.into(),
+            disable_cache: None,
+            _t: None,
         }
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
     }
 }
 
@@ -2732,6 +3503,8 @@ pub struct GetSocialBilibiliArchivesParams {
     pub orderby_query: Option<String>,
     pub ps_query: Option<String>,
     pub pn_query: Option<String>,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl GetSocialBilibiliArchivesParams {
@@ -2742,6 +3515,8 @@ impl GetSocialBilibiliArchivesParams {
             orderby_query: None,
             ps_query: None,
             pn_query: None,
+            disable_cache: None,
+            _t: None,
         }
     }
     pub fn keywords_query(mut self, value: impl Into<String>) -> Self {
@@ -2760,12 +3535,22 @@ impl GetSocialBilibiliArchivesParams {
         self.pn_query = Some(value.into());
         self
     }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
+    }
 }
 
 #[derive(Debug, Clone)]
 pub struct GetSocialBilibiliLiveroomParams {
     pub mid_query: Option<String>,
     pub room_id_query: Option<String>,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl GetSocialBilibiliLiveroomParams {
@@ -2773,6 +3558,8 @@ impl GetSocialBilibiliLiveroomParams {
         Self {
             mid_query: None,
             room_id_query: None,
+            disable_cache: None,
+            _t: None,
         }
     }
     pub fn mid_query(mut self, value: impl Into<String>) -> Self {
@@ -2783,6 +3570,14 @@ impl GetSocialBilibiliLiveroomParams {
         self.room_id_query = Some(value.into());
         self
     }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
+    }
 }
 
 #[derive(Debug, Clone)]
@@ -2791,6 +3586,8 @@ pub struct GetSocialBilibiliRepliesParams {
     pub sort_query: Option<String>,
     pub ps_query: Option<String>,
     pub pn_query: Option<String>,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl GetSocialBilibiliRepliesParams {
@@ -2800,6 +3597,8 @@ impl GetSocialBilibiliRepliesParams {
             sort_query: None,
             ps_query: None,
             pn_query: None,
+            disable_cache: None,
+            _t: None,
         }
     }
     pub fn sort_query(mut self, value: impl Into<String>) -> Self {
@@ -2814,18 +3613,38 @@ impl GetSocialBilibiliRepliesParams {
         self.pn_query = Some(value.into());
         self
     }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
+    }
 }
 
 #[derive(Debug, Clone)]
 pub struct GetSocialBilibiliUserinfoParams {
     pub uid_query: String,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl GetSocialBilibiliUserinfoParams {
     pub fn new(uid_query: impl Into<String>) -> Self {
         Self {
             uid_query: uid_query.into(),
+            disable_cache: None,
+            _t: None,
         }
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
     }
 }
 
@@ -2833,6 +3652,8 @@ impl GetSocialBilibiliUserinfoParams {
 pub struct GetSocialBilibiliVideoinfoParams {
     pub aid_query: Option<String>,
     pub bvid_query: Option<String>,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl GetSocialBilibiliVideoinfoParams {
@@ -2840,6 +3661,8 @@ impl GetSocialBilibiliVideoinfoParams {
         Self {
             aid_query: None,
             bvid_query: None,
+            disable_cache: None,
+            _t: None,
         }
     }
     pub fn aid_query(mut self, value: impl Into<String>) -> Self {
@@ -2850,31 +3673,63 @@ impl GetSocialBilibiliVideoinfoParams {
         self.bvid_query = Some(value.into());
         self
     }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
+    }
 }
 
 #[derive(Debug, Clone)]
 pub struct GetSocialQqGroupinfoParams {
     pub group_id_query: String,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl GetSocialQqGroupinfoParams {
     pub fn new(group_id_query: impl Into<String>) -> Self {
         Self {
             group_id_query: group_id_query.into(),
+            disable_cache: None,
+            _t: None,
         }
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
     }
 }
 
 #[derive(Debug, Clone)]
 pub struct GetSocialQqUserinfoParams {
     pub qq_query: String,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl GetSocialQqUserinfoParams {
     pub fn new(qq_query: impl Into<String>) -> Self {
         Self {
             qq_query: qq_query.into(),
+            disable_cache: None,
+            _t: None,
         }
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
     }
 }
 #[derive(Debug, Clone)]
@@ -2889,6 +3744,9 @@ impl<'a> StatusService<'a> {
         let mut path = "/api/v1/status/ratelimit".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -2906,6 +3764,7 @@ impl<'a> StatusService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -2917,6 +3776,9 @@ impl<'a> StatusService<'a> {
         let mut query: Vec<(String, String)> = Vec::new();
         if let Some(value) = &params.path_query {
             query.push(("path".to_string(), value.clone()));
+        }
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
         }
         let query = if query.is_empty() { None } else { Some(query) };
 
@@ -2931,6 +3793,7 @@ impl<'a> StatusService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -2939,29 +3802,53 @@ impl<'a> StatusService<'a> {
 #[derive(Debug, Clone)]
 pub struct GetStatusRatelimitParams {
     pub authorization_header: String,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl GetStatusRatelimitParams {
     pub fn new(authorization_header: impl Into<String>) -> Self {
         Self {
             authorization_header: authorization_header.into(),
+            disable_cache: None,
+            _t: None,
         }
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
     }
 }
 
 #[derive(Debug, Clone)]
 pub struct GetStatusUsageParams {
     pub path_query: Option<String>,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl GetStatusUsageParams {
     pub fn new() -> Self {
         Self {
             path_query: None,
+            disable_cache: None,
+            _t: None,
         }
     }
     pub fn path_query(mut self, value: impl Into<String>) -> Self {
         self.path_query = Some(value.into());
+        self
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
         self
     }
 }
@@ -2978,6 +3865,9 @@ impl<'a> TextService<'a> {
 
         let mut query: Vec<(String, String)> = Vec::new();
         query.push(("text".to_string(), params.text_query.clone()));
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -2991,6 +3881,7 @@ impl<'a> TextService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -3000,6 +3891,9 @@ impl<'a> TextService<'a> {
         let mut path = "/api/v1/text/aes/decrypt".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -3013,6 +3907,7 @@ impl<'a> TextService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -3022,6 +3917,9 @@ impl<'a> TextService<'a> {
         let mut path = "/api/v1/text/aes/decrypt-advanced".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -3035,6 +3933,7 @@ impl<'a> TextService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -3044,6 +3943,9 @@ impl<'a> TextService<'a> {
         let mut path = "/api/v1/text/aes/encrypt".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -3057,6 +3959,7 @@ impl<'a> TextService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -3066,6 +3969,9 @@ impl<'a> TextService<'a> {
         let mut path = "/api/v1/text/aes/encrypt-advanced".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -3079,6 +3985,7 @@ impl<'a> TextService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -3088,6 +3995,9 @@ impl<'a> TextService<'a> {
         let mut path = "/api/v1/text/analyze".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -3101,6 +4011,7 @@ impl<'a> TextService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -3110,6 +4021,9 @@ impl<'a> TextService<'a> {
         let mut path = "/api/v1/text/base64/decode".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -3123,6 +4037,7 @@ impl<'a> TextService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -3132,6 +4047,9 @@ impl<'a> TextService<'a> {
         let mut path = "/api/v1/text/base64/encode".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -3145,6 +4063,7 @@ impl<'a> TextService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -3154,6 +4073,9 @@ impl<'a> TextService<'a> {
         let mut path = "/api/v1/text/convert".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -3167,6 +4089,7 @@ impl<'a> TextService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -3176,6 +4099,9 @@ impl<'a> TextService<'a> {
         let mut path = "/api/v1/text/md5".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -3189,6 +4115,7 @@ impl<'a> TextService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -3198,6 +4125,9 @@ impl<'a> TextService<'a> {
         let mut path = "/api/v1/text/md5/verify".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -3211,6 +4141,7 @@ impl<'a> TextService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -3219,26 +4150,50 @@ impl<'a> TextService<'a> {
 #[derive(Debug, Clone)]
 pub struct GetTextMd5Params {
     pub text_query: String,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl GetTextMd5Params {
     pub fn new(text_query: impl Into<String>) -> Self {
         Self {
             text_query: text_query.into(),
+            disable_cache: None,
+            _t: None,
         }
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
     }
 }
 
 #[derive(Debug, Clone)]
 pub struct PostTextAesDecryptParams {
     pub body: Option<Value>,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl PostTextAesDecryptParams {
     pub fn new() -> Self {
         Self {
             body: None,
+            disable_cache: None,
+            _t: None,
         }
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
     }
     pub fn body(mut self, value: Value) -> Self {
         self.body = Some(value);
@@ -3249,13 +4204,25 @@ impl PostTextAesDecryptParams {
 #[derive(Debug, Clone)]
 pub struct PostTextAesDecryptAdvancedParams {
     pub body: Option<Value>,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl PostTextAesDecryptAdvancedParams {
     pub fn new() -> Self {
         Self {
             body: None,
+            disable_cache: None,
+            _t: None,
         }
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
     }
     pub fn body(mut self, value: Value) -> Self {
         self.body = Some(value);
@@ -3266,13 +4233,25 @@ impl PostTextAesDecryptAdvancedParams {
 #[derive(Debug, Clone)]
 pub struct PostTextAesEncryptParams {
     pub body: Option<Value>,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl PostTextAesEncryptParams {
     pub fn new() -> Self {
         Self {
             body: None,
+            disable_cache: None,
+            _t: None,
         }
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
     }
     pub fn body(mut self, value: Value) -> Self {
         self.body = Some(value);
@@ -3283,13 +4262,25 @@ impl PostTextAesEncryptParams {
 #[derive(Debug, Clone)]
 pub struct PostTextAesEncryptAdvancedParams {
     pub body: Option<Value>,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl PostTextAesEncryptAdvancedParams {
     pub fn new() -> Self {
         Self {
             body: None,
+            disable_cache: None,
+            _t: None,
         }
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
     }
     pub fn body(mut self, value: Value) -> Self {
         self.body = Some(value);
@@ -3300,13 +4291,25 @@ impl PostTextAesEncryptAdvancedParams {
 #[derive(Debug, Clone)]
 pub struct PostTextAnalyzeParams {
     pub body: Option<Value>,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl PostTextAnalyzeParams {
     pub fn new() -> Self {
         Self {
             body: None,
+            disable_cache: None,
+            _t: None,
         }
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
     }
     pub fn body(mut self, value: Value) -> Self {
         self.body = Some(value);
@@ -3317,13 +4320,25 @@ impl PostTextAnalyzeParams {
 #[derive(Debug, Clone)]
 pub struct PostTextBase64DecodeParams {
     pub body: Option<Value>,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl PostTextBase64DecodeParams {
     pub fn new() -> Self {
         Self {
             body: None,
+            disable_cache: None,
+            _t: None,
         }
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
     }
     pub fn body(mut self, value: Value) -> Self {
         self.body = Some(value);
@@ -3334,13 +4349,25 @@ impl PostTextBase64DecodeParams {
 #[derive(Debug, Clone)]
 pub struct PostTextBase64EncodeParams {
     pub body: Option<Value>,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl PostTextBase64EncodeParams {
     pub fn new() -> Self {
         Self {
             body: None,
+            disable_cache: None,
+            _t: None,
         }
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
     }
     pub fn body(mut self, value: Value) -> Self {
         self.body = Some(value);
@@ -3351,13 +4378,25 @@ impl PostTextBase64EncodeParams {
 #[derive(Debug, Clone)]
 pub struct PostTextConvertParams {
     pub body: Option<Value>,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl PostTextConvertParams {
     pub fn new() -> Self {
         Self {
             body: None,
+            disable_cache: None,
+            _t: None,
         }
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
     }
     pub fn body(mut self, value: Value) -> Self {
         self.body = Some(value);
@@ -3368,13 +4407,25 @@ impl PostTextConvertParams {
 #[derive(Debug, Clone)]
 pub struct PostTextMd5Params {
     pub body: Option<Value>,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl PostTextMd5Params {
     pub fn new() -> Self {
         Self {
             body: None,
+            disable_cache: None,
+            _t: None,
         }
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
     }
     pub fn body(mut self, value: Value) -> Self {
         self.body = Some(value);
@@ -3385,13 +4436,25 @@ impl PostTextMd5Params {
 #[derive(Debug, Clone)]
 pub struct PostTextMd5VerifyParams {
     pub body: Option<Value>,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl PostTextMd5VerifyParams {
     pub fn new() -> Self {
         Self {
             body: None,
+            disable_cache: None,
+            _t: None,
         }
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
     }
     pub fn body(mut self, value: Value) -> Self {
         self.body = Some(value);
@@ -3423,6 +4486,7 @@ impl<'a> TranslateService<'a> {
                 headers,
                 query,
                 body,
+                None,
             )
             .await
     }
@@ -3433,6 +4497,9 @@ impl<'a> TranslateService<'a> {
 
         let mut query: Vec<(String, String)> = Vec::new();
         query.push(("target_lang".to_string(), params.target_lang_query.clone()));
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -3446,6 +4513,7 @@ impl<'a> TranslateService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -3455,6 +4523,9 @@ impl<'a> TranslateService<'a> {
         let mut path = "/api/v1/translate/stream".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -3468,6 +4539,7 @@ impl<'a> TranslateService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -3478,6 +4550,9 @@ impl<'a> TranslateService<'a> {
 
         let mut query: Vec<(String, String)> = Vec::new();
         query.push(("to_lang".to_string(), params.to_lang_query.clone()));
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -3491,6 +4566,7 @@ impl<'a> TranslateService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -3501,6 +4577,8 @@ impl<'a> TranslateService<'a> {
 pub struct PostAiTranslateParams {
     pub target_lang_query: String,
     pub body: Option<Value>,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl PostAiTranslateParams {
@@ -3508,7 +4586,17 @@ impl PostAiTranslateParams {
         Self {
             target_lang_query: target_lang_query.into(),
             body: None,
+            disable_cache: None,
+            _t: None,
         }
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
     }
     pub fn body(mut self, value: Value) -> Self {
         self.body = Some(value);
@@ -3519,13 +4607,25 @@ impl PostAiTranslateParams {
 #[derive(Debug, Clone)]
 pub struct PostTranslateStreamParams {
     pub body: Option<Value>,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl PostTranslateStreamParams {
     pub fn new() -> Self {
         Self {
             body: None,
+            disable_cache: None,
+            _t: None,
         }
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
     }
     pub fn body(mut self, value: Value) -> Self {
         self.body = Some(value);
@@ -3537,6 +4637,8 @@ impl PostTranslateStreamParams {
 pub struct PostTranslateTextParams {
     pub to_lang_query: String,
     pub body: Option<Value>,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl PostTranslateTextParams {
@@ -3544,7 +4646,17 @@ impl PostTranslateTextParams {
         Self {
             to_lang_query: to_lang_query.into(),
             body: None,
+            disable_cache: None,
+            _t: None,
         }
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
     }
     pub fn body(mut self, value: Value) -> Self {
         self.body = Some(value);
@@ -3567,6 +4679,9 @@ impl<'a> WebparseService<'a> {
         }
 
         let mut query: Vec<(String, String)> = Vec::new();
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -3580,6 +4695,7 @@ impl<'a> WebparseService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -3590,6 +4706,9 @@ impl<'a> WebparseService<'a> {
 
         let mut query: Vec<(String, String)> = Vec::new();
         query.push(("url".to_string(), params.url_query.clone()));
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -3603,6 +4722,7 @@ impl<'a> WebparseService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -3613,6 +4733,9 @@ impl<'a> WebparseService<'a> {
 
         let mut query: Vec<(String, String)> = Vec::new();
         query.push(("url".to_string(), params.url_query.clone()));
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -3626,6 +4749,7 @@ impl<'a> WebparseService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -3636,6 +4760,9 @@ impl<'a> WebparseService<'a> {
 
         let mut query: Vec<(String, String)> = Vec::new();
         query.push(("url".to_string(), params.url_query.clone()));
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -3649,6 +4776,7 @@ impl<'a> WebparseService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -3657,52 +4785,100 @@ impl<'a> WebparseService<'a> {
 #[derive(Debug, Clone)]
 pub struct GetWebTomarkdownAsyncStatusParams {
     pub task_id_path: String,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl GetWebTomarkdownAsyncStatusParams {
     pub fn new(task_id_path: impl Into<String>) -> Self {
         Self {
             task_id_path: task_id_path.into(),
+            disable_cache: None,
+            _t: None,
         }
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
     }
 }
 
 #[derive(Debug, Clone)]
 pub struct GetWebparseExtractimagesParams {
     pub url_query: String,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl GetWebparseExtractimagesParams {
     pub fn new(url_query: impl Into<String>) -> Self {
         Self {
             url_query: url_query.into(),
+            disable_cache: None,
+            _t: None,
         }
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
     }
 }
 
 #[derive(Debug, Clone)]
 pub struct GetWebparseMetadataParams {
     pub url_query: String,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl GetWebparseMetadataParams {
     pub fn new(url_query: impl Into<String>) -> Self {
         Self {
             url_query: url_query.into(),
+            disable_cache: None,
+            _t: None,
         }
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
     }
 }
 
 #[derive(Debug, Clone)]
 pub struct PostWebTomarkdownAsyncParams {
     pub url_query: String,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl PostWebTomarkdownAsyncParams {
     pub fn new(url_query: impl Into<String>) -> Self {
         Self {
             url_query: url_query.into(),
+            disable_cache: None,
+            _t: None,
         }
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
     }
 }
 #[derive(Debug, Clone)]
@@ -3718,6 +4894,9 @@ impl<'a> MinGanCiShiBieService<'a> {
 
         let mut query: Vec<(String, String)> = Vec::new();
         query.push(("keyword".to_string(), params.keyword_query.clone()));
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -3731,6 +4910,7 @@ impl<'a> MinGanCiShiBieService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -3740,6 +4920,9 @@ impl<'a> MinGanCiShiBieService<'a> {
         let mut path = "/api/v1/sensitive-word/analyze".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -3753,6 +4936,7 @@ impl<'a> MinGanCiShiBieService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -3762,6 +4946,9 @@ impl<'a> MinGanCiShiBieService<'a> {
         let mut path = "/api/v1/text/profanitycheck".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -3775,6 +4962,7 @@ impl<'a> MinGanCiShiBieService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -3783,26 +4971,50 @@ impl<'a> MinGanCiShiBieService<'a> {
 #[derive(Debug, Clone)]
 pub struct GetSensitiveWordAnalyzeQueryParams {
     pub keyword_query: String,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl GetSensitiveWordAnalyzeQueryParams {
     pub fn new(keyword_query: impl Into<String>) -> Self {
         Self {
             keyword_query: keyword_query.into(),
+            disable_cache: None,
+            _t: None,
         }
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
     }
 }
 
 #[derive(Debug, Clone)]
 pub struct PostSensitiveWordAnalyzeParams {
     pub body: Option<Value>,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl PostSensitiveWordAnalyzeParams {
     pub fn new() -> Self {
         Self {
             body: None,
+            disable_cache: None,
+            _t: None,
         }
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
     }
     pub fn body(mut self, value: Value) -> Self {
         self.body = Some(value);
@@ -3813,13 +5025,25 @@ impl PostSensitiveWordAnalyzeParams {
 #[derive(Debug, Clone)]
 pub struct PostSensitiveWordQuickCheckParams {
     pub body: Option<Value>,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl PostSensitiveWordQuickCheckParams {
     pub fn new() -> Self {
         Self {
             body: None,
+            disable_cache: None,
+            _t: None,
         }
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
     }
     pub fn body(mut self, value: Value) -> Self {
         self.body = Some(value);
@@ -3851,6 +5075,7 @@ impl<'a> ZhiNengSouSuoService<'a> {
                 headers,
                 query,
                 body,
+                None,
             )
             .await
     }
@@ -3860,6 +5085,9 @@ impl<'a> ZhiNengSouSuoService<'a> {
         let mut path = "/api/v1/search/aggregate".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -3873,6 +5101,7 @@ impl<'a> ZhiNengSouSuoService<'a> {
                 headers,
                 query,
                 body,
+                params.disable_cache,
             )
             .await
     }
@@ -3882,13 +5111,25 @@ impl<'a> ZhiNengSouSuoService<'a> {
 #[derive(Debug, Clone)]
 pub struct PostSearchAggregateParams {
     pub body: Option<Value>,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
 }
 
 impl PostSearchAggregateParams {
     pub fn new() -> Self {
         Self {
             body: None,
+            disable_cache: None,
+            _t: None,
         }
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
     }
     pub fn body(mut self, value: Value) -> Self {
         self.body = Some(value);

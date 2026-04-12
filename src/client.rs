@@ -1,8 +1,5 @@
 use crate::errors::{ApiErrorBody, Error, RateLimitPolicyEntry, RateLimitStateEntry, ResponseMeta};
-use crate::services::{
-    ClipzyZaiXianJianTieBanService, ConvertService, DailyService, GameService, ImageService,
-    MinGanCiShiBieService, MiscService, NetworkService, PoemService, RandomService, SocialService,
-    StatusService, TextService, TranslateService, WebparseService, ZhiNengSouSuoService,
+use crate::services::{ClipzyZaiXianJianTieBanService,ConvertService,DailyService,GameService,ImageService,MiscService,NetworkService,PoemService,RandomService,SocialService,StatusService,TextService,TranslateService,WebparseService,MinGanCiShiBieService,ZhiNengSouSuoService
 };
 use crate::Result;
 use once_cell::sync::Lazy;
@@ -10,14 +7,13 @@ use reqwest::header::{HeaderMap, HeaderValue, AUTHORIZATION, RETRY_AFTER, USER_A
 use reqwest::StatusCode;
 use std::collections::BTreeMap;
 use std::sync::{Arc, RwLock};
-use std::time::Duration;
+use std::time::{Duration, SystemTime, UNIX_EPOCH};
 use tracing::{debug, instrument};
 use url::Url;
 
 static DEFAULT_BASE: &str = "https://uapis.cn/";
-static DEFAULT_UA: &str = "uapi-sdk-rust/0.1.13";
-static DEFAULT_BASE_URL: Lazy<Url> =
-    Lazy::new(|| Url::parse(DEFAULT_BASE).expect("valid default base"));
+static DEFAULT_UA: &str = "uapi-sdk-rust/0.1.0";
+static DEFAULT_BASE_URL: Lazy<Url> = Lazy::new(|| Url::parse(DEFAULT_BASE).expect("valid default base"));
 
 #[derive(Clone, Debug)]
 pub struct Client {
@@ -25,6 +21,7 @@ pub struct Client {
     pub(crate) base_url: Url,
     pub(crate) api_key: Option<String>,
     pub(crate) user_agent: String,
+    pub(crate) disable_cache_default: bool,
     pub(crate) last_response_meta: Arc<RwLock<Option<ResponseMeta>>>,
 }
 
@@ -39,6 +36,7 @@ impl Client {
             base_url: DEFAULT_BASE_URL.clone(),
             api_key: Some(api_key.into()),
             user_agent: DEFAULT_UA.to_string(),
+            disable_cache_default: false,
             last_response_meta: Arc::new(RwLock::new(None)),
         }
     }
@@ -59,10 +57,7 @@ impl Client {
     }
 
     pub fn last_response_meta(&self) -> Option<ResponseMeta> {
-        self.last_response_meta
-            .read()
-            .ok()
-            .and_then(|guard| guard.clone())
+        self.last_response_meta.read().ok().and_then(|guard| guard.clone())
     }
     pub fn clipzy_zai_xian_jian_tie_ban(&self) -> ClipzyZaiXianJianTieBanService<'_> {
         ClipzyZaiXianJianTieBanService { client: self }
@@ -121,15 +116,14 @@ impl Client {
         headers: Option<HeaderMap>,
         query: Option<Vec<(String, String)>>,
         json_body: Option<serde_json::Value>,
+        disable_cache: Option<bool>,
     ) -> Result<T> {
         let clean_path = path.trim_start_matches('/');
         let url = self.base_url.join(clean_path)?;
         let mut req = self.http.request(method.clone(), url.clone());
 
         let mut merged = HeaderMap::new();
-        let user_agent = HeaderValue::from_str(&self.user_agent)
-            .unwrap_or_else(|_| HeaderValue::from_static(DEFAULT_UA));
-        merged.insert(USER_AGENT, user_agent);
+        merged.insert(USER_AGENT, HeaderValue::from_static(DEFAULT_UA));
         if let Some(t) = &self.api_key {
             let value = format!("Bearer {}", t);
             if let Ok(h) = HeaderValue::from_str(&value) {
@@ -141,7 +135,7 @@ impl Client {
         }
         req = req.headers(merged);
 
-        if let Some(q) = query {
+        if let Some(q) = self.apply_cache_control(&method, query, disable_cache) {
             req = req.query(&q);
         }
         if let Some(body) = json_body {
@@ -153,10 +147,7 @@ impl Client {
         self.handle_json_response(resp).await
     }
 
-    async fn handle_json_response<T: serde::de::DeserializeOwned>(
-        &self,
-        resp: reqwest::Response,
-    ) -> Result<T> {
+    async fn handle_json_response<T: serde::de::DeserializeOwned>(&self, resp: reqwest::Response) -> Result<T> {
         let status = resp.status();
         let meta = extract_response_meta(resp.headers());
         if let Ok(mut guard) = self.last_response_meta.write() {
@@ -169,28 +160,42 @@ impl Client {
         }
         let text = resp.text().await.unwrap_or_default();
         let parsed = serde_json::from_str::<ApiErrorBody>(&text).ok();
-        let msg = parsed
-            .as_ref()
-            .and_then(|b| b.message.clone())
-            .or_else(|| non_empty(text.clone()));
+        let msg = parsed.as_ref().and_then(|b| b.message.clone()).or_else(|| non_empty(text.clone()));
         let code = parsed
             .as_ref()
             .and_then(|b| b.code.clone().or_else(|| b.error.clone()));
-        let details = parsed.as_ref().and_then(|b| {
-            b.details
-                .clone()
-                .or_else(|| b.quota.clone())
-                .or_else(|| b.docs.clone())
-        });
-        Err(map_status_to_error(
-            status,
-            code,
-            msg,
-            details,
-            req_id,
-            retry_after,
-            Some(meta),
-        ))
+        let details = parsed
+            .as_ref()
+            .and_then(|b| b.details.clone().or_else(|| b.quota.clone()).or_else(|| b.docs.clone()));
+        Err(map_status_to_error(status, code, msg, details, req_id, retry_after, Some(meta)))
+    }
+
+    fn apply_cache_control(
+        &self,
+        method: &reqwest::Method,
+        query: Option<Vec<(String, String)>>,
+        disable_cache: Option<bool>,
+    ) -> Option<Vec<(String, String)>> {
+        if *method != reqwest::Method::GET {
+            return query;
+        }
+        if let Some(items) = &query {
+            if items.iter().any(|(key, _)| key == "_t") {
+                return query;
+            }
+        }
+        let effective_disable_cache = disable_cache.unwrap_or(self.disable_cache_default);
+        if !effective_disable_cache {
+            return query;
+        }
+        let mut next = query.unwrap_or_default();
+        let now = SystemTime::now()
+            .duration_since(UNIX_EPOCH)
+            .unwrap_or_default()
+            .as_millis()
+            .to_string();
+        next.push(("_t".to_string(), now));
+        Some(next)
     }
 }
 
@@ -201,29 +206,16 @@ pub struct ClientBuilder {
     timeout: Option<Duration>,
     client: Option<reqwest::Client>,
     user_agent: Option<String>,
+    disable_cache: Option<bool>,
 }
 
 impl ClientBuilder {
-    pub fn api_key<T: Into<String>>(mut self, api_key: T) -> Self {
-        self.api_key = Some(api_key.into());
-        self
-    }
-    pub fn base_url(mut self, base: Url) -> Self {
-        self.base_url = Some(normalize_base_url(base));
-        self
-    }
-    pub fn timeout(mut self, secs: u64) -> Self {
-        self.timeout = Some(Duration::from_secs(secs));
-        self
-    }
-    pub fn user_agent<T: Into<String>>(mut self, ua: T) -> Self {
-        self.user_agent = Some(ua.into());
-        self
-    }
-    pub fn http_client(mut self, cli: reqwest::Client) -> Self {
-        self.client = Some(cli);
-        self
-    }
+    pub fn api_key<T: Into<String>>(mut self, api_key: T) -> Self { self.api_key = Some(api_key.into()); self }
+    pub fn base_url(mut self, base: Url) -> Self { self.base_url = Some(normalize_base_url(base)); self }
+    pub fn timeout(mut self, secs: u64) -> Self { self.timeout = Some(Duration::from_secs(secs)); self }
+    pub fn user_agent<T: Into<String>>(mut self, ua: T) -> Self { self.user_agent = Some(ua.into()); self }
+    pub fn http_client(mut self, cli: reqwest::Client) -> Self { self.client = Some(cli); self }
+    pub fn disable_cache(mut self, disable_cache: bool) -> Self { self.disable_cache = Some(disable_cache); self }
 
     pub fn build(self) -> Result<Client> {
         let http = if let Some(cli) = self.client {
@@ -238,6 +230,7 @@ impl ClientBuilder {
             base_url: self.base_url.unwrap_or_else(|| DEFAULT_BASE_URL.clone()),
             api_key: self.api_key,
             user_agent: self.user_agent.unwrap_or_else(|| DEFAULT_UA.to_string()),
+            disable_cache_default: self.disable_cache.unwrap_or(false),
             last_response_meta: Arc::new(RwLock::new(None)),
         })
     }
@@ -276,11 +269,7 @@ fn parse_retry_after(headers: &HeaderMap) -> Option<u64> {
 
 fn non_empty(s: String) -> Option<String> {
     let trimmed = s.trim();
-    if trimmed.is_empty() {
-        None
-    } else {
-        Some(trimmed.to_owned())
-    }
+    if trimmed.is_empty() { None } else { Some(trimmed.to_owned()) }
 }
 
 fn map_status_to_error(
@@ -295,74 +284,15 @@ fn map_status_to_error(
     let s = status.as_u16();
     let normalized_code = code.clone().unwrap_or_default().to_uppercase();
     match status {
-        StatusCode::UNAUTHORIZED | StatusCode::FORBIDDEN => Error::AuthenticationError {
-            status: s,
-            message,
-            request_id,
-            meta,
-        },
-        StatusCode::PAYMENT_REQUIRED
-            if normalized_code == "INSUFFICIENT_CREDITS" || normalized_code.is_empty() =>
-        {
-            Error::InsufficientCredits {
-                status: s,
-                message,
-                details,
-                request_id,
-                meta,
-            }
-        }
-        StatusCode::TOO_MANY_REQUESTS if normalized_code == "VISITOR_MONTHLY_QUOTA_EXHAUSTED" => {
-            Error::VisitorMonthlyQuotaExhausted {
-                status: s,
-                message,
-                details,
-                request_id,
-                meta,
-            }
-        }
-        StatusCode::TOO_MANY_REQUESTS => Error::RateLimitError {
-            status: s,
-            message,
-            retry_after_seconds: retry_after,
-            request_id,
-            meta,
-        },
-        StatusCode::NOT_FOUND => Error::NotFound {
-            status: s,
-            message,
-            request_id,
-            meta,
-        },
-        StatusCode::BAD_REQUEST => Error::ValidationError {
-            status: s,
-            message,
-            details,
-            request_id,
-            meta,
-        },
-        _ if status.is_server_error() => Error::ServerError {
-            status: s,
-            message,
-            request_id,
-            meta,
-        },
-        _ if status.is_client_error() => Error::ApiError {
-            status: s,
-            code,
-            message,
-            details,
-            request_id,
-            meta,
-        },
-        _ => Error::ApiError {
-            status: s,
-            code,
-            message,
-            details,
-            request_id,
-            meta,
-        },
+        StatusCode::UNAUTHORIZED | StatusCode::FORBIDDEN => Error::AuthenticationError { status: s, message, request_id, meta },
+        StatusCode::PAYMENT_REQUIRED if normalized_code == "INSUFFICIENT_CREDITS" || normalized_code.is_empty() => Error::InsufficientCredits { status: s, message, details, request_id, meta },
+        StatusCode::TOO_MANY_REQUESTS if normalized_code == "VISITOR_MONTHLY_QUOTA_EXHAUSTED" => Error::VisitorMonthlyQuotaExhausted { status: s, message, details, request_id, meta },
+        StatusCode::TOO_MANY_REQUESTS => Error::RateLimitError { status: s, message, retry_after_seconds: retry_after, request_id, meta },
+        StatusCode::NOT_FOUND => Error::NotFound { status: s, message, request_id, meta },
+        StatusCode::BAD_REQUEST => Error::ValidationError { status: s, message, details, request_id, meta },
+        _ if status.is_server_error() => Error::ServerError { status: s, message, request_id, meta },
+        _ if status.is_client_error() => Error::ApiError { status: s, code, message, details, request_id, meta },
+        _ => Error::ApiError { status: s, code, message, details, request_id, meta },
     }
 }
 
@@ -373,35 +303,21 @@ fn extract_response_meta(headers: &HeaderMap) -> ResponseMeta {
     };
     for (name, value) in headers {
         if let Ok(text) = value.to_str() {
-            meta.raw_headers
-                .insert(name.as_str().to_ascii_lowercase(), text.to_string());
+            meta.raw_headers.insert(name.as_str().to_ascii_lowercase(), text.to_string());
         }
     }
     meta.request_id = meta.raw_headers.get("x-request-id").cloned();
-    meta.retry_after_raw = meta.raw_headers.get("retry-after").cloned();
     meta.retry_after_seconds = parse_retry_after(headers);
     meta.debit_status = meta.raw_headers.get("uapi-debit-status").cloned();
-    meta.credits_requested = meta
-        .raw_headers
-        .get("uapi-credits-requested")
-        .and_then(|v| v.parse::<i64>().ok());
-    meta.credits_charged = meta
-        .raw_headers
-        .get("uapi-credits-charged")
-        .and_then(|v| v.parse::<i64>().ok());
+    meta.credits_requested = meta.raw_headers.get("uapi-credits-requested").and_then(|v| v.parse::<i64>().ok());
+    meta.credits_charged = meta.raw_headers.get("uapi-credits-charged").and_then(|v| v.parse::<i64>().ok());
     meta.credits_pricing = meta.raw_headers.get("uapi-credits-pricing").cloned();
-    meta.active_quota_buckets = meta
-        .raw_headers
-        .get("uapi-quota-active-buckets")
-        .and_then(|v| v.parse::<u64>().ok());
-    meta.stop_on_empty = meta
-        .raw_headers
-        .get("uapi-stop-on-empty")
-        .and_then(|value| match value.trim().to_ascii_lowercase().as_str() {
-            "true" => Some(true),
-            "false" => Some(false),
-            _ => None,
-        });
+    meta.active_quota_buckets = meta.raw_headers.get("uapi-quota-active-buckets").and_then(|v| v.parse::<u64>().ok());
+    meta.stop_on_empty = meta.raw_headers.get("uapi-stop-on-empty").and_then(|value| match value.trim().to_ascii_lowercase().as_str() {
+        "true" => Some(true),
+        "false" => Some(false),
+        _ => None,
+    });
     meta.rate_limit_policy_raw = meta.raw_headers.get("ratelimit-policy").cloned();
     meta.rate_limit_raw = meta.raw_headers.get("ratelimit").cloned();
 
@@ -423,105 +339,12 @@ fn extract_response_meta(headers: &HeaderMap) -> ResponseMeta {
         };
         meta.rate_limits.insert(item.name, entry);
     }
-    meta.balance_limit_cents = meta
-        .rate_limit_policies
-        .get("billing-balance")
-        .and_then(|entry| entry.quota);
-    meta.balance_remaining_cents = meta
-        .rate_limits
-        .get("billing-balance")
-        .and_then(|entry| entry.remaining);
-    meta.quota_limit_credits = meta
-        .rate_limit_policies
-        .get("billing-quota")
-        .and_then(|entry| entry.quota);
-    meta.quota_remaining_credits = meta
-        .rate_limits
-        .get("billing-quota")
-        .and_then(|entry| entry.remaining);
-    meta.visitor_quota_limit_credits = meta
-        .rate_limit_policies
-        .get("visitor-quota")
-        .and_then(|entry| entry.quota);
-    meta.visitor_quota_remaining_credits = meta
-        .rate_limits
-        .get("visitor-quota")
-        .and_then(|entry| entry.remaining);
-    meta.billing_key_rate_limit = meta
-        .rate_limit_policies
-        .get("billing-key-rate")
-        .and_then(|entry| entry.quota);
-    meta.billing_key_rate_remaining = meta
-        .rate_limits
-        .get("billing-key-rate")
-        .and_then(|entry| entry.remaining);
-    meta.billing_key_rate_unit = meta
-        .rate_limit_policies
-        .get("billing-key-rate")
-        .and_then(|entry| entry.unit.clone())
-        .or_else(|| {
-            meta.rate_limits
-                .get("billing-key-rate")
-                .and_then(|entry| entry.unit.clone())
-        });
-    meta.billing_key_rate_window_seconds = meta
-        .rate_limit_policies
-        .get("billing-key-rate")
-        .and_then(|entry| entry.window_seconds);
-    meta.billing_key_rate_reset_after_seconds = meta
-        .rate_limits
-        .get("billing-key-rate")
-        .and_then(|entry| entry.reset_after_seconds);
-    meta.billing_ip_rate_limit = meta
-        .rate_limit_policies
-        .get("billing-ip-rate")
-        .and_then(|entry| entry.quota);
-    meta.billing_ip_rate_remaining = meta
-        .rate_limits
-        .get("billing-ip-rate")
-        .and_then(|entry| entry.remaining);
-    meta.billing_ip_rate_unit = meta
-        .rate_limit_policies
-        .get("billing-ip-rate")
-        .and_then(|entry| entry.unit.clone())
-        .or_else(|| {
-            meta.rate_limits
-                .get("billing-ip-rate")
-                .and_then(|entry| entry.unit.clone())
-        });
-    meta.billing_ip_rate_window_seconds = meta
-        .rate_limit_policies
-        .get("billing-ip-rate")
-        .and_then(|entry| entry.window_seconds);
-    meta.billing_ip_rate_reset_after_seconds = meta
-        .rate_limits
-        .get("billing-ip-rate")
-        .and_then(|entry| entry.reset_after_seconds);
-    meta.visitor_rate_limit = meta
-        .rate_limit_policies
-        .get("visitor-rate")
-        .and_then(|entry| entry.quota);
-    meta.visitor_rate_remaining = meta
-        .rate_limits
-        .get("visitor-rate")
-        .and_then(|entry| entry.remaining);
-    meta.visitor_rate_unit = meta
-        .rate_limit_policies
-        .get("visitor-rate")
-        .and_then(|entry| entry.unit.clone())
-        .or_else(|| {
-            meta.rate_limits
-                .get("visitor-rate")
-                .and_then(|entry| entry.unit.clone())
-        });
-    meta.visitor_rate_window_seconds = meta
-        .rate_limit_policies
-        .get("visitor-rate")
-        .and_then(|entry| entry.window_seconds);
-    meta.visitor_rate_reset_after_seconds = meta
-        .rate_limits
-        .get("visitor-rate")
-        .and_then(|entry| entry.reset_after_seconds);
+    meta.balance_limit_cents = meta.rate_limit_policies.get("billing-balance").and_then(|entry| entry.quota);
+    meta.balance_remaining_cents = meta.rate_limits.get("billing-balance").and_then(|entry| entry.remaining);
+    meta.quota_limit_credits = meta.rate_limit_policies.get("billing-quota").and_then(|entry| entry.quota);
+    meta.quota_remaining_credits = meta.rate_limits.get("billing-quota").and_then(|entry| entry.remaining);
+    meta.visitor_quota_limit_credits = meta.rate_limit_policies.get("visitor-quota").and_then(|entry| entry.quota);
+    meta.visitor_quota_remaining_credits = meta.rate_limits.get("visitor-quota").and_then(|entry| entry.remaining);
     meta
 }
 

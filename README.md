@@ -2,7 +2,7 @@
 
 ![Banner](https://raw.githubusercontent.com/AxT-Team/uapi-sdk-rust/main/banner.png)
 
-[![Rust](https://img.shields.io/badge/Rust-1.87+-DEA584?style=flat-square&logo=rust&logoColor=white)](https://www.rust-lang.org/)
+[![Rust](https://img.shields.io/badge/Rust-1.75+-DEA584?style=flat-square&logo=rust&logoColor=white)](https://www.rust-lang.org/)
 [![Docs](https://img.shields.io/badge/Docs-uapis.cn-2EAE5D?style=flat-square)](https://uapis.cn/)
 [![crates.io](https://img.shields.io/crates/v/uapi-sdk-rust?style=flat-square&logo=rust)](https://crates.io/crates/uapi-sdk-rust)
 [![docs.rs](https://img.shields.io/docsrs/uapi-sdk-rust?label=docs.rs&style=flat-square)](https://docs.rs/uapi-sdk-rust)
@@ -17,19 +17,16 @@ cargo add uapi-sdk-rust
 ```
 
 ```rust
-use uapi_sdk_rust::{Client, Result};
-use uapi_sdk_rust::services::GetMiscHotboardParams;
+use _::{Client, Result};
 
 #[tokio::main]
 async fn main() -> Result<()> {
     let client = Client::new("YOUR_API_KEY");
-    let result = client.misc().get_misc_hotboard(GetMiscHotboardParams::new("weibo")).await?;
+    let result = client.social().get_social_qq_userinfo("10001").await?;
     println!("{result:?}");
     Ok(())
 }
 ```
-
-这个接口默认只要传 `type` 就可以拿当前热榜。`time_query`、`keyword_query`、`time_start_query`、`time_end_query`、`limit_query`、`sources_query` 都是按场景再传的可选参数。
 
 ## 特性
 
@@ -44,77 +41,6 @@ async fn main() -> Result<()> {
 `Client::builder()` / `Client::new()` / `Client::from_env()` 允许你在保持默认 15 秒超时与 `Authorization` 头的同时，自由覆盖 Base URL、Token、代理乃至注入自定义的 `reqwest::Client`。
 
 如果你需要查看字段细节或内部逻辑，仓库中的 `./internal` 目录同步保留了由 `openapi-generator` 生成的完整结构体，随时可供参考。
-
-## 响应元信息
-
-每次请求完成后，SDK 会自动把响应 Header 解析成结构化的 `ResponseMeta`，你不用自己拆原始字符串。
-
-成功时可以通过 `client.last_response_meta()` 读取，失败时可以通过 `e.meta()` 读取，两条路径拿到的是同一套字段。
-
-```rust
-use uapi_sdk_rust::{Client, Result};
-
-#[tokio::main]
-async fn main() -> Result<()> {
-    let client = Client::new("YOUR_API_KEY");
-
-    // 成功路径
-    client.social().get_social_qq_userinfo("10001").await?;
-    if let Some(meta) = client.last_response_meta() {
-        println!("这次请求原价: {} 积分", meta.credits_requested.unwrap_or(0));
-        println!("这次实际扣费: {} 积分", meta.credits_charged.unwrap_or(0));
-        println!("特殊计价: {}", meta.credits_pricing.as_deref().unwrap_or("原价"));
-        println!("余额剩余: {} 分", meta.balance_remaining_cents.unwrap_or(0));
-        println!("资源包剩余: {} 积分", meta.quota_remaining_credits.unwrap_or(0));
-        println!("当前有效额度桶: {}", meta.active_quota_buckets.unwrap_or(0));
-        println!("额度用空即停: {}", meta.stop_on_empty.unwrap_or(false));
-        println!(
-            "Key QPS: {} / {} {}",
-            meta.billing_key_rate_remaining.unwrap_or(0),
-            meta.billing_key_rate_limit.unwrap_or(0),
-            meta.billing_key_rate_unit.as_deref().unwrap_or("req")
-        );
-        println!("Request ID: {:?}", meta.request_id);
-    }
-
-    // 失败路径
-    match client.social().get_social_qq_userinfo("10001").await {
-        Err(e) => {
-            if let Some(meta) = e.meta() {
-                println!("Retry-After 秒数: {:?}", meta.retry_after_seconds);
-                println!("Retry-After 原始值: {:?}", meta.retry_after_raw);
-                println!(
-                    "访客 QPS: {} / {}",
-                    meta.visitor_rate_remaining.unwrap_or(0),
-                    meta.visitor_rate_limit.unwrap_or(0)
-                );
-                println!("Request ID: {:?}", meta.request_id);
-            }
-        }
-        Ok(_) => {}
-    }
-
-    Ok(())
-}
-```
-
-常用字段一览：
-
-| 字段 | 说明 |
-|------|------|
-| `credits_requested` | 这次请求原本要扣多少积分，也就是请求价 |
-| `credits_charged` | 这次请求实际扣了多少积分 |
-| `credits_pricing` | 特殊计价原因，例如缓存半价 `cache-hit-half-price` |
-| `balance_remaining_cents` | 账户余额剩余（分） |
-| `quota_remaining_credits` | 资源包剩余积分 |
-| `active_quota_buckets` | 当前还有多少个有效额度桶参与计费 |
-| `stop_on_empty` | 额度耗尽后是否直接停止服务 |
-| `retry_after_seconds` / `retry_after_raw` | 限流后的等待时长；当服务端返回 HTTP 时间字符串时看 `retry_after_raw` |
-| `request_id` | 请求唯一 ID，排障时使用 |
-| `billing_key_rate_limit` / `billing_key_rate_remaining` | Billing Key 当前 QPS 规则的上限与剩余 |
-| `billing_ip_rate_limit` / `billing_ip_rate_remaining` | Billing Key 单 IP 当前 QPS 规则的上限与剩余 |
-| `visitor_rate_limit` / `visitor_rate_remaining` | 访客当前 QPS 规则的上限与剩余 |
-| `rate_limit_policies` / `rate_limits` | 完整结构化限流策略数据 |
 
 ## 模型
 

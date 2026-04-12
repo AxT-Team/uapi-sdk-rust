@@ -19,7 +19,6 @@ pub struct RateLimitStateEntry {
 #[derive(Debug, Clone, serde::Serialize, serde::Deserialize, Default)]
 pub struct ResponseMeta {
     pub request_id: Option<String>,
-    pub retry_after_raw: Option<String>,
     pub retry_after_seconds: Option<u64>,
     pub debit_status: Option<String>,
     pub credits_requested: Option<i64>,
@@ -37,33 +36,13 @@ pub struct ResponseMeta {
     pub quota_remaining_credits: Option<i64>,
     pub visitor_quota_limit_credits: Option<i64>,
     pub visitor_quota_remaining_credits: Option<i64>,
-    pub billing_key_rate_limit: Option<i64>,
-    pub billing_key_rate_remaining: Option<i64>,
-    pub billing_key_rate_unit: Option<String>,
-    pub billing_key_rate_window_seconds: Option<u64>,
-    pub billing_key_rate_reset_after_seconds: Option<u64>,
-    pub billing_ip_rate_limit: Option<i64>,
-    pub billing_ip_rate_remaining: Option<i64>,
-    pub billing_ip_rate_unit: Option<String>,
-    pub billing_ip_rate_window_seconds: Option<u64>,
-    pub billing_ip_rate_reset_after_seconds: Option<u64>,
-    pub visitor_rate_limit: Option<i64>,
-    pub visitor_rate_remaining: Option<i64>,
-    pub visitor_rate_unit: Option<String>,
-    pub visitor_rate_window_seconds: Option<u64>,
-    pub visitor_rate_reset_after_seconds: Option<u64>,
     pub raw_headers: std::collections::BTreeMap<String, String>,
 }
 
 #[derive(Debug, Error)]
 pub enum Error {
     #[error("authentication failed (status {status})")]
-    AuthenticationError {
-        status: u16,
-        message: Option<String>,
-        request_id: Option<String>,
-        meta: Option<ResponseMeta>,
-    },
+    AuthenticationError { status: u16, message: Option<String>, request_id: Option<String>, meta: Option<ResponseMeta> },
 
     #[error("rate limited (status {status})")]
     RateLimitError {
@@ -93,29 +72,13 @@ pub enum Error {
     },
 
     #[error("validation failed (status {status})")]
-    ValidationError {
-        status: u16,
-        message: Option<String>,
-        details: Option<serde_json::Value>,
-        request_id: Option<String>,
-        meta: Option<ResponseMeta>,
-    },
+    ValidationError { status: u16, message: Option<String>, details: Option<serde_json::Value>, request_id: Option<String>, meta: Option<ResponseMeta> },
 
     #[error("resource not found (status {status})")]
-    NotFound {
-        status: u16,
-        message: Option<String>,
-        request_id: Option<String>,
-        meta: Option<ResponseMeta>,
-    },
+    NotFound { status: u16, message: Option<String>, request_id: Option<String>, meta: Option<ResponseMeta> },
 
     #[error("server error (status {status})")]
-    ServerError {
-        status: u16,
-        message: Option<String>,
-        request_id: Option<String>,
-        meta: Option<ResponseMeta>,
-    },
+    ServerError { status: u16, message: Option<String>, request_id: Option<String>, meta: Option<ResponseMeta> },
 
     #[error("api error (status {status})")]
     ApiError {
