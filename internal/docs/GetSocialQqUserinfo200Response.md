@@ -11,7 +11,7 @@ Name | Type | Description | Notes
 **age** | Option<**i32**> | 年龄 | [optional]
 **sex** | Option<**String**> | 性别 | [optional]
 **qid** | Option<**String**> | QQ个性域名 | [optional]
-**qq_level** | Option<**i32**> | QQ等级 | [optional]
+**qq_level** | Option<**i32**> | QQ等级。用户隐藏时返回 null | [optional]
 **location** | Option<**String**> | 地理位置（省市） | [optional]
 **email** | Option<**String**> | QQ邮箱 | [optional]
 **is_vip** | Option<**bool**> | 是否为VIP用户 | [optional]

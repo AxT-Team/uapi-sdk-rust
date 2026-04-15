@@ -5,6 +5,7 @@ All URIs are relative to *https://uapis.cn/api/v1*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**get_github_repo**](SocialApi.md#get_github_repo) | **GET** /github/repo | 查询 GitHub 仓库
+[**get_github_user**](SocialApi.md#get_github_user) | **GET** /github/user | 查询 GitHub 用户信息
 [**get_social_bilibili_archives**](SocialApi.md#get_social_bilibili_archives) | **GET** /social/bilibili/archives | 查询 B站投稿
 [**get_social_bilibili_liveroom**](SocialApi.md#get_social_bilibili_liveroom) | **GET** /social/bilibili/liveroom | 查询 B站直播间
 [**get_social_bilibili_replies**](SocialApi.md#get_social_bilibili_replies) | **GET** /social/bilibili/replies | 查询 B站评论
@@ -20,7 +21,7 @@ Method | HTTP request | Description
 > models::GetGithubRepo200Response get_github_repo(repo)
 查询 GitHub 仓库
 
-需要快速获取一个GitHub仓库的核心信息？这个接口为你聚合了最有价值的数据，避免了多次调用GitHub官方API的麻烦，并且内置了缓存优化，速度更快、更稳定。  ### 聚合高价值数据 一次请求，即可获得以下信息： - **核心指标**: `star`, `fork`, `open_issues` 等关键统计数据。 - **项目详情**: 描述、主页、分支、语言、话题标签、开源协议。 - **参与者信息**: 获取协作者(`collaborators`)和推断的维护者(`maintainers`)列表，包括他们的公开邮箱（如果可用）。  > [!NOTE] > `collaborators` 字段在私有仓库或权限受限时可能为空。`maintainers` 是根据最新提交记录推断的，仅供参考。  ### 性能与稳定性 我们内置了多级缓存，有效避免触发GitHub的API速率限制。对于需要更高请求额度的用户，可以联系我们定制接口。
+需要快速获取一个GitHub仓库的核心信息？这个接口一次请求就能返回仓库的关键数据，适合项目展示、统计和分析场景。  ### 可获取的数据 一次请求，即可获得以下信息： - **核心指标**: `star`, `fork`, `open_issues` 等关键统计数据。 - **项目详情**: 描述、主页、分支、语言、话题标签、开源协议。 - **参与者信息**: 获取协作者(`collaborators`)和维护者参考信息(`maintainers`)列表，包括他们的公开邮箱（如果可用）。  > [!NOTE] > `collaborators` 字段在私有仓库或权限受限时可能为空。`maintainers` 为整理后的参考信息，仅供参考。
 
 ### Parameters
 
@@ -32,6 +33,39 @@ Name | Type | Description  | Required | Notes
 ### Return type
 
 [**models::GetGithubRepo200Response**](get_github_repo_200_response.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
+## get_github_user
+
+> models::GetGithubUser200Response get_github_user(user, activity, activity_scope, org)
+查询 GitHub 用户信息
+
+需要获取开发者的 GitHub 画像？这个接口不仅能返回详尽的基础资料和所属的公开组织列表，还能一键拉取开发者的绿格子数据。  ## 功能概述 - **开发者基础画像**：返回用户的仓库数、关注数、公司、地理位置和社交媒体链接等，非常适合用来自动生成技术博客的作者名片或建立开发者档案。 - **贡献日历与时间线**：只要开启 `activity=true`，就能获取该用户最近一年的全量贡献数据。返回的 JSON 已经将数据按周（weeks）和天（days）整理好，前端通过简单的双重循环就能画出和 GitHub 主页一模一样的贡献日历。 - **组织级贡献过滤**：如果你只想评估某个人在特定团队开源项目中的活跃度，直接传入 `org` 参数。接口会自动剥离他在其他私有项目或个人仓库的提交，只返回针对该组织的贡献数据。
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**user** | **String** | GitHub 用户名（必需符合 GitHub 命名规范：仅限字母、数字、连字符，最长 39 位）。 | [required] |
+**activity** | Option<**bool**> | 是否获取最近一年的贡献活动数据（如贡献图、时间线）。传入 true 开启，其他值均视为不开启。 |  |[default to false]
+**activity_scope** | Option<**String**> | 活动数据范围。可选 all 或 organization。只有开启 activity 时才有意义。 |  |[default to all]
+**org** | Option<**String**> | 组织登录名。如果传入此参数，会自动视为开启 organization 级别的贡献查询，切勿再同时传 activity_scope=all。 |  |
+
+### Return type
+
+[**models::GetGithubUser200Response**](get_github_user_200_response.md)
 
 ### Authorization
 
@@ -239,7 +273,7 @@ No authorization required
 > models::GetSocialQqUserinfo200Response get_social_qq_userinfo(qq)
 查询 QQ 信息
 
-这是一个功能丰富的QQ用户信息查询接口，能够获取QQ用户的详细公开信息。  ## 功能概述 通过QQ号查询用户的详细信息，包括基础资料、等级信息、VIP状态等。返回的信息丰富全面，适合用于用户画像分析、社交应用集成等场景。  ## 数据字段说明 - **基础信息**: 昵称、个性签名、头像、年龄、性别 - **联系信息**: QQ邮箱、个性域名(QID) - **等级信息**: QQ等级、VIP状态和等级 - **时间信息**: 注册时间、最后更新时间
+通过 QQ 号查询用户资料，返回头像、昵称、个性签名、等级和 VIP 信息。  ## 功能概述 这个接口适合用在用户资料展示、头像卡片、账号绑定结果展示等场景。若用户把 QQ 等级设为隐藏，`qq_level` 会返回 `null`。  ## 数据字段说明 - **基础信息**: 昵称、个性签名、头像、年龄、性别 - **联系信息**: QQ 邮箱、个性域名（QID） - **等级信息**: QQ 等级、VIP 状态和等级 - **时间信息**: 注册时间、最后更新时间
 
 ### Parameters
 

@@ -6,7 +6,6 @@
 |---- | -----|
 | GetMiscHotboard200ResponseOneOf |  |
 | GetMiscHotboard200ResponseOneOf1 |  |
-| GetMiscHotboard200ResponseOneOf2 |  |
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

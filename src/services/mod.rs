@@ -657,12 +657,24 @@ impl<'a> ImageService<'a> {
             )
             .await
     }
-/// 必应壁纸
-    #[instrument(skip(self))]
-    pub async fn get_image_bing_daily(&self) -> Result<Vec<u8>> {
+/// 获取必应每日壁纸
+    #[instrument(skip(self, params))]
+    pub async fn get_image_bing_daily(&self, params: GetImageBingDailyParams) -> Result<crate::models::FormatJson> {
         let mut path = "/api/v1/image/bing-daily".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
+        if let Some(value) = &params.date_query {
+            query.push(("date".to_string(), value.clone()));
+        }
+        if let Some(value) = &params.resolution_query {
+            query.push(("resolution".to_string(), value.clone()));
+        }
+        if let Some(value) = &params.format_query {
+            query.push(("format".to_string(), value.clone()));
+        }
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
         let query = if query.is_empty() { None } else { Some(query) };
 
         let mut extra_headers = HeaderMap::new();
@@ -676,7 +688,45 @@ impl<'a> ImageService<'a> {
                 headers,
                 query,
                 body,
-                None,
+                params.disable_cache,
+            )
+            .await
+    }
+/// 查询必应壁纸历史
+    #[instrument(skip(self, params))]
+    pub async fn get_image_bing_daily_history(&self, params: GetImageBingDailyHistoryParams) -> Result<crate::models::GetImageBingDailyHistory200Response> {
+        let mut path = "/api/v1/image/bing-daily/history".to_string();
+
+        let mut query: Vec<(String, String)> = Vec::new();
+        if let Some(value) = &params.date_query {
+            query.push(("date".to_string(), value.clone()));
+        }
+        if let Some(value) = &params.resolution_query {
+            query.push(("resolution".to_string(), value.clone()));
+        }
+        if let Some(value) = &params.page_query {
+            query.push(("page".to_string(), value.clone()));
+        }
+        if let Some(value) = &params.page_size_query {
+            query.push(("page_size".to_string(), value.clone()));
+        }
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
+        let query = if query.is_empty() { None } else { Some(query) };
+
+        let mut extra_headers = HeaderMap::new();
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
+        let body = None;
+
+        self.client
+            .request_json(
+                Method::GET,
+                &path,
+                headers,
+                query,
+                body,
+                params.disable_cache,
             )
             .await
     }
@@ -811,6 +861,56 @@ impl<'a> ImageService<'a> {
             )
             .await
     }
+/// 解码并缩放图片
+    #[instrument(skip(self, params))]
+    pub async fn post_image_decode(&self, params: PostImageDecodeParams) -> Result<Vec<u8>> {
+        let mut path = "/api/v1/image/decode".to_string();
+
+        let mut query: Vec<(String, String)> = Vec::new();
+        if let Some(value) = &params.width_query {
+            query.push(("width".to_string(), value.clone()));
+        }
+        if let Some(value) = &params.height_query {
+            query.push(("height".to_string(), value.clone()));
+        }
+        if let Some(value) = &params.max_width_query {
+            query.push(("max_width".to_string(), value.clone()));
+        }
+        if let Some(value) = &params.max_height_query {
+            query.push(("max_height".to_string(), value.clone()));
+        }
+        if let Some(value) = &params.format_query {
+            query.push(("format".to_string(), value.clone()));
+        }
+        if let Some(value) = &params.color_mode_query {
+            query.push(("color_mode".to_string(), value.clone()));
+        }
+        if let Some(value) = &params.fit_query {
+            query.push(("fit".to_string(), value.clone()));
+        }
+        if let Some(value) = &params.background_query {
+            query.push(("background".to_string(), value.clone()));
+        }
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
+        let query = if query.is_empty() { None } else { Some(query) };
+
+        let mut extra_headers = HeaderMap::new();
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
+        let body = params.body.clone();
+
+        self.client
+            .request_json(
+                Method::POST,
+                &path,
+                headers,
+                query,
+                body,
+                params.disable_cache,
+            )
+            .await
+    }
 /// 通过Base64编码上传图片
     #[instrument(skip(self, params))]
     pub async fn post_image_frombase_64(&self, params: PostImageFrombase64Params) -> Result<crate::models::PostImageFrombase64200Response> {
@@ -867,6 +967,32 @@ impl<'a> ImageService<'a> {
     #[instrument(skip(self, params))]
     pub async fn post_image_nsfw(&self, params: PostImageNsfwParams) -> Result<crate::models::PostImageNsfw200Response> {
         let mut path = "/api/v1/image/nsfw".to_string();
+
+        let mut query: Vec<(String, String)> = Vec::new();
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
+        let query = if query.is_empty() { None } else { Some(query) };
+
+        let mut extra_headers = HeaderMap::new();
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
+        let body = params.body.clone();
+
+        self.client
+            .request_json(
+                Method::POST,
+                &path,
+                headers,
+                query,
+                body,
+                params.disable_cache,
+            )
+            .await
+    }
+/// 通用 OCR 文字识别
+    #[instrument(skip(self, params))]
+    pub async fn post_image_ocr(&self, params: PostImageOcrParams) -> Result<crate::models::PostImageOcr200Response> {
+        let mut path = "/api/v1/image/ocr".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
         if let Some(value) = &params._t {
@@ -1008,6 +1134,93 @@ impl GetAvatarGravatarParams {
     }
 }
 
+#[derive(Debug, Clone)]
+pub struct GetImageBingDailyParams {
+    pub date_query: Option<String>,
+    pub resolution_query: Option<String>,
+    pub format_query: Option<String>,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
+}
+
+impl GetImageBingDailyParams {
+    pub fn new() -> Self {
+        Self {
+            date_query: None,
+            resolution_query: None,
+            format_query: None,
+            disable_cache: None,
+            _t: None,
+        }
+    }
+    pub fn date_query(mut self, value: impl Into<String>) -> Self {
+        self.date_query = Some(value.into());
+        self
+    }
+    pub fn resolution_query(mut self, value: impl Into<String>) -> Self {
+        self.resolution_query = Some(value.into());
+        self
+    }
+    pub fn format_query(mut self, value: impl Into<String>) -> Self {
+        self.format_query = Some(value.into());
+        self
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct GetImageBingDailyHistoryParams {
+    pub date_query: Option<String>,
+    pub resolution_query: Option<String>,
+    pub page_query: Option<String>,
+    pub page_size_query: Option<String>,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
+}
+
+impl GetImageBingDailyHistoryParams {
+    pub fn new() -> Self {
+        Self {
+            date_query: None,
+            resolution_query: None,
+            page_query: None,
+            page_size_query: None,
+            disable_cache: None,
+            _t: None,
+        }
+    }
+    pub fn date_query(mut self, value: impl Into<String>) -> Self {
+        self.date_query = Some(value.into());
+        self
+    }
+    pub fn resolution_query(mut self, value: impl Into<String>) -> Self {
+        self.resolution_query = Some(value.into());
+        self
+    }
+    pub fn page_query(mut self, value: impl Into<String>) -> Self {
+        self.page_query = Some(value.into());
+        self
+    }
+    pub fn page_size_query(mut self, value: impl Into<String>) -> Self {
+        self.page_size_query = Some(value.into());
+        self
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
+    }
+}
 
 #[derive(Debug, Clone)]
 pub struct GetImageMotouParams {
@@ -1162,6 +1375,83 @@ impl PostImageCompressParams {
 }
 
 #[derive(Debug, Clone)]
+pub struct PostImageDecodeParams {
+    pub width_query: Option<String>,
+    pub height_query: Option<String>,
+    pub max_width_query: Option<String>,
+    pub max_height_query: Option<String>,
+    pub format_query: Option<String>,
+    pub color_mode_query: Option<String>,
+    pub fit_query: Option<String>,
+    pub background_query: Option<String>,
+    pub body: Option<Value>,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
+}
+
+impl PostImageDecodeParams {
+    pub fn new() -> Self {
+        Self {
+            width_query: None,
+            height_query: None,
+            max_width_query: None,
+            max_height_query: None,
+            format_query: None,
+            color_mode_query: None,
+            fit_query: None,
+            background_query: None,
+            body: None,
+            disable_cache: None,
+            _t: None,
+        }
+    }
+    pub fn width_query(mut self, value: impl Into<String>) -> Self {
+        self.width_query = Some(value.into());
+        self
+    }
+    pub fn height_query(mut self, value: impl Into<String>) -> Self {
+        self.height_query = Some(value.into());
+        self
+    }
+    pub fn max_width_query(mut self, value: impl Into<String>) -> Self {
+        self.max_width_query = Some(value.into());
+        self
+    }
+    pub fn max_height_query(mut self, value: impl Into<String>) -> Self {
+        self.max_height_query = Some(value.into());
+        self
+    }
+    pub fn format_query(mut self, value: impl Into<String>) -> Self {
+        self.format_query = Some(value.into());
+        self
+    }
+    pub fn color_mode_query(mut self, value: impl Into<String>) -> Self {
+        self.color_mode_query = Some(value.into());
+        self
+    }
+    pub fn fit_query(mut self, value: impl Into<String>) -> Self {
+        self.fit_query = Some(value.into());
+        self
+    }
+    pub fn background_query(mut self, value: impl Into<String>) -> Self {
+        self.background_query = Some(value.into());
+        self
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
+    }
+    pub fn body(mut self, value: Value) -> Self {
+        self.body = Some(value);
+        self
+    }
+}
+
+#[derive(Debug, Clone)]
 pub struct PostImageFrombase64Params {
     pub body: Option<Value>,
     pub disable_cache: Option<bool>,
@@ -1227,6 +1517,35 @@ pub struct PostImageNsfwParams {
 }
 
 impl PostImageNsfwParams {
+    pub fn new() -> Self {
+        Self {
+            body: None,
+            disable_cache: None,
+            _t: None,
+        }
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
+    }
+    pub fn body(mut self, value: Value) -> Self {
+        self.body = Some(value);
+        self
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct PostImageOcrParams {
+    pub body: Option<Value>,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
+}
+
+impl PostImageOcrParams {
     pub fn new() -> Self {
         Self {
             body: None,
@@ -1460,6 +1779,9 @@ impl<'a> MiscService<'a> {
         if let Some(value) = &params.nearby_limit_query {
             query.push(("nearby_limit".to_string(), value.clone()));
         }
+        if let Some(value) = &params.exclude_past_query {
+            query.push(("exclude_past".to_string(), value.clone()));
+        }
         if let Some(value) = &params._t {
             query.push(("_t".to_string(), value.clone()));
         }
@@ -1501,9 +1823,6 @@ impl<'a> MiscService<'a> {
         }
         if let Some(value) = &params.limit_query {
             query.push(("limit".to_string(), value.clone()));
-        }
-        if let Some(value) = &params.sources_query {
-            query.push(("sources".to_string(), value.clone()));
         }
         if let Some(value) = &params._t {
             query.push(("_t".to_string(), value.clone()));
@@ -1717,6 +2036,9 @@ impl<'a> MiscService<'a> {
         }
         if let Some(value) = &params.phone_query {
             query.push(("phone".to_string(), value.clone()));
+        }
+        if let Some(value) = &params.full_query {
+            query.push(("full".to_string(), value.clone()));
         }
         if let Some(value) = &params._t {
             query.push(("_t".to_string(), value.clone()));
@@ -1945,6 +2267,7 @@ pub struct GetMiscHolidayCalendarParams {
     pub holiday_type_query: Option<String>,
     pub include_nearby_query: Option<String>,
     pub nearby_limit_query: Option<String>,
+    pub exclude_past_query: Option<String>,
     pub disable_cache: Option<bool>,
     pub _t: Option<String>,
 }
@@ -1959,6 +2282,7 @@ impl GetMiscHolidayCalendarParams {
             holiday_type_query: None,
             include_nearby_query: None,
             nearby_limit_query: None,
+            exclude_past_query: None,
             disable_cache: None,
             _t: None,
         }
@@ -1991,6 +2315,10 @@ impl GetMiscHolidayCalendarParams {
         self.nearby_limit_query = Some(value.into());
         self
     }
+    pub fn exclude_past_query(mut self, value: impl Into<String>) -> Self {
+        self.exclude_past_query = Some(value.into());
+        self
+    }
     pub fn disable_cache(mut self, value: bool) -> Self {
         self.disable_cache = Some(value);
         self
@@ -2009,7 +2337,6 @@ pub struct GetMiscHotboardParams {
     pub time_start_query: Option<String>,
     pub time_end_query: Option<String>,
     pub limit_query: Option<String>,
-    pub sources_query: Option<String>,
     pub disable_cache: Option<bool>,
     pub _t: Option<String>,
 }
@@ -2023,7 +2350,6 @@ impl GetMiscHotboardParams {
             time_start_query: None,
             time_end_query: None,
             limit_query: None,
-            sources_query: None,
             disable_cache: None,
             _t: None,
         }
@@ -2046,10 +2372,6 @@ impl GetMiscHotboardParams {
     }
     pub fn limit_query(mut self, value: impl Into<String>) -> Self {
         self.limit_query = Some(value.into());
-        self
-    }
-    pub fn sources_query(mut self, value: impl Into<String>) -> Self {
-        self.sources_query = Some(value.into());
         self
     }
     pub fn disable_cache(mut self, value: bool) -> Self {
@@ -2237,6 +2559,7 @@ pub struct GetMiscTrackingQueryParams {
     pub tracking_number_query: String,
     pub carrier_code_query: Option<String>,
     pub phone_query: Option<String>,
+    pub full_query: Option<String>,
     pub disable_cache: Option<bool>,
     pub _t: Option<String>,
 }
@@ -2247,6 +2570,7 @@ impl GetMiscTrackingQueryParams {
             tracking_number_query: tracking_number_query.into(),
             carrier_code_query: None,
             phone_query: None,
+            full_query: None,
             disable_cache: None,
             _t: None,
         }
@@ -2257,6 +2581,10 @@ impl GetMiscTrackingQueryParams {
     }
     pub fn phone_query(mut self, value: impl Into<String>) -> Self {
         self.phone_query = Some(value.into());
+        self
+    }
+    pub fn full_query(mut self, value: impl Into<String>) -> Self {
+        self.full_query = Some(value.into());
         self
     }
     pub fn disable_cache(mut self, value: bool) -> Self {
@@ -3249,6 +3577,42 @@ impl<'a> SocialService<'a> {
             )
             .await
     }
+/// 查询 GitHub 用户信息
+    #[instrument(skip(self, params))]
+    pub async fn get_github_user(&self, params: GetGithubUserParams) -> Result<crate::models::GetGithubUser200Response> {
+        let mut path = "/api/v1/github/user".to_string();
+
+        let mut query: Vec<(String, String)> = Vec::new();
+        query.push(("user".to_string(), params.user_query.clone()));
+        if let Some(value) = &params.activity_query {
+            query.push(("activity".to_string(), value.clone()));
+        }
+        if let Some(value) = &params.activity_scope_query {
+            query.push(("activity_scope".to_string(), value.clone()));
+        }
+        if let Some(value) = &params.org_query {
+            query.push(("org".to_string(), value.clone()));
+        }
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
+        let query = if query.is_empty() { None } else { Some(query) };
+
+        let mut extra_headers = HeaderMap::new();
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
+        let body = None;
+
+        self.client
+            .request_json(
+                Method::GET,
+                &path,
+                headers,
+                query,
+                body,
+                params.disable_cache,
+            )
+            .await
+    }
 /// 查询 B站投稿
     #[instrument(skip(self, params))]
     pub async fn get_social_bilibili_archives(&self, params: GetSocialBilibiliArchivesParams) -> Result<crate::models::GetSocialBilibiliArchives200Response> {
@@ -3485,6 +3849,49 @@ impl GetGithubRepoParams {
             disable_cache: None,
             _t: None,
         }
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct GetGithubUserParams {
+    pub user_query: String,
+    pub activity_query: Option<String>,
+    pub activity_scope_query: Option<String>,
+    pub org_query: Option<String>,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
+}
+
+impl GetGithubUserParams {
+    pub fn new(user_query: impl Into<String>) -> Self {
+        Self {
+            user_query: user_query.into(),
+            activity_query: None,
+            activity_scope_query: None,
+            org_query: None,
+            disable_cache: None,
+            _t: None,
+        }
+    }
+    pub fn activity_query(mut self, value: impl Into<String>) -> Self {
+        self.activity_query = Some(value.into());
+        self
+    }
+    pub fn activity_scope_query(mut self, value: impl Into<String>) -> Self {
+        self.activity_scope_query = Some(value.into());
+        self
+    }
+    pub fn org_query(mut self, value: impl Into<String>) -> Self {
+        self.org_query = Some(value.into());
+        self
     }
     pub fn disable_cache(mut self, value: bool) -> Self {
         self.disable_cache = Some(value);
@@ -4093,6 +4500,58 @@ impl<'a> TextService<'a> {
             )
             .await
     }
+/// Markdown 转 HTML
+    #[instrument(skip(self, params))]
+    pub async fn post_text_markdown_to_html(&self, params: PostTextMarkdownToHtmlParams) -> Result<crate::models::PostTextMarkdownToHtml200Response> {
+        let mut path = "/api/v1/text/markdown-to-html".to_string();
+
+        let mut query: Vec<(String, String)> = Vec::new();
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
+        let query = if query.is_empty() { None } else { Some(query) };
+
+        let mut extra_headers = HeaderMap::new();
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
+        let body = params.body.clone();
+
+        self.client
+            .request_json(
+                Method::POST,
+                &path,
+                headers,
+                query,
+                body,
+                params.disable_cache,
+            )
+            .await
+    }
+/// Markdown 转 PDF
+    #[instrument(skip(self, params))]
+    pub async fn post_text_markdown_to_pdf(&self, params: PostTextMarkdownToPdfParams) -> Result<Vec<u8>> {
+        let mut path = "/api/v1/text/markdown-to-pdf".to_string();
+
+        let mut query: Vec<(String, String)> = Vec::new();
+        if let Some(value) = &params._t {
+            query.push(("_t".to_string(), value.clone()));
+        }
+        let query = if query.is_empty() { None } else { Some(query) };
+
+        let mut extra_headers = HeaderMap::new();
+        let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
+        let body = params.body.clone();
+
+        self.client
+            .request_json(
+                Method::POST,
+                &path,
+                headers,
+                query,
+                body,
+                params.disable_cache,
+            )
+            .await
+    }
 /// MD5 哈希 (POST)
     #[instrument(skip(self, params))]
     pub async fn post_text_md_5(&self, params: PostTextMd5Params) -> Result<crate::models::GetTextMd5200Response> {
@@ -4383,6 +4842,64 @@ pub struct PostTextConvertParams {
 }
 
 impl PostTextConvertParams {
+    pub fn new() -> Self {
+        Self {
+            body: None,
+            disable_cache: None,
+            _t: None,
+        }
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
+    }
+    pub fn body(mut self, value: Value) -> Self {
+        self.body = Some(value);
+        self
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct PostTextMarkdownToHtmlParams {
+    pub body: Option<Value>,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
+}
+
+impl PostTextMarkdownToHtmlParams {
+    pub fn new() -> Self {
+        Self {
+            body: None,
+            disable_cache: None,
+            _t: None,
+        }
+    }
+    pub fn disable_cache(mut self, value: bool) -> Self {
+        self.disable_cache = Some(value);
+        self
+    }
+    pub fn _t(mut self, value: impl Into<String>) -> Self {
+        self._t = Some(value.into());
+        self
+    }
+    pub fn body(mut self, value: Value) -> Self {
+        self.body = Some(value);
+        self
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct PostTextMarkdownToPdfParams {
+    pub body: Option<Value>,
+    pub disable_cache: Option<bool>,
+    pub _t: Option<String>,
+}
+
+impl PostTextMarkdownToPdfParams {
     pub fn new() -> Self {
         Self {
             body: None,

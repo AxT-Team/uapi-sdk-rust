@@ -118,10 +118,10 @@ No authorization required
 
 ## get_misc_holiday_calendar
 
-> models::GetMiscHolidayCalendar200Response get_misc_holiday_calendar(date, month, year, timezone, holiday_type, include_nearby, nearby_limit)
+> models::GetMiscHolidayCalendar200Response get_misc_holiday_calendar(date, month, year, timezone, holiday_type, include_nearby, nearby_limit, exclude_past)
 查询节假日与万年历
 
-查询指定日期、月份或年份的万年历与节假日信息。  ## 功能概述 这个接口支持三种查询方式：按天（`date`）、按月（`month`）和按年（`year`）。调用时三者选一个传入即可。  如果你只关心某一类事件，可以通过 `holiday_type` 进行筛选，例如只看法定休假/调休、公历节日、农历节日或节气。  在 `date` 模式下，传 `include_nearby=true` 可以额外返回该日期前后最近的节日；返回数量由 `nearby_limit` 控制，默认 7，最大 30。
+查询指定日期、月份或年份的万年历与节假日信息。  ## 功能概述 这个接口支持三种查询方式：按天（`date`）、按月（`month`）和按年（`year`）。调用时三者选一个传入即可。  如果你只关心某一类事件，可以通过 `holiday_type` 进行筛选，例如只看法定休假/调休、公历节日、农历节日或节气。  在 `date` 模式下，传 `include_nearby=true` 可以额外返回该日期前后最近的节日；返回数量由 `nearby_limit` 控制，默认 7，最大 30。  如果你只想保留今天和之后的节日，可以再传 `exclude_past=true` 过滤已经过去的节日。
 
 ### Parameters
 
@@ -135,6 +135,7 @@ Name | Type | Description  | Required | Notes
 **holiday_type** | Option<**String**> | 节日筛选类型，默认 all。 |  |[default to all]
 **include_nearby** | Option<**bool**> | 是否返回前后最近节日，仅 date 模式生效，默认 false。month/year 模式会忽略此参数。 |  |[default to false]
 **nearby_limit** | Option<**i32**> | 返回最近节日数量限制，默认 7，最大 30。仅 date 模式 + include_nearby=true 生效。 |  |[default to 7]
+**exclude_past** | Option<**bool**> | 传 true 时，会过滤今天之前已经过去的节日。默认 false。 |  |[default to false]
 
 ### Return type
 
@@ -154,10 +155,10 @@ No authorization required
 
 ## get_misc_hotboard
 
-> models::GetMiscHotboard200Response get_misc_hotboard(r#type, time, keyword, time_start, time_end, limit, sources)
+> models::GetMiscHotboard200Response get_misc_hotboard(r#type, time, keyword, time_start, time_end, limit)
 查询热榜
 
-想快速跟上网络热点？这个接口让你一网打尽各大主流平台的实时热榜/热搜！  ## 功能概述 你只需要指定一个平台类型，就能获取到该平台当前的热榜数据列表。每个热榜条目都包含标题、热度值和原始链接。非常适合用于制作信息聚合类应用或看板。  ## 三种使用模式  ### 默认模式 只传 `type` 参数，返回该平台当前的实时热榜。  ### 时光机模式 传 `type` + `time` 参数，返回最接近指定时间的热榜快照。如果不可用或无数据，会返回空。  ### 搜索模式 传 `type` + `keyword` + `time_start` + `time_end` 参数，在指定时间范围内搜索包含关键词的热榜条目。可选传 `limit` 限制返回数量。  ### 数据源列表 传 `sources=true`，返回所有支持历史数据的平台列表。
+想快速跟上网络热点？这个接口让你一网打尽各大主流平台的实时热榜/热搜！  ## 功能概述 你只需要指定一个平台类型，就能获取到该平台当前的热榜数据列表。每个热榜条目都包含标题、热度值和原始链接。非常适合用于制作信息聚合类应用或看板。  ## 三种使用模式  ### 默认模式 只传 `type` 参数，返回该平台当前的实时热榜。  ### 时光机模式 传 `type` + `time` 参数，返回最接近指定时间的热榜快照。如果不可用或无数据，会返回空。  ### 搜索模式 传 `type` + `keyword` + `time_start` + `time_end` 参数，在指定时间范围内搜索包含关键词的热榜条目。可选传 `limit` 限制返回数量。
 
 ### Parameters
 
@@ -170,7 +171,6 @@ Name | Type | Description  | Required | Notes
 **time_start** | Option<**i64**> | 搜索模式必填：搜索起始时间戳（毫秒）。 |  |
 **time_end** | Option<**i64**> | 搜索模式必填：搜索结束时间戳（毫秒）。 |  |
 **limit** | Option<**i32**> | 搜索模式下最大返回条数，默认 50，最大 200。 |  |
-**sources** | Option<**bool**> | 设为 true 时列出所有可用的历史数据源，忽略其他参数。 |  |
 
 ### Return type
 
@@ -373,10 +373,10 @@ No authorization required
 
 ## get_misc_tracking_query
 
-> models::GetMiscTrackingQuery200Response get_misc_tracking_query(tracking_number, carrier_code, phone)
+> models::GetMiscTrackingQuery200Response get_misc_tracking_query(tracking_number, carrier_code, phone, full)
 查询快递物流信息
 
-买了东西想知道快递到哪儿了？这个接口帮你实时追踪物流状态。  ## 功能概述 提供一个快递单号，系统会自动识别快递公司并返回完整的物流轨迹信息。这个接口目前可以查询中通、圆通、韵达、申通、极兔、京东、EMS、德邦等主流快递公司的物流信息。  ## 使用须知 目前暂不支持顺丰快递单号的物流查询。  - **自动识别**：不知道是哪家快递？系统会根据单号规则自动识别快递公司（推荐使用） - **手动指定**：如果已知快递公司，可以传递 `carrier_code` 参数，查询速度会更快 - **手机尾号验证**：部分快递公司需要验证收件人手机尾号才能查询详细物流，如果返回 `暂无物流信息`，建议尝试传入 `phone` 参数 - **查询时效**：物流信息实时查询，响应时间通常在1-2秒内
+买了东西想知道快递到哪儿了？这个接口帮你实时追踪物流状态。  ## 功能概述 提供一个快递单号，系统会自动识别快递公司并返回完整的物流轨迹信息。这个接口目前可以查询中通、圆通、韵达、申通、极兔、顺丰、京东、EMS、德邦等主流快递公司的物流信息。  ## 使用须知 - **自动识别**：不知道是哪家快递？系统会根据单号规则自动识别快递公司（推荐使用） - **手动指定**：如果已知快递公司，可以传递 `carrier_code` 参数，查询速度会更快 - **手机尾号验证**：顺丰等部分快递公司需要验证收件人手机尾号才能查询详细物流，如果返回 `暂无物流信息`，建议尝试传入 `phone` 参数 - **查询时效**：物流信息实时查询，响应时间通常在1-2秒内
 
 ### Parameters
 
@@ -386,6 +386,7 @@ Name | Type | Description  | Required | Notes
 **tracking_number** | **String** | 快递单号，通常是一串10-20位的数字或字母数字组合。 | [required] |
 **carrier_code** | Option<**String**> | 快递公司编码（可选）。不填写时系统会自动识别，填写后可加快查询速度。 |  |
 **phone** | Option<**String**> | 收件人手机尾号，4位数字（可选）。部分快递公司需要验证手机尾号才能查询详细物流信息。 |  |
+**full** | Option<**bool**> | 使用这个参数可以获得完整的物流信息。但会消耗34积分/一次（不过缓存命中半价）。因为成本实在太贵了，否则非常非常亏说是 |  |
 
 ### Return type
 
