@@ -93,6 +93,12 @@ pub enum Error {
     #[error("invalid header `{name}`")]
     InvalidHeader { name: String },
 
+    #[error("invalid multipart body: {message}")]
+    InvalidMultipartBody { message: String },
+
+    #[error(transparent)]
+    Io(#[from] std::io::Error),
+
     #[error(transparent)]
     Transport(#[from] reqwest::Error),
 

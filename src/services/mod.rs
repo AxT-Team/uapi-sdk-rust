@@ -6,6 +6,12 @@ use reqwest::Method;
 use serde_json::Value;
 use tracing::instrument;
 use urlencoding::encode;
+
+#[derive(Debug, Clone)]
+pub enum GetImageBingDailyResponse {
+    Json(crate::models::FormatJson),
+    Bytes(Vec<u8>),
+}
 #[derive(Debug, Clone)]
 pub struct ClipzyZaiXianJianTieBanService<'a> {
     pub(crate) client: &'a Client,
@@ -27,7 +33,6 @@ impl<'a> ClipzyZaiXianJianTieBanService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
-
         self.client
             .request_json(
                 Method::GET,
@@ -58,7 +63,6 @@ impl<'a> ClipzyZaiXianJianTieBanService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
-
         self.client
             .request_json(
                 Method::GET,
@@ -84,7 +88,6 @@ impl<'a> ClipzyZaiXianJianTieBanService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = params.body.clone();
-
         self.client
             .request_json(
                 Method::POST,
@@ -199,7 +202,6 @@ impl<'a> ConvertService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
-
         self.client
             .request_json(
                 Method::GET,
@@ -225,7 +227,6 @@ impl<'a> ConvertService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = params.body.clone();
-
         self.client
             .request_json(
                 Method::POST,
@@ -309,9 +310,8 @@ impl<'a> DailyService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
-
         self.client
-            .request_json(
+            .request_bytes(
                 Method::GET,
                 &path,
                 headers,
@@ -340,7 +340,6 @@ impl<'a> GameService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
-
         self.client
             .request_json(
                 Method::GET,
@@ -372,7 +371,6 @@ impl<'a> GameService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
-
         self.client
             .request_json(
                 Method::GET,
@@ -399,7 +397,6 @@ impl<'a> GameService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
-
         self.client
             .request_json(
                 Method::GET,
@@ -426,7 +423,6 @@ impl<'a> GameService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
-
         self.client
             .request_json(
                 Method::GET,
@@ -464,7 +460,6 @@ impl<'a> GameService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
-
         self.client
             .request_json(
                 Method::GET,
@@ -645,9 +640,8 @@ impl<'a> ImageService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
-
         self.client
-            .request_json(
+            .request_bytes(
                 Method::GET,
                 &path,
                 headers,
@@ -659,7 +653,7 @@ impl<'a> ImageService<'a> {
     }
 /// 获取必应每日壁纸
     #[instrument(skip(self, params))]
-    pub async fn get_image_bing_daily(&self, params: GetImageBingDailyParams) -> Result<crate::models::FormatJson> {
+    pub async fn get_image_bing_daily(&self, params: GetImageBingDailyParams) -> Result<GetImageBingDailyResponse> {
         let mut path = "/api/v1/image/bing-daily".to_string();
 
         let mut query: Vec<(String, String)> = Vec::new();
@@ -680,9 +674,23 @@ impl<'a> ImageService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
+        let wants_json = matches!(params.format_query.as_deref(), Some("json"));
+        if wants_json {
+            return self.client
+                .request_json(
+                    Method::GET,
+                    &path,
+                    headers,
+                    query,
+                    body,
+                    params.disable_cache,
+                )
+                .await
+                .map(GetImageBingDailyResponse::Json);
+        }
 
-        self.client
-            .request_json(
+        return self.client
+            .request_bytes(
                 Method::GET,
                 &path,
                 headers,
@@ -691,6 +699,7 @@ impl<'a> ImageService<'a> {
                 params.disable_cache,
             )
             .await
+            .map(GetImageBingDailyResponse::Bytes);
     }
 /// 查询必应壁纸历史
     #[instrument(skip(self, params))]
@@ -718,7 +727,6 @@ impl<'a> ImageService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
-
         self.client
             .request_json(
                 Method::GET,
@@ -748,9 +756,8 @@ impl<'a> ImageService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
-
         self.client
-            .request_json(
+            .request_bytes(
                 Method::GET,
                 &path,
                 headers,
@@ -790,7 +797,6 @@ impl<'a> ImageService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
-
         self.client
             .request_json(
                 Method::GET,
@@ -817,7 +823,6 @@ impl<'a> ImageService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
-
         self.client
             .request_json(
                 Method::GET,
@@ -849,14 +854,14 @@ impl<'a> ImageService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = params.body.clone();
-
         self.client
-            .request_json(
+            .request_multipart_bytes(
                 Method::POST,
                 &path,
                 headers,
                 query,
                 body,
+                &["file",],
                 params.disable_cache,
             )
             .await
@@ -899,14 +904,14 @@ impl<'a> ImageService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = params.body.clone();
-
         self.client
-            .request_json(
+            .request_multipart_bytes(
                 Method::POST,
                 &path,
                 headers,
                 query,
                 body,
+                &["file",],
                 params.disable_cache,
             )
             .await
@@ -925,7 +930,6 @@ impl<'a> ImageService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = params.body.clone();
-
         self.client
             .request_json(
                 Method::POST,
@@ -951,14 +955,14 @@ impl<'a> ImageService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = params.body.clone();
-
         self.client
-            .request_json(
+            .request_multipart_bytes(
                 Method::POST,
                 &path,
                 headers,
                 query,
                 body,
+                &["file",],
                 params.disable_cache,
             )
             .await
@@ -977,14 +981,14 @@ impl<'a> ImageService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = params.body.clone();
-
         self.client
-            .request_json(
+            .request_multipart_json(
                 Method::POST,
                 &path,
                 headers,
                 query,
                 body,
+                &["file",],
                 params.disable_cache,
             )
             .await
@@ -1003,14 +1007,14 @@ impl<'a> ImageService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = params.body.clone();
-
         self.client
-            .request_json(
+            .request_multipart_json(
                 Method::POST,
                 &path,
                 headers,
                 query,
                 body,
+                &["file",],
                 params.disable_cache,
             )
             .await
@@ -1029,9 +1033,8 @@ impl<'a> ImageService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = params.body.clone();
-
         self.client
-            .request_json(
+            .request_bytes(
                 Method::POST,
                 &path,
                 headers,
@@ -1067,14 +1070,14 @@ impl<'a> ImageService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = params.body.clone();
-
         self.client
-            .request_json(
+            .request_multipart_bytes(
                 Method::POST,
                 &path,
                 headers,
                 query,
                 body,
+                &["file",],
                 params.disable_cache,
             )
             .await
@@ -1670,7 +1673,6 @@ impl<'a> MiscService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
-
         self.client
             .request_json(
                 Method::GET,
@@ -1693,7 +1695,6 @@ impl<'a> MiscService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
-
         self.client
             .request_json(
                 Method::GET,
@@ -1740,7 +1741,6 @@ impl<'a> MiscService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
-
         self.client
             .request_json(
                 Method::GET,
@@ -1790,7 +1790,6 @@ impl<'a> MiscService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
-
         self.client
             .request_json(
                 Method::GET,
@@ -1832,7 +1831,6 @@ impl<'a> MiscService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
-
         self.client
             .request_json(
                 Method::GET,
@@ -1864,7 +1862,6 @@ impl<'a> MiscService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
-
         self.client
             .request_json(
                 Method::GET,
@@ -1891,7 +1888,6 @@ impl<'a> MiscService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
-
         self.client
             .request_json(
                 Method::GET,
@@ -1935,7 +1931,6 @@ impl<'a> MiscService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
-
         self.client
             .request_json(
                 Method::GET,
@@ -1962,7 +1957,6 @@ impl<'a> MiscService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
-
         self.client
             .request_json(
                 Method::GET,
@@ -1985,7 +1979,6 @@ impl<'a> MiscService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
-
         self.client
             .request_json(
                 Method::GET,
@@ -2012,7 +2005,6 @@ impl<'a> MiscService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
-
         self.client
             .request_json(
                 Method::GET,
@@ -2048,7 +2040,6 @@ impl<'a> MiscService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
-
         self.client
             .request_json(
                 Method::GET,
@@ -2098,7 +2089,6 @@ impl<'a> MiscService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
-
         self.client
             .request_json(
                 Method::GET,
@@ -2125,7 +2115,6 @@ impl<'a> MiscService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
-
         self.client
             .request_json(
                 Method::GET,
@@ -2151,7 +2140,6 @@ impl<'a> MiscService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = params.body.clone();
-
         self.client
             .request_json(
                 Method::POST,
@@ -2745,7 +2733,6 @@ impl<'a> NetworkService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
-
         self.client
             .request_json(
                 Method::GET,
@@ -2772,7 +2759,6 @@ impl<'a> NetworkService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
-
         self.client
             .request_json(
                 Method::GET,
@@ -2802,7 +2788,6 @@ impl<'a> NetworkService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
-
         self.client
             .request_json(
                 Method::GET,
@@ -2831,7 +2816,6 @@ impl<'a> NetworkService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
-
         self.client
             .request_json(
                 Method::GET,
@@ -2858,7 +2842,6 @@ impl<'a> NetworkService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
-
         self.client
             .request_json(
                 Method::GET,
@@ -2881,7 +2864,6 @@ impl<'a> NetworkService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
-
         self.client
             .request_json(
                 Method::GET,
@@ -2912,7 +2894,6 @@ impl<'a> NetworkService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
-
         self.client
             .request_json(
                 Method::GET,
@@ -2939,7 +2920,6 @@ impl<'a> NetworkService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
-
         self.client
             .request_json(
                 Method::GET,
@@ -2969,7 +2949,6 @@ impl<'a> NetworkService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
-
         self.client
             .request_json(
                 Method::GET,
@@ -2996,7 +2975,6 @@ impl<'a> NetworkService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
-
         self.client
             .request_json(
                 Method::GET,
@@ -3282,7 +3260,6 @@ impl<'a> PoemService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
-
         self.client
             .request_json(
                 Method::GET,
@@ -3317,7 +3294,6 @@ impl<'a> RandomService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
-
         self.client
             .request_json(
                 Method::GET,
@@ -3349,9 +3325,8 @@ impl<'a> RandomService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
-
         self.client
-            .request_json(
+            .request_bytes(
                 Method::GET,
                 &path,
                 headers,
@@ -3381,7 +3356,6 @@ impl<'a> RandomService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
-
         self.client
             .request_json(
                 Method::GET,
@@ -3407,7 +3381,6 @@ impl<'a> RandomService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = params.body.clone();
-
         self.client
             .request_json(
                 Method::POST,
@@ -3565,7 +3538,6 @@ impl<'a> SocialService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
-
         self.client
             .request_json(
                 Method::GET,
@@ -3601,7 +3573,6 @@ impl<'a> SocialService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
-
         self.client
             .request_json(
                 Method::GET,
@@ -3640,7 +3611,6 @@ impl<'a> SocialService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
-
         self.client
             .request_json(
                 Method::GET,
@@ -3672,7 +3642,6 @@ impl<'a> SocialService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
-
         self.client
             .request_json(
                 Method::GET,
@@ -3708,7 +3677,6 @@ impl<'a> SocialService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
-
         self.client
             .request_json(
                 Method::GET,
@@ -3735,7 +3703,6 @@ impl<'a> SocialService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
-
         self.client
             .request_json(
                 Method::GET,
@@ -3767,7 +3734,6 @@ impl<'a> SocialService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
-
         self.client
             .request_json(
                 Method::GET,
@@ -3794,7 +3760,6 @@ impl<'a> SocialService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
-
         self.client
             .request_json(
                 Method::GET,
@@ -3821,7 +3786,6 @@ impl<'a> SocialService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
-
         self.client
             .request_json(
                 Method::GET,
@@ -4163,7 +4127,6 @@ impl<'a> StatusService<'a> {
         );
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
-
         self.client
             .request_json(
                 Method::GET,
@@ -4192,7 +4155,6 @@ impl<'a> StatusService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
-
         self.client
             .request_json(
                 Method::GET,
@@ -4280,7 +4242,6 @@ impl<'a> TextService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
-
         self.client
             .request_json(
                 Method::GET,
@@ -4306,7 +4267,6 @@ impl<'a> TextService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = params.body.clone();
-
         self.client
             .request_json(
                 Method::POST,
@@ -4332,7 +4292,6 @@ impl<'a> TextService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = params.body.clone();
-
         self.client
             .request_json(
                 Method::POST,
@@ -4358,7 +4317,6 @@ impl<'a> TextService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = params.body.clone();
-
         self.client
             .request_json(
                 Method::POST,
@@ -4384,7 +4342,6 @@ impl<'a> TextService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = params.body.clone();
-
         self.client
             .request_json(
                 Method::POST,
@@ -4410,7 +4367,6 @@ impl<'a> TextService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = params.body.clone();
-
         self.client
             .request_json(
                 Method::POST,
@@ -4436,7 +4392,6 @@ impl<'a> TextService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = params.body.clone();
-
         self.client
             .request_json(
                 Method::POST,
@@ -4462,7 +4417,6 @@ impl<'a> TextService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = params.body.clone();
-
         self.client
             .request_json(
                 Method::POST,
@@ -4488,7 +4442,6 @@ impl<'a> TextService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = params.body.clone();
-
         self.client
             .request_json(
                 Method::POST,
@@ -4514,7 +4467,6 @@ impl<'a> TextService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = params.body.clone();
-
         self.client
             .request_json(
                 Method::POST,
@@ -4540,9 +4492,8 @@ impl<'a> TextService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = params.body.clone();
-
         self.client
-            .request_json(
+            .request_bytes(
                 Method::POST,
                 &path,
                 headers,
@@ -4566,7 +4517,6 @@ impl<'a> TextService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = params.body.clone();
-
         self.client
             .request_json(
                 Method::POST,
@@ -4592,7 +4542,6 @@ impl<'a> TextService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = params.body.clone();
-
         self.client
             .request_json(
                 Method::POST,
@@ -4995,7 +4944,6 @@ impl<'a> TranslateService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
-
         self.client
             .request_json(
                 Method::GET,
@@ -5022,7 +4970,6 @@ impl<'a> TranslateService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = params.body.clone();
-
         self.client
             .request_json(
                 Method::POST,
@@ -5048,7 +4995,6 @@ impl<'a> TranslateService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = params.body.clone();
-
         self.client
             .request_json(
                 Method::POST,
@@ -5075,7 +5021,6 @@ impl<'a> TranslateService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = params.body.clone();
-
         self.client
             .request_json(
                 Method::POST,
@@ -5204,7 +5149,6 @@ impl<'a> WebparseService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
-
         self.client
             .request_json(
                 Method::GET,
@@ -5231,7 +5175,6 @@ impl<'a> WebparseService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
-
         self.client
             .request_json(
                 Method::GET,
@@ -5258,7 +5201,6 @@ impl<'a> WebparseService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
-
         self.client
             .request_json(
                 Method::GET,
@@ -5285,7 +5227,6 @@ impl<'a> WebparseService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
-
         self.client
             .request_json(
                 Method::POST,
@@ -5419,7 +5360,6 @@ impl<'a> MinGanCiShiBieService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
-
         self.client
             .request_json(
                 Method::GET,
@@ -5445,7 +5385,6 @@ impl<'a> MinGanCiShiBieService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = params.body.clone();
-
         self.client
             .request_json(
                 Method::POST,
@@ -5471,7 +5410,6 @@ impl<'a> MinGanCiShiBieService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = params.body.clone();
-
         self.client
             .request_json(
                 Method::POST,
@@ -5584,7 +5522,6 @@ impl<'a> ZhiNengSouSuoService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = None;
-
         self.client
             .request_json(
                 Method::GET,
@@ -5610,7 +5547,6 @@ impl<'a> ZhiNengSouSuoService<'a> {
         let mut extra_headers = HeaderMap::new();
         let headers = if extra_headers.is_empty() { None } else { Some(extra_headers) };
         let body = params.body.clone();
-
         self.client
             .request_json(
                 Method::POST,
