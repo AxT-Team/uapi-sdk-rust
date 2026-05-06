@@ -3,11 +3,12 @@ name = "uapi-sdk-rust"
 version = "0.1.17"
 edition = "2021"
 license = "MIT OR Apache-2.0"
-description = "UAPI Rust SDK - idiomatic, typed, domain-driven API client."
+description = "Official Rust SDK for UAPI / uapis.cn — idiomatic, typed wrapper around 100+ free public-API endpoints (network, text, image, social, translation, search). Generated from the live OpenAPI 3.1 spec."
 repository = "https://github.com/AxT-Team/uapi-sdk-rust"
 documentation = "https://docs.rs/uapi-sdk-rust"
+homepage = "https://uapis.cn/docs/sdk/rust"
 readme = "README.md"
-keywords = ["uapi", "sdk", "api", "client"]
+keywords = ["uapi", "uapis", "sdk", "openapi", "public-api"]
 categories = ["api-bindings", "web-programming::http-client"]
 
 [features]
